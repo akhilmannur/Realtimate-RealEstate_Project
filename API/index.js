@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import userRouterr from './Routes/userRoutes.js';
 import dotenv from 'dotenv'
 import authRouterr from './Routes/authRoutes.js';
+import ErrorHandler from './middlewares/errorHandler.js';
 dotenv.config();
 
 
@@ -19,6 +20,7 @@ app.use(express.json());
 
 app.use('/api/user',userRouterr);
 app.use('/api/auth',authRouterr);
+app.use(ErrorHandler);
 
 app.listen(3000,()=>{
     console.log('listening on port 3000');
