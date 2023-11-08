@@ -10,8 +10,8 @@ const Header = () => {
   };
 
   return (
-    <nav className="shadow-md p-2">
-      <div className="flex justify-between items-center max-w-6xl mx-auto">
+    <nav className="shadow-md p-2 bg-slate-200">
+      <div className="flex justify-between items-center max-w-8xl mx-auto">
         <div className="sm:hidden">
           {isMenuOpen ? (
             <FaTimes
@@ -34,8 +34,8 @@ const Header = () => {
           <li className="hidden sm:inline hover:underline cursor-pointer">Sell</li>
           <li className="hidden sm:inline hover:underline cursor-pointer">Rent</li>
         </ul>
-        <div className='flex item-center' >
-          <form className="bg-slate-100 rounded-lg flex items-center p-2"   >
+        <div className='flex gap-2 item-center' >
+          <form className="bg-slate-100 rounded-lg flex items-center p-2 "   >
             <input
               type="text"
               placeholder="search..."
@@ -45,12 +45,10 @@ const Header = () => {
             <FaSearch className="text-slate-600 ml-2" />
           </form>
           <div className="flex gap-4 items-center">
-          <ul>
+          <ul >
               <li className="hidden sm:inline hover:underline cursor-pointer">News & Insight</li>
             </ul>
           <button className="bg-black text-white p-2 rounded-lg cursor-pointer hover:bg-slate-500">SignUp</button>
-
-           
           </div>
         
         </div>
