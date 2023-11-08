@@ -22,30 +22,22 @@ export const signUp = async (req, res) => {
     });
   }
 
-  try {
-    const user = await User.create({
-      name,
-      email,
-      username,
-      password,
-    });
+  const user = await User.create({
+    name,
+    email,
+    username,
+    password,
+  });
 
-    if (!user) {
-      return res.status(400).json({
-        status: "error",
-        message: "Error creating the user.",
-      });
-    }
-
-    return res.status(200).json({
-      status: "success",
-      message: "User registration successfully completed",
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
+  if (!user) {
+    return res.status(400).json({
       status: "error",
-      message: "An error occurred while creating the user.",
+      message: "Error creating the user.",
     });
   }
+
+  return res.status(200).json({
+    status: "success",
+    message: "User registration successfully completed",
+  });
 };
