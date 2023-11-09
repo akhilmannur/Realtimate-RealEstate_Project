@@ -5,11 +5,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as yup from "yup";
+import { useCookies } from 'react-cookie';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [_,setCookie] = useCookies(['token']);
   const navigate = useNavigate();
 
   const validationSchema = yup.object({
@@ -60,7 +62,10 @@ const SignIn = () => {
       const response = await axios.post("/api/auth/signin", formData);
       const data = response.data;
       console.log(data);
+    if(data.status === "success"){
+      setCookie("token",data.data);
       navigate("/");
+    }
     } catch (error) {
       toast.error("no matching validations please check your credentials");
     } finally {
