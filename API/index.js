@@ -9,6 +9,7 @@ import cors from 'cors';
 
 const app= express();
 app.use(cors());
+
 mongoose.connect(process.env.MONGO_DB)
 .then(()=>{
     console.log('connected to mongodb');
@@ -18,7 +19,6 @@ mongoose.connect(process.env.MONGO_DB)
 })
 
 app.use(express.json());
-
 app.use('/api/user',userRouterr);
 app.use('/api/auth',authRouterr);
 app.use(ErrorHandler);

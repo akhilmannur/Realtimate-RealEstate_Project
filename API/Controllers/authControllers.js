@@ -1,5 +1,13 @@
+
 import User from "../models/userSchema.js";
-import joiUservalidationSchema from "../Models/validationSchema.js";
+import {joiUservalidationSchema ,joiUserLoginvalidationSchema}from "../Models/validationSchema.js";
+import jwt from 'jsonwebtoken';
+import bcryptjs from "bcryptjs";
+import dotenv from 'dotenv'
+dotenv.config();
+
+
+
 
 export const signUp = async (req, res) => {
   const { value, error } = joiUservalidationSchema.validate(req.body);
@@ -40,4 +48,49 @@ export const signUp = async (req, res) => {
     status: "success",
     message: "User registration successfully completed",
   });
+};
+
+
+export const signIn=  async (req, res) => {
+  const { value, error } = joiUserLoginvalidationSchema.validate(req.body);
+  if (error) {
+    res.json(error.message);
+  }
+
+  const { username, password } = value;
+
+  const user = await User.findOne({ username: username});
+  // console.log(user);
+
+  if (!user) {
+    return res.status(404).json({
+      status: "error",
+      message: "user not found",
+    });
+  }
+
+  if (!password || !user.password ) {
+    console.log(password , user.password);
+    return res
+      .status(404)
+      .json({ status: "error", message: "Inavalid input" });
+  }
+
+  const passwordverify = await bcryptjs.compare(password, user.password);
+
+  if (!passwordverify) {
+    return res
+      .status(404)
+      .json({ status: "error", message: "Incorrect password" });
+  }
+
+  const token = jwt.sign(
+    { username: user.username },
+    process.env.USER_ACCESS_TOKEN_SECRET,
+    { expiresIn: 86400 }
+  );
+
+  res
+    .status(200)
+    .json({ status: "success", message: "Login sucessfull", data: token });
 };
