@@ -1,6 +1,6 @@
 import express from 'express';
 import trycatch from '../middlewares/tryCatch.js';
-import { signIn, signUp } from '../Controllers/authControllers.js';
+import { signIn, signUp,} from '../Controllers/authControllers.js';
 
 const authRouter=express.Router();
 

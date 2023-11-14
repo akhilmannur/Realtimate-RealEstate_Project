@@ -51,16 +51,18 @@ export const signUp = async (req, res) => {
 };
 
 
+
+
 export const signIn=  async (req, res) => {
   const { value, error } = joiUserLoginvalidationSchema.validate(req.body);
   if (error) {
     res.json(error.message);
   }
 
+  
   const { username, password } = value;
-
   const user = await User.findOne({ username: username});
-  // console.log(user);
+// console.log(user);
 
   if (!user) {
     return res.status(404).json({
@@ -68,6 +70,20 @@ export const signIn=  async (req, res) => {
       message: "user not found",
     });
   }
+  else if(username === process.env.ADMIN_USERNAME &&
+    password === process.env.ADMIN_PASSWORD){
+      const admintoken = jwt.sign(
+        { username: username },
+        process.env.ADMIN_ACCESS_TOKEN_SECRET,
+        { expiresIn: 86400}
+      );
+  
+      res.status(200).json({
+        status: "admin_success",
+        message: "Admin Successfully logged In.",
+        data: { jwt_token: admintoken },
+      });
+    }
 
   if (!password || !user.password ) {
     console.log(password , user.password);
@@ -92,5 +108,6 @@ export const signIn=  async (req, res) => {
 
   res
     .status(200)
-    .json({ status: "success", message: "Login sucessfull", data: token });
+    .json({ status: "user_success", message: "Login sucessfull", data: token });
 };
+

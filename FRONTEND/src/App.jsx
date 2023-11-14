@@ -7,6 +7,10 @@ import Profile from './Pages/Profile';
 import Header from './Components/Header';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
+import AdminHome from './Pages/AdminHome';
+import AdminUserList from './Pages/AdminUserList';
+import Footer from './Components/Footer';
+
 
 function App() {
   return (
@@ -18,8 +22,11 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/about" element={<About />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/adminhome" element={<AdminHome />} />
+        <Route path="/adminuserlist" element={<AdminUserList/>} />
       </Routes>
       <ToastContainer position="top-right" autoClose={3000} />
+      <Footer/>
     </>
   );
 }

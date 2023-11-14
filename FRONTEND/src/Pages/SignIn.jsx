@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import * as yup from "yup";
 import { useCookies } from 'react-cookie';
 
+
 const SignIn = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -36,6 +37,7 @@ const SignIn = () => {
       [id]: value,
     });
 
+
     try {
       await validationSchema.validateAt(id, formData);
       setErrors((prevErrors) => ({
@@ -49,29 +51,56 @@ const SignIn = () => {
       }));
     }
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      await validationSchema.validate(formData, { abortEarly: false });
-      setErrors({});
-
-      setLoading(true);
-
-      const response = await axios.post("/api/auth/signin", formData);
-      const data = response.data;
-      console.log(data);
-    if(data.status === "success"){
-      setCookie("token",data.data);
-      navigate("/");
-    }
-    } catch (error) {
-      toast.error("no matching validations please check your credentials");
-    } finally {
-      setLoading(false);
+  const handleLoginResponse = (data) => {
+    if (data.status === "error") {
+      if (data.message === "User not found" || data.message === "Incorrect password") {
+        toast.error("Invalid username or password. Please try again.");
+      } else {
+        toast.error(data.message);
+      }
+    } else if (data.status === "success") {
+      toast.success("Login successful!");
+     
     }
   };
+  
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    await validationSchema.validate(formData, { abortEarly: false });
+    setErrors({});
+
+    setLoading(true);
+
+    
+   
+     
+      const Response = await axios.post("/api/auth/signin", formData);
+      const Data = Response.data;
+
+      if (Data.status === "admin_success") {
+        setCookie("token", Data.data);
+        navigate("/adminhome");
+        handleLoginResponse(Data);
+      }
+      else if(Data.status==="user_success"){
+        setCookie("token", Data.data);
+        navigate("/");
+        handleLoginResponse(Data);
+
+      }
+      else {
+        toast.error("User login failed. Please try again.");
+      }
+    }
+   catch (error) {
+    toast.error("No matching validations. Please check your credentials.");
+  } finally {
+    setLoading(false);
+  }
+};
+
   return (
     <div className="bg-white p-10 max-w-md mx-auto border shadow-lg mt-10">
       <h1 className="text-3xl text-center font-bold p-5 uppercase">login</h1>
