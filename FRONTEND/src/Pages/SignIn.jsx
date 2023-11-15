@@ -11,14 +11,15 @@ import {
   signInStart,
   signInSuccess,
   signInFailure,
-  setFormData,
-  setFormError,
-
 } from "../redux/user/userSlice";
 
 const SignIn = () => {
-  const { loading, formData, errors } = useSelector((state) => state.user);
+  const { loading, error} = useSelector(
+    (state) => state.user
+  );
   const [_, setCookie] = useCookies(["token"]);
+  const [errors, setErrors] = useState({});
+  const [formData, setFormData] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -38,16 +39,24 @@ const SignIn = () => {
   });
 
   const handleChange = async (e) => {
-    const { id, value } = e.target; 
-    dispatch(setFormData({ [id]: value }));
+    const { id, value } = e.target;
+    setFormData({
+      ...formData,
+      [id]: value,
+    });
 
     try {
       await validationSchema.validateAt(id, formData);
-      dispatch(setFormError({ id, message: undefined }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [id]: undefined,
+      }));
     } catch (error) {
-      dispatch(setFormError({ id, message: error.message }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [id]: error.message,
+      }));
     }
-  
   };
   const handleLoginResponse = (data) => {
     if (data.status === "error") {
@@ -56,8 +65,10 @@ const SignIn = () => {
         data.message === "Incorrect password"
       ) {
         toast.error("Invalid username or password. Please try again.");
+        dispatch(signInFailure(error.message));
       } else {
         toast.error(data.message);
+        dispatch(signInFailure(data.message));
       }
     } else if (data.status === "admin_success") {
       toast.success("Admin login successful!");
@@ -71,7 +82,7 @@ const SignIn = () => {
 
     try {
       await validationSchema.validate(formData, { abortEarly: false });
-      dispatch(signInStart);
+      dispatch(signInStart());
 
       const Response = await axios.post("/api/auth/signin", formData);
       const Data = Response.data;
@@ -88,7 +99,7 @@ const SignIn = () => {
         dispatch(signInSuccess(Data));
       } else {
         handleLoginResponse(Data);
-        dispatch(signInFailure);
+        dispatch(signInFailure());
       }
     } catch (error) {
       toast.error("No matching validations. Please check your credentials.");

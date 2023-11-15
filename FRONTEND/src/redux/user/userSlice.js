@@ -4,8 +4,7 @@ const initialState = {
   currentuser: null,
   error: null,
   loading: false,
-  formData: {},
-  errors: {},
+  
 };
 
 const userSlice = createSlice({
@@ -24,18 +23,9 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
-    setFormData: (state, action) => {
-      state.formData = { ...state.formData, ...action.payload };
-    },
-    setFormError: (state, action) => {
-      const { id, message } = action.payload;
-      state.errors = { ...state.errors, [id]: message };
-    },
-    clearFormErrors: (state) => {
-      state.errors = {};
-    },
+  
   },
 });
 
-export const { signInStart, signInSuccess, signInFailure,setFormData, setFormError, clearFormErrors } = userSlice.actions;
+export const { signInStart, signInSuccess, signInFailure} = userSlice.actions;
 export default userSlice.reducer;
