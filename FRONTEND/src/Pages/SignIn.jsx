@@ -5,15 +5,22 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as yup from "yup";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+  setFormData,
+  setFormError,
 
+} from "../redux/user/userSlice";
 
 const SignIn = () => {
-  const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [_,setCookie] = useCookies(['token']);
+  const { loading, formData, errors } = useSelector((state) => state.user);
+  const [_, setCookie] = useCookies(["token"]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const validationSchema = yup.object({
     username: yup
@@ -31,51 +38,41 @@ const SignIn = () => {
   });
 
   const handleChange = async (e) => {
-    const { id, value } = e.target;
-    setFormData({
-      ...formData,
-      [id]: value,
-    });
-
+    const { id, value } = e.target; 
+    dispatch(setFormData({ [id]: value }));
 
     try {
       await validationSchema.validateAt(id, formData);
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [id]: undefined,
-      }));
+      dispatch(setFormError({ id, message: undefined }));
     } catch (error) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [id]: error.message,
-      }));
+      dispatch(setFormError({ id, message: error.message }));
     }
+  
   };
   const handleLoginResponse = (data) => {
     if (data.status === "error") {
-      if (data.message === "User not found" || data.message === "Incorrect password") {
+      if (
+        data.message === "User not found" ||
+        data.message === "Incorrect password"
+      ) {
         toast.error("Invalid username or password. Please try again.");
       } else {
         toast.error(data.message);
       }
-    } else if (data.status === "success") {
-      toast.success("Login successful!");
-     
+    } else if (data.status === "admin_success") {
+      toast.success("Admin login successful!");
+    } else if (data.status === "user_success") {
+      toast.success("User login successful!");
     }
   };
-  
-const handleSubmit = async (e) => {
-  e.preventDefault();
 
-  try {
-    await validationSchema.validate(formData, { abortEarly: false });
-    setErrors({});
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    setLoading(true);
+    try {
+      await validationSchema.validate(formData, { abortEarly: false });
+      dispatch(signInStart);
 
-    
-   
-     
       const Response = await axios.post("/api/auth/signin", formData);
       const Data = Response.data;
 
@@ -83,23 +80,21 @@ const handleSubmit = async (e) => {
         setCookie("token", Data.data);
         navigate("/adminhome");
         handleLoginResponse(Data);
-      }
-      else if(Data.status==="user_success"){
+        dispatch(signInSuccess(Data));
+      } else if (Data.status === "user_success") {
         setCookie("token", Data.data);
         navigate("/");
         handleLoginResponse(Data);
-
+        dispatch(signInSuccess(Data));
+      } else {
+        handleLoginResponse(Data);
+        dispatch(signInFailure);
       }
-      else {
-        toast.error("User login failed. Please try again.");
-      }
+    } catch (error) {
+      toast.error("No matching validations. Please check your credentials.");
+      dispatch(signInFailure(error.message));
     }
-   catch (error) {
-    toast.error("No matching validations. Please check your credentials.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="bg-white p-10 max-w-md mx-auto border shadow-lg mt-10">
