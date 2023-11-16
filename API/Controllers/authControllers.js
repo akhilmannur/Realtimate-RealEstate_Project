@@ -49,13 +49,12 @@ export const signUp = async (req, res) => {
   });
 };
 
-
 export const signIn = async (req, res) => {
   const { value, error } = joiUserLoginvalidationSchema.validate(req.body);
 
   if (error) {
     return res.json({
-      status: 'error',
+      status: "error",
       message: error.message,
     });
   }
@@ -63,7 +62,10 @@ export const signIn = async (req, res) => {
   const { username, password } = value;
   const user = await User.findOne({ username });
 
-  if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
+  if (
+    username === process.env.ADMIN_USERNAME &&
+    password === process.env.ADMIN_PASSWORD
+  ) {
     const admintoken = jwt.sign(
       { username: username },
       process.env.ADMIN_ACCESS_TOKEN_SECRET,
@@ -71,8 +73,8 @@ export const signIn = async (req, res) => {
     );
 
     return res.status(200).json({
-      status: 'admin_success',
-      message: 'Login successful',
+      status: "admin_success",
+      message: "Login successful",
       data: { jwt_token: admintoken },
     });
   }
@@ -81,8 +83,8 @@ export const signIn = async (req, res) => {
     if (!password || !user.password) {
       console.log(password, user.password);
       return res.json({
-        status: 'error',
-        message: 'Incorrect password',
+        status: "error",
+        message: "Incorrect password",
       });
     }
 
@@ -90,8 +92,8 @@ export const signIn = async (req, res) => {
 
     if (!passwordverify) {
       return res.json({
-        status: 'error',
-        message: 'Incorrect password',
+        status: "error",
+        message: "Incorrect password",
       });
     }
 
@@ -102,16 +104,56 @@ export const signIn = async (req, res) => {
     );
 
     return res.status(200).json({
-      status: 'user_success',
-      message: 'Login successful',
+      status: "user_success",
+      message: "Login successful",
       data: token,
     });
+  } else {
+    return res.json({
+      status: "error",
+      message: "User not found",
+    });
   }
-else{
-  return res.json({
-    status: 'error',
-    message: 'User not found',
-  });
-};
 };
 
+export const google = async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (user) {
+    const gtoken = jwt.sign(
+      { username: user.username },
+      process.env.USER_ACCESS_TOKEN_SECRET,
+      { expiresIn: 86400 }
+    );
+    const { password: pass, ...rest } = user._doc;
+    res
+      .cookie("access_token", gtoken, { httpOnly: true })
+      .status(200)
+      .json({data:gtoken,
+        rest:rest});
+  } else {
+    const generatedPassword =
+      Math.random().toString(36).slice(-8) +
+      Math.random().toString(36).slice(-8);
+    const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+    const newUser = new User({
+      username:
+        req.body.name.split(" ").join("").toLowerCase() +
+        Math.random().toString(36).slice(-4),
+      email: req.body.email,
+      password: hashedPassword,
+      avatar: req.body.photo,
+    });
+    await newUser.save();
+    const gtoken = jwt.sign(
+      { username: user.username },
+      process.env.USER_ACCESS_TOKEN_SECRET,
+      { expiresIn: 86400 }
+    );
+    const { password: pass, ...rest } = newUser._doc;
+    res
+      .cookie("access_token", gtoken, { httpOnly: true })
+      .status(200)
+      .json({data:gtoken,
+        rest:rest});
+  }
+};

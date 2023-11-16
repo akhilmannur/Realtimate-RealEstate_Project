@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as yup from "yup";
+import OAuth from "../Components/OAuth";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});
@@ -124,12 +124,7 @@ const SignUp = () => {
       >
         {loading ? "Loading..." : "Sign Up"}
       </button>
-      <button className="bg-blue-500 text-white p-3 rounded-lg flex justify-center items-center uppercase hover:opacity-75 disabled:opacity-80">
-        <span className="pr-2">
-          <FaGoogle size={24} />
-        </span>
-        Continue with Google
-      </button>
+        <OAuth/>
     </form>
     <div className="flex gap-2 mt-5">
       <p>Already Have an Account?</p>

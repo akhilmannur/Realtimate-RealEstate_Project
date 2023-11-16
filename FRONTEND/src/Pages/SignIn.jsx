@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -12,6 +11,7 @@ import {
   signInSuccess,
   signInFailure,
 } from "../redux/user/userSlice";
+import OAuth from "../Components/OAuth";
 
 const SignIn = () => {
   const { loading, error} = useSelector(
@@ -135,12 +135,13 @@ const SignIn = () => {
         >
           {loading ? "Loading..." : "Login"}
         </button>
-        <button className="bg-blue-500 text-white p-3 rounded-lg flex justify-center items-center uppercase hover:opacity-75 disabled:opacity-80">
+        {/* <button className="bg-blue-500 text-white p-3 rounded-lg flex justify-center items-center uppercase hover:opacity-75 disabled:opacity-80">
           <span className="pr-2">
             <FaGoogle size={24} />
           </span>
           Continue with Google
-        </button>
+        </button> */}
+        <OAuth/>
       </form>
       <div className="flex gap-2 mt-5">
         <p>Dont have account </p>
