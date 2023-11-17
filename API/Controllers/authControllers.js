@@ -117,6 +117,7 @@ export const signIn = async (req, res) => {
 };
 
 export const google = async (req, res) => {
+  console.log(req.body)
   const user = await User.findOne({ email: req.body.email });
   if (user) {
     const gtoken = jwt.sign(
@@ -126,7 +127,6 @@ export const google = async (req, res) => {
     );
     const { password: pass, ...rest } = user._doc;
     res
-      .cookie("access_token", gtoken, { httpOnly: true })
       .status(200)
       .json({data:gtoken,
         rest:rest});
@@ -136,23 +136,21 @@ export const google = async (req, res) => {
       Math.random().toString(36).slice(-8);
     const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
     const newUser = User.create({
-      username:req.body.username,
+      username: req.body.name.split(' ').join('').toLowerCase() +
+      Math.random().toString(36).slice(-4),
       name:req.body.name,  
       email: req.body.email,
       password: hashedPassword,
-     'rest.avatar': req.body.photo,
+     avatar:req.body.avatar ,
     });
-    await newUser.save();
+  
     const gtoken = jwt.sign(
       { username: user.username },
       process.env.USER_ACCESS_TOKEN_SECRET,
       { expiresIn: 86400 }
     );
     const { password: pass, ...rest } = newUser._doc;
-    res
-      .cookie("access_token", gtoken, { httpOnly: true })
-      .status(200)
-      .json({data:gtoken,
+    res.status(200).json({data:gtoken,
         rest:rest});
   }
 };

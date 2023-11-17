@@ -22,7 +22,7 @@ const userSchema= new mongoose.Schema({
     },
     avatar:{
         type: String,
-        default: "https://image.pngaaa.com/567/2189567-middle.png"
+        default: "https://w0.peakpx.com/wallpaper/979/89/HD-wallpaper-purple-smile-design-eye-smily-profile-pic-face-thumbnail.jpg"
       },
 },{timestamps:true});
 

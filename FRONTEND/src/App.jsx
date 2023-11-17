@@ -15,7 +15,7 @@ import PrivateRoute from "./Components/PrivateRoute";
 function App() {
   return (
     <>
-      <Header />
+      <Header  />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/sign-in" element={<SignIn />} />
@@ -25,7 +25,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
         </Route>
-        
+
         <Route path="/adminhome" element={<AdminHome />} />
         <Route path="/adminuserlist" element={<AdminUserList />} />
       </Routes>

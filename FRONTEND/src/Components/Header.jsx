@@ -7,14 +7,14 @@ import { useSelector } from "react-redux";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { currentuser } = useSelector((state) => state.user);
-  const avatarUrl = currentuser && currentuser.rest && currentuser.rest.avatar;
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <nav className="shadow-md p-2 bg-slate-200">
+    <nav className="sticky top-0 z-50 shadow-md p-2 bg-slate-200">
       <div className="flex justify-between items-center max-w-8xl mx-auto">
         <div className="sm:hidden">
           {isMenuOpen ? (
@@ -62,11 +62,11 @@ const Header = () => {
                 News & Insight
               </li>
             </ul>
-            {avatarUrl ? (
+            {currentuser ? (
             <Link to="/profile">
               <img
               className="rounded-full h-7 w-7 object-cover"
-              src={avatarUrl}
+              src={currentuser.rest.avatar}
               alt="profile"
               />
               </Link>
