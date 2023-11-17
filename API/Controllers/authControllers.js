@@ -106,7 +106,7 @@ export const signIn = async (req, res) => {
     return res.status(200).json({
       status: "user_success",
       message: "Login successful",
-      data: token,
+      data: token,username
     });
   } else {
     return res.json({
@@ -135,13 +135,12 @@ export const google = async (req, res) => {
       Math.random().toString(36).slice(-8) +
       Math.random().toString(36).slice(-8);
     const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
-    const newUser = new User({
-      username:
-        req.body.name.split(" ").join("").toLowerCase() +
-        Math.random().toString(36).slice(-4),
+    const newUser = User.create({
+      username:req.body.username,
+      name:req.body.name,  
       email: req.body.email,
       password: hashedPassword,
-      avatar: req.body.photo,
+     'rest.avatar': req.body.photo,
     });
     await newUser.save();
     const gtoken = jwt.sign(

@@ -25,13 +25,14 @@ import { useCookies } from 'react-cookie';
         body: JSON.stringify({
           name: result.user.displayName,
           email: result.user.email,
-          photo: result.user.photoURL,
+          'rest.avatar': result.user.photoURL,
         }),
       });
-      const Data = await res.json();
-      console.log(Data);
-      setCookie("gtoken", Data.data);
-      dispatch(signInSuccess(Data));
+
+      const data = await res.json();
+      dispatch(signInSuccess(data));
+      console.log(data);
+      setCookie("gtoken", data.data);
       navigate('/');
     } catch (error) {
       console.log('could not sign in with google', error);
