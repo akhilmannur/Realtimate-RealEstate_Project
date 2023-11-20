@@ -1,113 +1,183 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  Typography,
+  Button,
+  Dialog,
+  Card,
+  CardBody,
+  CardFooter,
+  Input,
+} from "@material-tailwind/react";
 import { useSelector } from "react-redux";
+import { FaEdit, FaSignOutAlt, FaCamera } from "react-icons/fa";
+import axios from "axios";
+import AvatarUpload from "./AvatarUpload";
 
 const Profile = () => {
   const { currentuser } = useSelector((state) => state.user);
-  const [editing, setEditing] = useState(false);
-  const [username, setUsername] = useState(currentuser?.username || '');
-  const [email, setEmail] = useState(currentuser?.email || '');
-  const [password, setPassword] = useState('');
-
   const avatarUrl = currentuser?.rest?.avatar;
+  const [open, setOpen] = React.useState(false);
+  const [avatar, setavatar] = useState(null);
+  const fileRef = useRef(null);
+  const handleOpen = () => setOpen((cur) => !cur);
 
-  const handleEditClick = () => {
-    setEditing(true);
+
+  const handleFileUpload = async () => {
+    console.log(currentuser);
+    try {
+      const url = await AvatarUpload(avatar);
+      console.log(url);
+
+      await axios.put(`http://localhost:3000/api/user/${currentuser?.rest?._id}/avatar`, {
+        Avatar: url,
+     
+      },
+      {
+        headers: {
+          Authorization: `${currentuser?.data}`,
+        },
+      }
+      );
+    } catch (error) {
+      console.log("from upload", error.message);
+    }
   };
-
-  const handleSaveClick = () => {
-    setEditing(false);
-
+  const uploadavatar = async (e) => {
+    setavatar(e.target.files[0]);
   };
-
   return (
-    <div className='p-3 max-w-md mx-auto bg-white border  shadow-2xl mt-20 rounded-lg'>
-      <h1 className='text-4xl font-bold text-center my-7'>PROFILE</h1>
-      <form className="flex flex-col">  
+    <div>
+      <figure className="relative h-96 w-full">
         <img
-          className="w-24 h-24 mb-4 rounded-full object-cover cursor-pointer self-center mt-2"
-          src={avatarUrl}
-          alt="profile image"
+          className="h-full w-full rounded-xl object-cover object-center"
+          src="https://www.contemporist.com/wp-content/uploads/2023/09/modern-house-dark-brick-exterior-040923-931-01.jpg"
+          alt="nature image"
         />
-        {editing ? (
-          <>
-            <input
-              type="text"
-              placeholder="username"
-              id="username"
-              className="border p-3 rounded-lg center m-3"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-              type="email"
-              placeholder="email"
-              id="email"
-              className="border p-3 rounded-lg center m-3"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="password"
-              id="password"
-              className="border p-3 rounded-lg center m-3"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </>
-        ) : (
-          <div className="flex flex-col items-start space-y-2">
-            <h3 className="bg-gray-100 p-3 rounded-lg text-lg w-full">
-              <strong>Username:</strong> {currentuser?.rest?.username}
-            </h3>
-            <h3 className="bg-gray-100 p-3 rounded-lg text-lg w-full">
-              <strong>Email:</strong> {currentuser?.rest?.email}
-            </h3>
-            <h3 className="bg-gray-100 p-3 rounded-lg text-lg w-full">
-              <strong>Password:</strong> ********
-            </h3>
-          </div>
-        )}
-        <div >
-          {editing ? (
-            <a
-              href="#"
-              className="bg-slate-800 text-white p-3 rounded-lg uppercase hover:opacity-75 disabled:opacity-80"
-              onClick={handleSaveClick}
-            >
-              Save
-            </a>
-          ) : (
-            <div className="flex justify-between items-center p-4">
-            <a
-              href="#"
-              className="bg-slate-800 text-white p-3 rounded-lg uppercase hover:opacity-75 disabled:opacity-80"
-              onClick={handleEditClick}
-            >
-              Edit
-            </a>
-            <a
-            href="#"
-            className="bg-slate-800 text-white p-3 rounded-lg uppercase hover:opacity-75 disabled:opacity-80"
-         
-          >
-          Delete Account
-          </a>
-            <a
-            href="#"
-            className="bg-slate-800 text-white p-3 rounded-lg uppercase hover:opacity-75 disabled:opacity-80"
-         
-          >
-          signout
-          </a>
-          </div>
-          )}
+        <div className="absolute top-5 right-5 p-2 text-white">
+          <FaEdit size={30} />
         </div>
-      </form>
+        <figcaption className="absolute bottom-8 left-2/4 flex w-[calc(100%-3rem)] -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
+          <div>
+            <Typography variant="h5" color="blue-gray">
+              {currentuser?.rest?.name}
+            </Typography>
+            <Typography color="gray" className="mt-2 font-normal">
+              USER
+            </Typography>
+          </div>
+          <div className="flex flex-col justify-center align-center ">
+            <div className="relative w-24 h-24 mb-4 rounded-full overflow-hidden">
+              <img
+                className="w-24 h-24 mb-4 rounded-full object-cover cursor-pointer self-center "
+                src={avatarUrl}
+                alt="profile image"
+              />
+              <div className="absolute bottom-0 left-11 ml-3 mb-2  text-white">
+                <FaCamera size={24} />
+              </div>
+            </div>
+            <Typography color="gray" className="font-normal">
+              {currentuser?.rest?.username}
+            </Typography>
+          </div>
+
+          <div className="flex flex-col gap-4 mt-4">
+            <div className="flex items-center gap-1">
+              <FaEdit size={18} onClick={handleOpen} />
+              <Typography color="gray" onClick={handleOpen}>
+                Edit
+              </Typography>
+            </div>
+            <div className="flex items-center gap-1">
+              <FaSignOutAlt size={18} />
+              <Typography color="gray">Logout</Typography>
+            </div>
+          </div>
+        </figcaption>
+      </figure>
+      <Dialog
+        size="xs"
+        open={open}
+        handler={handleOpen}
+        className="bg-transparent shadow-none"
+      >
+        <Card className="mx-auto w-full max-w-[24rem]">
+          <CardBody className="flex flex-col gap-4">
+            <Typography variant="h4" color="blue-gray">
+              EDIT YOUR PROFILE
+            </Typography>
+            <input
+        onChange={(e)=>uploadavatar(e)}
+          type='file'
+          ref={fileRef}
+          hidden
+          accept='image/*'
+        />
+            <img
+              className="w-24 h-24 mb-4 rounded-full object-cover cursor-pointer self-center "
+              src={avatarUrl}
+              alt="profile image"
+              onClick={() => fileRef.current.click()}
+            />
+              <div className="flex flex-col justify-between items-end">
+    
+        <div className="flex items-center gap-4">
+        
+          <label htmlFor="avatar" className="cursor-pointer">
+            <FaCamera size={18} />
+          </label>
+          <input
+            id="avatar"
+            onChange={(e) => uploadavatar(e)}
+            type="file"
+            ref={fileRef}
+            hidden
+            accept="image/*"
+          />
+          <FaSignOutAlt size={18} onClick={handleFileUpload} className="cursor-pointer" />
+        </div>
+        </div>
+            <Typography className="-mb-2" variant="h6">
+              username
+            </Typography>
+
+            <Input
+              label="username"
+              size="lg"
+              id="username"
+              name="username"
+              autoComplete="username"
+            />
+            <Typography className="-mb-2" variant="h6">
+              email
+            </Typography>
+
+            <Input
+              label="email"
+              size="lg"
+              id="email"
+              name="email"
+              autoComplete="email"
+            />
+            <Typography className="-mb-2" variant="h6">
+              password
+            </Typography>
+
+            <Input
+              label="password"
+              size="lg"
+              id="password"
+              name="password"
+              autoComplete="current-password"
+            />
+          </CardBody>
+          <CardFooter className="pt-0">
+            <Button  onClick={()=>(handleFileUpload)}>save</Button>
+          </CardFooter>
+        </Card>
+      </Dialog>
     </div>
   );
 };
 
 export default Profile;
-
-

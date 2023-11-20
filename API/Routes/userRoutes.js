@@ -1,7 +1,10 @@
 import  express  from 'express';
 const userRouter= express.Router();
-import { test } from '../Controllers/userControllers.js';
+import verifyToken from '../middlewares/authMiddleWare.js'
+import tryCatch from '../middlewares/tryCatch.js'
+import { editAvatar } from '../Controllers/userControllers.js';
 
-userRouter.get('/test',test)
+
+userRouter.put('/:id/avatar',verifyToken,tryCatch(editAvatar))
 
 export default userRouter;
