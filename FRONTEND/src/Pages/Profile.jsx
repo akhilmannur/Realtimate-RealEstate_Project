@@ -1,4 +1,4 @@
-import React, { useState, useRef,  } from "react";
+import React, { useState, useRef } from "react";
 import {
   Typography,
   Button,
@@ -12,14 +12,12 @@ import {
   updateUserStart,
   updateUserFailure,
   updateUserAvatar,
-
 } from "../redux/user/userSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { FaEdit, FaSignOutAlt, FaCamera } from "react-icons/fa";
+import { FaEdit, FaSignOutAlt, FaCamera,FaCheck } from "react-icons/fa";
 import axios from "axios";
 import AvatarUpload from "./AvatarUpload";
-
 
 const Profile = () => {
   const { currentuser, loading, error } = useSelector((state) => state.user);
@@ -30,14 +28,12 @@ const Profile = () => {
   const dispatch = useDispatch();
   const handleOpen = () => setOpen((cur) => !cur);
 
-  // console.log(currentuser);
   const handleFileUpload = async () => {
     try {
       dispatch(updateUserStart());
       const url = await AvatarUpload(avatar);
-      // console.log(url);
 
-     await axios.put(
+      await axios.put(
         `http://localhost:3000/api/user/${currentuser?.rest?._id}/avatar`,
         {
           Avatar: url,
@@ -47,7 +43,7 @@ const Profile = () => {
             Authorization: `${currentuser?.data}`,
           },
         }
-      );    
+      );
       dispatch(updateUserAvatar(url));
     } catch (error) {
       console.log("from upload", error.message);
@@ -91,7 +87,6 @@ const Profile = () => {
             <Typography color="gray" className="font-normal">
               {currentuser?.rest?.username}
             </Typography>
-            
           </div>
 
           <div className="flex flex-col gap-4 mt-4">
@@ -136,7 +131,12 @@ const Profile = () => {
               <div className="flex items-center gap-4">
                 <label htmlFor="avatar" className="cursor-pointer">
                   <FaCamera size={18} />
-                </label>
+                </label> 
+                 <FaCheck
+                  size={18}
+                  onClick={handleFileUpload}
+                  className="cursor-pointer"
+                />
                 <input
                   id="avatar"
                   onChange={(e) => uploadavatar(e)}
@@ -145,11 +145,7 @@ const Profile = () => {
                   hidden
                   accept="image/*"
                 />
-                <FaSignOutAlt
-                  size={18}
-                  onClick={handleFileUpload}
-                  className="cursor-pointer"
-                />
+              
               </div>
             </div>
             <Typography className="-mb-2" variant="h6">

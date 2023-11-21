@@ -37,3 +37,37 @@ export const  showUserBYId=async (req, res) => {
       data: user,
     });
   }
+
+  export const updateUser =async (req, res) => {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      if (req.body.password) {
+        req.body.password = bcryptjs.hashSync(req.body.password, 10);
+      }
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          $set: {
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password,
+            avatar: req.body.avatar,
+          },
+        },
+        { new: true }
+      );
+      const { password, ...rest } = updatedUser._doc;
+
+      res.status(200).json({
+        status:"success",
+        message:"user updated succesfully",
+        data:rest
+      }
+      )
+    
+
+  }
