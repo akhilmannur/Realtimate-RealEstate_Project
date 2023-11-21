@@ -108,13 +108,13 @@ const SignIn = () => {
   };
 
   return (
-    <div className="bg-white p-10 max-w-md mx-auto border shadow-lg mt-10">
+    <div className="bg-white p-10 max-w-md mx-auto border shadow-lg mt-12">
       <h1 className="text-3xl text-center font-bold p-5 uppercase">login</h1>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
         {errors.username && <p className="text-red-500">{errors.username}</p>}
         <input
           type="text"
-          className="border p-2"
+          className="border rounded-lg p-3 "
           id="username"
           placeholder="Username"
           onChange={handleChange}
@@ -122,7 +122,7 @@ const SignIn = () => {
 
         <input
           type="password"
-          className="border p-2"
+          className="border rounded-lg p-3"
           id="password"
           placeholder="Password"
           onChange={handleChange}
@@ -131,16 +131,11 @@ const SignIn = () => {
 
         <button
           disabled={loading}
-          className="bg-slate-800 text-white p-3 rounded-lg uppercase hover:opacity-75 disabled:opacity-80"
+          className="bg-black text-white p-4 rounded-lg uppercase hover:opacity-75 disabled:opacity-80"
         >
           {loading ? "Loading..." : "Login"}
         </button>
-        {/* <button className="bg-blue-500 text-white p-3 rounded-lg flex justify-center items-center uppercase hover:opacity-75 disabled:opacity-80">
-          <span className="pr-2">
-            <FaGoogle size={24} />
-          </span>
-          Continue with Google
-        </button> */}
+      
         <OAuth/>
       </form>
       <div className="flex gap-2 mt-5">

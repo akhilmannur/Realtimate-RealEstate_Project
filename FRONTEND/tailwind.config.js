@@ -1,7 +1,15 @@
+/** @type {import('tailwindcss').Config} */
+import withMT from "@material-tailwind/react/utils/withMT";
+
 const defaultTailwindConfig = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: '#123456',
+        secondary: '#789abc',
+      },
+    },
   },
   plugins: [],
 };
@@ -9,17 +17,32 @@ const defaultTailwindConfig = {
 const materialTailwindConfig = {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      // Different theme extension in materialTailwindConfig
+      fonts: {
+        custom: ['Arial', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 };
 
 // Merge the configurations
 const mergedConfig = {
-  content: [...new Set([...defaultTailwindConfig.content, ...materialTailwindConfig.content])],
+  content: [
+    ...new Set([...defaultTailwindConfig.content, ...materialTailwindConfig.content]),
+  ],
   theme: {
-    extend: { ...defaultTailwindConfig.theme, ...materialTailwindConfig.theme },
+    extend: {
+      ...defaultTailwindConfig.theme.extend,
+      ...materialTailwindConfig.theme.extend,
+    },
   },
-  plugins: [...new Set([...defaultTailwindConfig.plugins, ...materialTailwindConfig.plugins])],
+  plugins: [
+    ...new Set([...defaultTailwindConfig.plugins, ...materialTailwindConfig.plugins]),
+  ],
 };
-export default mergedConfig;
+
+// Apply withMT function to the merged configuration
+const finalConfig = withMT(mergedConfig);
+export default finalConfig;

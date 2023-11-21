@@ -8,15 +8,16 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const { currentuser } = useSelector((state) => state.user);
+  // console.log(currentuser);
   const toggleDropdown = () => {
     setOpen(!open);
   };
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-// console.log(currentuser.rest.avatar);
+ 
   return (
-    <nav className="sticky top-0 z-50 shadow-md p-2 bg-slate-300">
+    <nav className="sticky top-0 z-50 shadow-md p-2 bg-blue-gray-100">
       <div className="flex justify-around items-center max-w-8xl mx-auto">
         <div className="sm:hidden">
           {isMenuOpen ? (
@@ -56,7 +57,7 @@ const Header = () => {
           </li>
         </ul>
         <div className="flex gap-6 item-center">
-          <form className="bg-slate-100 rounded-lg flex items-center p-2 ">
+          <form className="bg-gray-200 rounded-lg flex items-center p-2 ">
             <input
               type="text"
               id="search"
@@ -87,7 +88,7 @@ const Header = () => {
                     className={`rounded-full h-7 w-7 object-cover ${
                       open ? "dropdownOpen" : ""
                     }`}
-                    src={currentuser?.rest.avatar}
+                    src={currentuser?.rest?.avatar}
                     alt="profile"
                   />
                 </button>
@@ -104,10 +105,10 @@ const Header = () => {
                     }}
                   >
                     <ul>
-                      <Link to={'/profile'}>
-                      <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
-                        Profile
-                      </li>
+                      <Link to={"/profile"}>
+                        <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
+                          Profile
+                        </li>
                       </Link>
 
                       <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">

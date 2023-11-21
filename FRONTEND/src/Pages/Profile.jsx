@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef,  } from "react";
 import {
   Typography,
   Button,
@@ -8,38 +8,50 @@ import {
   CardFooter,
   Input,
 } from "@material-tailwind/react";
+import {
+  updateUserStart,
+  updateUserFailure,
+  updateUserAvatar,
+
+} from "../redux/user/userSlice";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { FaEdit, FaSignOutAlt, FaCamera } from "react-icons/fa";
 import axios from "axios";
 import AvatarUpload from "./AvatarUpload";
 
+
 const Profile = () => {
-  const { currentuser } = useSelector((state) => state.user);
+  const { currentuser, loading, error } = useSelector((state) => state.user);
   const avatarUrl = currentuser?.rest?.avatar;
   const [open, setOpen] = React.useState(false);
   const [avatar, setavatar] = useState(null);
   const fileRef = useRef(null);
+  const dispatch = useDispatch();
   const handleOpen = () => setOpen((cur) => !cur);
 
-
+  // console.log(currentuser);
   const handleFileUpload = async () => {
-    console.log(currentuser);
     try {
+      dispatch(updateUserStart());
       const url = await AvatarUpload(avatar);
-      console.log(url);
+      // console.log(url);
 
-      await axios.put(`http://localhost:3000/api/user/${currentuser?.rest?._id}/avatar`, {
-        Avatar: url,
-     
-      },
-      {
-        headers: {
-          Authorization: `${currentuser?.data}`,
+     await axios.put(
+        `http://localhost:3000/api/user/${currentuser?.rest?._id}/avatar`,
+        {
+          Avatar: url,
         },
-      }
-      );
+        {
+          headers: {
+            Authorization: `${currentuser?.data}`,
+          },
+        }
+      );    
+      dispatch(updateUserAvatar(url));
     } catch (error) {
       console.log("from upload", error.message);
+      dispatch(updateUserFailure(error.message));
     }
   };
   const uploadavatar = async (e) => {
@@ -79,6 +91,7 @@ const Profile = () => {
             <Typography color="gray" className="font-normal">
               {currentuser?.rest?.username}
             </Typography>
+            
           </div>
 
           <div className="flex flex-col gap-4 mt-4">
@@ -107,36 +120,38 @@ const Profile = () => {
               EDIT YOUR PROFILE
             </Typography>
             <input
-        onChange={(e)=>uploadavatar(e)}
-          type='file'
-          ref={fileRef}
-          hidden
-          accept='image/*'
-        />
+              onChange={(e) => uploadavatar(e)}
+              type="file"
+              ref={fileRef}
+              hidden
+              accept="image/*"
+            />
             <img
               className="w-24 h-24 mb-4 rounded-full object-cover cursor-pointer self-center "
               src={avatarUrl}
               alt="profile image"
               onClick={() => fileRef.current.click()}
             />
-              <div className="flex flex-col justify-between items-end">
-    
-        <div className="flex items-center gap-4">
-        
-          <label htmlFor="avatar" className="cursor-pointer">
-            <FaCamera size={18} />
-          </label>
-          <input
-            id="avatar"
-            onChange={(e) => uploadavatar(e)}
-            type="file"
-            ref={fileRef}
-            hidden
-            accept="image/*"
-          />
-          <FaSignOutAlt size={18} onClick={handleFileUpload} className="cursor-pointer" />
-        </div>
-        </div>
+            <div className="flex flex-col justify-between items-end">
+              <div className="flex items-center gap-4">
+                <label htmlFor="avatar" className="cursor-pointer">
+                  <FaCamera size={18} />
+                </label>
+                <input
+                  id="avatar"
+                  onChange={(e) => uploadavatar(e)}
+                  type="file"
+                  ref={fileRef}
+                  hidden
+                  accept="image/*"
+                />
+                <FaSignOutAlt
+                  size={18}
+                  onClick={handleFileUpload}
+                  className="cursor-pointer"
+                />
+              </div>
+            </div>
             <Typography className="-mb-2" variant="h6">
               username
             </Typography>
@@ -172,7 +187,7 @@ const Profile = () => {
             />
           </CardBody>
           <CardFooter className="pt-0">
-            <Button  onClick={()=>(handleFileUpload)}>save</Button>
+            <Button onClick={() => handleFileUpload}>save</Button>
           </CardFooter>
         </Card>
       </Dialog>

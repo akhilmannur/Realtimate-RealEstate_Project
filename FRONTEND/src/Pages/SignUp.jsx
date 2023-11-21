@@ -88,7 +88,7 @@ const SignUp = () => {
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <input
         type="text"
-        className="border p-2"
+        className="border rounded-lg p-3"
         id="name"
         placeholder="Full Name"
         onChange={handleChange}
@@ -96,7 +96,7 @@ const SignUp = () => {
     
       <input
         type="email"
-        className="border p-2"
+        className="border rounded-lg p-3"
         id="email"
         placeholder="Email Id"
         onChange={handleChange}
@@ -104,7 +104,7 @@ const SignUp = () => {
       {errors.email && <p className="text-red-500">{errors.email}</p>}
       <input
         type="text"
-        className="border p-2"
+        className="border rounded-lg p-3"
         id="username"
         placeholder="Username"
         onChange={handleChange}
@@ -112,7 +112,7 @@ const SignUp = () => {
       {errors.username && <p className="text-red-500">{errors.username}</p>}
       <input
         type="password"
-        className="border p-2"
+        className="border rounded-lg p-3"
         id="password"
         placeholder="Password"
         onChange={handleChange}
@@ -120,7 +120,7 @@ const SignUp = () => {
       {errors.password && <p className="text-red-500">{errors.password}</p>}
       <button
         disabled={loading}
-        className="bg-slate-800 text-white p-3 rounded-lg uppercase hover:opacity-75 disabled:opacity-80"
+        className="bg-black text-white p-4 rounded-lg uppercase hover:opacity-75 disabled:opacity-80"
       >
         {loading ? "Loading..." : "Sign Up"}
       </button>
