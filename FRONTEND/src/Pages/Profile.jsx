@@ -12,15 +12,19 @@ import {
   updateUserStart,
   updateUserFailure,
   updateUserAvatar,
-  updateUserDetails
+  updateUserDetails,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure
 } from "../redux/user/userSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { FaEdit, FaSignOutAlt, FaCamera, FaCheck } from "react-icons/fa";
+import { FaEdit, FaSignOutAlt, FaCamera, FaCheck,FaTrash  } from "react-icons/fa";
 import axios from "axios";
 import AvatarUpload from "./AvatarUpload";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const Profile = () => {
   const { currentuser, loading, error } = useSelector((state) => state.user);
@@ -28,6 +32,8 @@ const Profile = () => {
   const [open, setOpen] = React.useState(false);
   const [avatar, setavatar] = useState(null);
   const [formData, setFormData] = useState({});
+  const [_,removeCookie] = useCookies(['token']);
+
   const fileRef = useRef(null);
   const dispatch = useDispatch();
   const navigate=useNavigate();
@@ -93,6 +99,32 @@ const Profile = () => {
       toast.error("updation failed:", error.message);
     }
   };
+    const handleDeleteUser = async () => {
+      try {
+        dispatch(deleteUserStart());
+        const res = await axios.delete(`http://localhost:3000/api/user/${currentuser?.rest?._id}/deleteuser`, 
+          {
+            headers: {
+              Authorization: `${currentuser?.data}`,
+            },
+          }
+        );
+
+        const data = await res.data
+        console.log(data);
+        if (data.success === false) {
+          dispatch(deleteUserFailure(data.message));
+          toast.error('delete user failed', data.message);
+          return;
+        }
+        dispatch(deleteUserSuccess(data));
+         removeCookie('token');
+        toast.success('delete user success', data.message);
+      } catch (error) {
+        dispatch(deleteUserFailure(error.message));
+        toast.error('delete user failed', error.message);
+      }
+    };
   
   return (
     <div>
@@ -105,7 +137,7 @@ const Profile = () => {
         <div className="absolute top-5 right-5 p-2 text-white">
           <FaEdit size={30} />
         </div>
-        <figcaption className="absolute bottom-8 left-2/4 flex w-[calc(100%-3rem)] -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
+        <figcaption className="absolute bottom-8 left-2/4 flex w-[calc(100%-1rem)] -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
           <div>
             <Typography variant="h5" color="blue-gray">
               {currentuser?.rest?.name}
@@ -114,7 +146,7 @@ const Profile = () => {
               USER
             </Typography>
           </div>
-          <div className="flex flex-col justify-center align-center ">
+          <div className="flex flex-col justify-between align-center ">
             <div className="relative w-24 h-24 mb-4 rounded-full overflow-hidden">
               <img
                 className="w-24 h-24 mb-4 rounded-full object-cover cursor-pointer self-center "
@@ -130,7 +162,7 @@ const Profile = () => {
             </Typography>
           </div>
 
-          <div className="flex flex-col gap-4 mt-4">
+          <div className="flex flex-col gap-4 mt-1 mr-8">
             <div className="flex items-center gap-1">
               <FaEdit size={18} onClick={handleOpen} />
               <Typography color="gray" onClick={handleOpen}>
@@ -140,6 +172,10 @@ const Profile = () => {
             <div className="flex items-center gap-1">
               <FaSignOutAlt size={18} />
               <Typography color="gray">Logout</Typography>
+            </div>
+            <div className="flex items-center">
+              <FaTrash  size={18} onClick={handleDeleteUser} />
+              <Typography color="gray" onClick={handleDeleteUser}>DeleteAccount</Typography>
             </div>
           </div>
         </figcaption>
