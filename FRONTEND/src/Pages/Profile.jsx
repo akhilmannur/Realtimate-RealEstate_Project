@@ -15,11 +15,19 @@ import {
   updateUserDetails,
   deleteUserStart,
   deleteUserSuccess,
-  deleteUserFailure
+  deleteUserFailure,
+  signOutUserSuccess,
+  signOutUserFailure
 } from "../redux/user/userSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { FaEdit, FaSignOutAlt, FaCamera, FaCheck,FaTrash  } from "react-icons/fa";
+import {
+  FaEdit,
+  FaSignOutAlt,
+  FaCamera,
+  FaCheck,
+  FaTrash,
+} from "react-icons/fa";
 import axios from "axios";
 import AvatarUpload from "./AvatarUpload";
 import { toast } from "react-toastify";
@@ -32,11 +40,11 @@ const Profile = () => {
   const [open, setOpen] = React.useState(false);
   const [avatar, setavatar] = useState(null);
   const [formData, setFormData] = useState({});
-  const [_,removeCookie] = useCookies(['token']);
+  const [_, removeCookie] = useCookies(["token"]);
 
   const fileRef = useRef(null);
   const dispatch = useDispatch();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const handleOpen = () => setOpen((cur) => !cur);
 
   const handleFileUpload = async () => {
@@ -56,11 +64,11 @@ const Profile = () => {
         }
       );
       dispatch(updateUserAvatar(url));
-      toast.success('Updated sucessfully')
+      toast.success("Updated sucessfully");
     } catch (error) {
       console.log("from upload", error.message);
-    dispatch(updateUserFailure(error));
-    toast.error("updation failed:", error.message);
+      dispatch(updateUserFailure(error));
+      toast.error("updation failed:", error.message);
     }
   };
   const uploadavatar = async (e) => {
@@ -77,7 +85,7 @@ const Profile = () => {
       dispatch(updateUserStart());
       const res = await axios.put(
         `http://localhost:3000/api/user/${currentuser?.rest?._id}/updateuser`,
-        formData, 
+        formData,
         {
           headers: {
             Authorization: `${currentuser?.data}`,
@@ -90,42 +98,56 @@ const Profile = () => {
         dispatch(updateUserFailure(data.message));
         return;
       }
-  
+
       dispatch(updateUserDetails(data.rest));
-      toast.success('Updated sucessfully')
-      
+      toast.success("Updated sucessfully");
     } catch (error) {
       dispatch(updateUserFailure(error.message));
       toast.error("updation failed:", error.message);
     }
   };
-    const handleDeleteUser = async () => {
-      try {
-        dispatch(deleteUserStart());
-        const res = await axios.delete(`http://localhost:3000/api/user/${currentuser?.rest?._id}/deleteuser`, 
-          {
-            headers: {
-              Authorization: `${currentuser?.data}`,
-            },
-          }
-        );
-
-        const data = await res.data
-        console.log(data);
-        if (data.success === false) {
-          dispatch(deleteUserFailure(data.message));
-          toast.error('delete user failed', data.message);
-          return;
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await axios.delete(
+        `http://localhost:3000/api/user/${currentuser?.rest?._id}/deleteuser`,
+        {
+          headers: {
+            Authorization: `${currentuser?.data}`,
+          },
         }
-        dispatch(deleteUserSuccess(data));
-         removeCookie('token');
-        toast.success('delete user success', data.message);
-      } catch (error) {
-        dispatch(deleteUserFailure(error.message));
-        toast.error('delete user failed', error.message);
+      );
+
+      const data = await res.data;
+      console.log(data);
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        toast.error("delete user failed", data.message);
+        return;
       }
-    };
-  
+      dispatch(deleteUserSuccess(data));
+      removeCookie("token");
+      toast.success("delete user success", data.message);
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+      toast.error("delete user failed", error.message);
+    }
+  };
+
+  const handleSignOut = () => {
+
+    if(currentuser){
+    removeCookie("token");
+    dispatch(signOutUserSuccess());
+    toast.success("signout successful");
+    navigate('/sign-in');
+    }
+    else{
+    dispatch(signOutUserFailure());
+    toast.error("signout failed");
+  };
+  }
+
   return (
     <div>
       <figure className="relative h-96 w-full">
@@ -154,7 +176,7 @@ const Profile = () => {
                 alt="profile image"
               />
               <div className="absolute bottom-0 left-11 ml-3 mb-2  text-white">
-                <FaCamera size={24}  onClick={handleOpen}/>
+                <FaCamera size={24} onClick={handleOpen} />
               </div>
             </div>
             <Typography color="gray" className="font-normal">
@@ -170,64 +192,69 @@ const Profile = () => {
               </Typography>
             </div>
             <div className="flex items-center gap-1">
-              <FaSignOutAlt size={18} />
-              <Typography color="gray">Logout</Typography>
+              <FaSignOutAlt size={18} onClick={handleSignOut} />
+              <Typography color="gray"  onClick={handleSignOut} >Logout</Typography>
             </div>
             <div className="flex items-center">
-              <FaTrash  size={18} onClick={handleDeleteUser} />
-              <Typography color="gray" onClick={handleDeleteUser}>DeleteAccount</Typography>
+              <FaTrash size={18} onClick={handleDeleteUser} />
+              <Typography color="gray" onClick={handleDeleteUser}>
+                DeleteAccount
+              </Typography>
             </div>
           </div>
         </figcaption>
       </figure>
-      
-        <Dialog
-          size="xs"
-          open={open}
-          handler={handleOpen}
-          className="bg-transparent shadow-none"
-        >
-          <Card className="mx-auto w-full max-w-[24rem]">
-            <CardBody className="flex flex-col gap-4">
-              <Typography variant="h4" color="blue-gray">
-                EDIT YOUR PROFILE
-              </Typography>
-              <input
-                onChange={(e) => uploadavatar(e)}
-                type="file"
-                ref={fileRef}
-                hidden
-                accept="image/*"
-              />
-              <img
-                className="w-24 h-24 mb-4 rounded-full object-cover cursor-pointer self-center "
-                src={avatarUrl}
-                alt="profile image"
-                onClick={() => fileRef.current.click()}
-              />
-              <div className="flex flex-col justify-between items-end">
-                <div className="flex items-center gap-4">
-                  <label htmlFor="avatar" className="cursor-pointer">
-                    <FaCamera size={18} />
-                  </label>
-                     <span className="ml-1">Edit Image</span>
-                  <FaCheck
-                    size={18}
-                    onClick={handleFileUpload}
-                    className="cursor-pointer"
-                  />
-                   <span className="ml-1">Update</span>
-                  <input
-                    id="avatar"
-                    onChange={(e) => uploadavatar(e)}
-                    type="file"
-                    ref={fileRef}
-                    hidden
-                    accept="image/*"
-                  />
-                </div>
+
+      <Dialog
+        size="xs"
+        open={open}
+        handler={handleOpen}
+        className="bg-transparent shadow-none"
+      >
+        <Card className="mx-auto w-full max-w-[24rem]">
+          <CardBody className="flex flex-col gap-4">
+            <Typography variant="h4" color="blue-gray">
+              EDIT YOUR PROFILE
+            </Typography>
+            <input
+              onChange={(e) => uploadavatar(e)}
+              type="file"
+              ref={fileRef}
+              hidden
+              accept="image/*"
+            />
+            <img
+              className="w-24 h-24 mb-4 rounded-full object-cover cursor-pointer self-center "
+              src={avatarUrl}
+              alt="profile image"
+              onClick={() => fileRef.current.click()}
+            />
+            <div className="flex flex-col justify-between items-end">
+              <div className="flex items-center gap-4">
+                <label htmlFor="avatar" className="cursor-pointer">
+                  <FaCamera size={18} />
+                </label>
+                <span className="ml-1">Edit Image</span>
+                <FaCheck
+                  size={18}
+                  onClick={handleFileUpload}
+                  className="cursor-pointer"
+                />
+                <span className="ml-1">Update</span>
+                <input
+                  id="avatar"
+                  onChange={(e) => uploadavatar(e)}
+                  type="file"
+                  ref={fileRef}
+                  hidden
+                  accept="image/*"
+                />
               </div>
-              <form onSubmit={handleSubmit} className="flex flex-col justify-between items-end gap-4">
+            </div>
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col justify-between items-end gap-4"
+            >
               <Input
                 label="name"
                 size="lg"
@@ -235,9 +262,9 @@ const Profile = () => {
                 name="name"
                 type="text"
                 autoComplete="email"
-                value={formData.name || currentuser?.rest?.name || ''}
+                value={formData.name || currentuser?.rest?.name || ""}
                 onChange={handleChange}
-              /> 
+              />
 
               <Input
                 label="username"
@@ -245,10 +272,10 @@ const Profile = () => {
                 id="username"
                 name="username"
                 autoComplete="username"
-                value={formData.username || currentuser?.rest?.username || '' }
+                value={formData.username || currentuser?.rest?.username || ""}
                 onChange={handleChange}
               />
-          
+
               <Input
                 label="email"
                 size="lg"
@@ -256,20 +283,23 @@ const Profile = () => {
                 name="email"
                 type="email"
                 autoComplete="email"
-                value={formData.email || currentuser?.rest?.email || ''}
+                value={formData.email || currentuser?.rest?.email || ""}
                 onChange={handleChange}
               />
-            
-            <CardFooter className="pt-0">
-              <Button type="submit"  disabled={loading} > {loading ? 'Loading...' : 'Update'}</Button>
-            </CardFooter>
-      </form>
+
+              <CardFooter className="pt-0">
+                <Button type="submit" disabled={loading}>
+                  {" "}
+                  {loading ? "Loading..." : "Update"}
+                </Button>
+              </CardFooter>
+            </form>
             <Button onClick={handleOpen} color="blue" size="sm">
-          Back to Profile
-        </Button>
-            </CardBody>
-          </Card>
-        </Dialog>
+              Back to Profile
+            </Button>
+          </CardBody>
+        </Card>
+      </Dialog>
     </div>
   );
 };

@@ -1,20 +1,44 @@
 import React, { useState } from "react";
 import Logo from "../assets/logo.png";
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { useCookies } from "react-cookie";
+import { useDispatch } from "react-redux";
+import { signOutUserSuccess,signOutUserFailure } from "../redux/user/userSlice";
+
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
+  const [_, removeCookie] = useCookies(["token"]);
+   const dispatch = useDispatch();
+   const navigate=useNavigate();
+
   const { currentuser } = useSelector((state) => state.user);
-  // console.log(currentuser);
+ 
   const toggleDropdown = () => {
     setOpen(!open);
   };
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+    const handleSignOut = () => {
+
+    if(currentuser){
+    removeCookie("token");
+    dispatch(signOutUserSuccess());
+    toast.success("signout successful");
+    navigate('/sign-in');
+    }
+    else{
+    dispatch(signOutUserFailure());
+    toast.error("signout failed");
+  };
+  }
+
  
   return (
     <nav className="sticky top-0 z-50 shadow-md p-2 bg-blue-gray-100">
@@ -106,12 +130,12 @@ const Header = () => {
                   >
                     <ul>
                       <Link to={"/profile"}>
-                        <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
+                        <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"   onClick={toggleDropdown}>
                           Profile
                         </li>
                       </Link>
 
-                      <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
+                      <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"   onClick={handleSignOut}>
                         Logout
                       </li>
                     </ul>
