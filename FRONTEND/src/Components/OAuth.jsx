@@ -9,7 +9,7 @@ import { useCookies } from 'react-cookie';
  function OAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [_, setCookie] = useCookies(["gtoken"]);
+  const [_, setCookie] = useCookies(["token"]);
   const handleGoogleAuth = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -32,7 +32,7 @@ import { useCookies } from 'react-cookie';
 
       const Data = await res.json();
       dispatch(signInSuccess(Data));
-      setCookie("gtoken", Data.data);
+      setCookie("token", Data.data);
       navigate('/');
     } catch (error) {
       console.log('could not sign in with google', error);

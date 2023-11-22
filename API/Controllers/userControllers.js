@@ -38,6 +38,7 @@ export const  showUserBYId=async (req, res) => {
     });
   }
 
+  
   export const updateUser =async (req, res) => {
     const userId = req.params.id;
     const user = await User.findById(userId);
@@ -55,7 +56,7 @@ export const  showUserBYId=async (req, res) => {
             username: req.body.username,
             email: req.body.email,
             password: req.body.password,
-            avatar: req.body.avatar,
+            name: req.body.name,
           },
         },
         { new: true }
@@ -65,7 +66,9 @@ export const  showUserBYId=async (req, res) => {
       res.status(200).json({
         status:"success",
         message:"user updated succesfully",
-        data:rest
+        rest: rest,
+        // data:updatedUser,
+
       }
       )
     

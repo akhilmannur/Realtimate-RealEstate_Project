@@ -12,20 +12,25 @@ import {
   updateUserStart,
   updateUserFailure,
   updateUserAvatar,
+  updateUserDetails
 } from "../redux/user/userSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { FaEdit, FaSignOutAlt, FaCamera,FaCheck } from "react-icons/fa";
+import { FaEdit, FaSignOutAlt, FaCamera, FaCheck } from "react-icons/fa";
 import axios from "axios";
 import AvatarUpload from "./AvatarUpload";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const { currentuser, loading, error } = useSelector((state) => state.user);
   const avatarUrl = currentuser?.rest?.avatar;
   const [open, setOpen] = React.useState(false);
   const [avatar, setavatar] = useState(null);
+  const [formData, setFormData] = useState({});
   const fileRef = useRef(null);
   const dispatch = useDispatch();
+  const navigate=useNavigate();
   const handleOpen = () => setOpen((cur) => !cur);
 
   const handleFileUpload = async () => {
@@ -45,14 +50,50 @@ const Profile = () => {
         }
       );
       dispatch(updateUserAvatar(url));
+      toast.success('Updated sucessfully')
     } catch (error) {
       console.log("from upload", error.message);
-      dispatch(updateUserFailure(error.message));
+    dispatch(updateUserFailure(error));
+    toast.error("updation failed:", error.message);
     }
   };
   const uploadavatar = async (e) => {
     setavatar(e.target.files[0]);
   };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+      const res = await axios.put(
+        `http://localhost:3000/api/user/${currentuser?.rest?._id}/updateuser`,
+        formData, 
+        {
+          headers: {
+            Authorization: `${currentuser?.data}`,
+          },
+        }
+      );
+      const data = res.data;
+      console.log(data);
+      if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
+        return;
+      }
+  
+      dispatch(updateUserDetails(data.rest));
+      toast.success('Updated sucessfully')
+      
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+      toast.error("updation failed:", error.message);
+    }
+  };
+  
   return (
     <div>
       <figure className="relative h-96 w-full">
@@ -81,11 +122,11 @@ const Profile = () => {
                 alt="profile image"
               />
               <div className="absolute bottom-0 left-11 ml-3 mb-2  text-white">
-                <FaCamera size={24} />
+                <FaCamera size={24}  onClick={handleOpen}/>
               </div>
             </div>
             <Typography color="gray" className="font-normal">
-              {currentuser?.rest?.username}
+              {currentuser?.rest?.username || currentuser.data.username}
             </Typography>
           </div>
 
@@ -103,90 +144,96 @@ const Profile = () => {
           </div>
         </figcaption>
       </figure>
-      <Dialog
-        size="xs"
-        open={open}
-        handler={handleOpen}
-        className="bg-transparent shadow-none"
-      >
-        <Card className="mx-auto w-full max-w-[24rem]">
-          <CardBody className="flex flex-col gap-4">
-            <Typography variant="h4" color="blue-gray">
-              EDIT YOUR PROFILE
-            </Typography>
-            <input
-              onChange={(e) => uploadavatar(e)}
-              type="file"
-              ref={fileRef}
-              hidden
-              accept="image/*"
-            />
-            <img
-              className="w-24 h-24 mb-4 rounded-full object-cover cursor-pointer self-center "
-              src={avatarUrl}
-              alt="profile image"
-              onClick={() => fileRef.current.click()}
-            />
-            <div className="flex flex-col justify-between items-end">
-              <div className="flex items-center gap-4">
-                <label htmlFor="avatar" className="cursor-pointer">
-                  <FaCamera size={18} />
-                </label> 
-                 <FaCheck
-                  size={18}
-                  onClick={handleFileUpload}
-                  className="cursor-pointer"
-                />
-                <input
-                  id="avatar"
-                  onChange={(e) => uploadavatar(e)}
-                  type="file"
-                  ref={fileRef}
-                  hidden
-                  accept="image/*"
-                />
-              
+      
+        <Dialog
+          size="xs"
+          open={open}
+          handler={handleOpen}
+          className="bg-transparent shadow-none"
+        >
+          <Card className="mx-auto w-full max-w-[24rem]">
+            <CardBody className="flex flex-col gap-4">
+              <Typography variant="h4" color="blue-gray">
+                EDIT YOUR PROFILE
+              </Typography>
+              <input
+                onChange={(e) => uploadavatar(e)}
+                type="file"
+                ref={fileRef}
+                hidden
+                accept="image/*"
+              />
+              <img
+                className="w-24 h-24 mb-4 rounded-full object-cover cursor-pointer self-center "
+                src={avatarUrl}
+                alt="profile image"
+                onClick={() => fileRef.current.click()}
+              />
+              <div className="flex flex-col justify-between items-end">
+                <div className="flex items-center gap-4">
+                  <label htmlFor="avatar" className="cursor-pointer">
+                    <FaCamera size={18} />
+                  </label>
+                     <span className="ml-1">Edit Image</span>
+                  <FaCheck
+                    size={18}
+                    onClick={handleFileUpload}
+                    className="cursor-pointer"
+                  />
+                   <span className="ml-1">Update</span>
+                  <input
+                    id="avatar"
+                    onChange={(e) => uploadavatar(e)}
+                    type="file"
+                    ref={fileRef}
+                    hidden
+                    accept="image/*"
+                  />
+                </div>
               </div>
-            </div>
-            <Typography className="-mb-2" variant="h6">
-              username
-            </Typography>
+              <form onSubmit={handleSubmit} className="flex flex-col justify-between items-end gap-4">
+              <Input
+                label="name"
+                size="lg"
+                id="name"
+                name="name"
+                type="text"
+                autoComplete="email"
+                value={formData.name || currentuser?.rest?.name || ''}
+                onChange={handleChange}
+              /> 
 
-            <Input
-              label="username"
-              size="lg"
-              id="username"
-              name="username"
-              autoComplete="username"
-            />
-            <Typography className="-mb-2" variant="h6">
-              email
-            </Typography>
-
-            <Input
-              label="email"
-              size="lg"
-              id="email"
-              name="email"
-              autoComplete="email"
-            />
-            <Typography className="-mb-2" variant="h6">
-              password
-            </Typography>
-
-            <Input
-              label="password"
-              size="lg"
-              id="password"
-              name="password"
-              autoComplete="current-password"
-            />
-          </CardBody>
-          <CardFooter className="pt-0">
-            <Button onClick={() => handleFileUpload}>save</Button>
-          </CardFooter>
-        </Card>
-      </Dialog>
+              <Input
+                label="username"
+                size="lg"
+                id="username"
+                name="username"
+                autoComplete="username"
+                value={formData.username || currentuser?.rest?.username || '' }
+                onChange={handleChange}
+              />
+          
+              <Input
+                label="email"
+                size="lg"
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={formData.email || currentuser?.rest?.email || ''}
+                onChange={handleChange}
+              />
+            
+            <CardFooter className="pt-0">
+              <Button type="submit"  disabled={loading} > {loading ? 'Loading...' : 'Update'}</Button>
+            </CardFooter>
+      </form>
+            <Button onClick={handleOpen} color="blue" size="sm">
+          Back to Profile
+        </Button>
+            </CardBody>
+          </Card>
+        </Dialog>
     </div>
   );
 };

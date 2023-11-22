@@ -25,11 +25,22 @@ const userSlice = createSlice({
     updateUserStart: (state) => {
       state.loading = true;
     },
-    updateUserSuccess: (state, action) => {
-      state.currentuser = action.payload;
+    updateUserDetails: (state, action) => {
+      state.currentuser = {
+        ...state.currentuser,
+        rest: {
+          ...state.currentuser?.rest, 
+          username: action.payload.username,
+          email: action.payload.email,
+          password: action.payload.password,
+          name: action.payload.name,
+
+        },
+      };
       state.loading = false;
       state.error = null;
     },
+    
     updateUserFailure: (state, action) => {
       state.error = action.payload;
       state.loading = false;
@@ -42,6 +53,8 @@ const userSlice = createSlice({
           avatar: action.payload, 
         },
       };
+      state.loading = false;
+      state.error = null;
     },
   }
 });
@@ -51,7 +64,7 @@ export const {
   signInSuccess,
   signInFailure,
   updateUserAvatar,
-  updateUserSuccess,
+  updateUserDetails,
   updateUserFailure,
   updateUserStart
 } = userSlice.actions;
