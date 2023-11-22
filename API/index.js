@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import userRouterr from './Routes/userRoutes.js';
 import dotenv from 'dotenv'
 import authRouterr from './Routes/authRoutes.js';
+import listingRouter from './Routes/propertyListingRoutes.js';
 import ErrorHandler from './middlewares/errorHandler.js';
 dotenv.config();
 import cors from 'cors';
@@ -21,6 +22,7 @@ mongoose.connect(process.env.MONGO_DB)
 app.use(express.json());
 app.use('/api/user',userRouterr);
 app.use('/api/auth',authRouterr);
+app.use('/api/list',listingRouter);
 app.use(ErrorHandler);
 
 
