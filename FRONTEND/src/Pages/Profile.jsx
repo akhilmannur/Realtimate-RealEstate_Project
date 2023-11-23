@@ -31,8 +31,9 @@ import {
 import axios from "axios";
 import AvatarUpload from "./AvatarUpload";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+
 
 const Profile = () => {
   const { currentuser, loading, error } = useSelector((state) => state.user);
@@ -300,6 +301,9 @@ const Profile = () => {
           </CardBody>
         </Card>
       </Dialog>
+     <Link className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95 mt-10' to={'/createlisting'}>
+      creat your properties
+     </Link>
     </div>
   );
 };

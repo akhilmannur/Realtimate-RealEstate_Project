@@ -11,6 +11,7 @@ import AdminHome from "./Pages/AdminHome";
 import AdminUserList from "./Pages/AdminUserList";
 import Footer from "./Components/Footer";
 import PrivateRoute from "./Components/PrivateRoute";
+import Createlist from "./Pages/Createlist";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
 
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
+          <Route path="/createlisting" element={<Createlist />} />
         </Route>
 
         <Route path="/adminhome" element={<AdminHome />} />
