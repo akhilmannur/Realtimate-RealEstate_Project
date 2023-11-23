@@ -1,16 +1,35 @@
 import React, { useState } from "react";
 import { Stepper, Step, Button } from "@material-tailwind/react";
 import ListingimageUrls from "./ListingimageUrls";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Createlist = () => {
+  const { currentuser } = useSelector((state) => state.user);
+  // console.log(currentuser);
   const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
   const [isFirstStep, setIsFirstStep] = React.useState(false);
   const [files, setFiles] = useState([]);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     ListingimageUrls: [],
+    name: "",
+    description: "",
+    address: "",
+    phonenumber: "",
+    type: "rent",
+    bedrooms: 1,
+    bathrooms: 1,
+    regularPrice: 50,
+    discountPrice: 0,
+    offer: false,
+    parking: false,
+    furnished: false,
   });
   const handleNext = () => !isLastStep && setActiveStep((cur) => cur + 1);
   const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
@@ -52,6 +71,72 @@ const Createlist = () => {
     });
   };
 
+  const handleChange = (e) => {
+    if (e.target.id === "sale" || e.target.id === "rent") {
+      setFormData({
+        ...formData,
+        type: e.target.id,
+      });
+    }
+
+    if (
+      e.target.id === "parking" ||
+      e.target.id === "furnished" ||
+      e.target.id === "offer"
+    ) {
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.checked,
+      });
+    }
+
+    if (
+      e.target.type === "number" ||
+      e.target.type === "text" ||
+      e.target.type === "textarea"
+    ) {
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.value,
+      });
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (formData.ListingimageUrls.length < 1)
+        return setError("You must upload at least one image");
+      if (+formData.regularPrice < +formData.discountPrice)
+        return setError("Discount price must be lower than regular price");
+      setLoading(true);
+      setError(false);
+      const res = await axios.post(
+        "http://localhost:3000/api/list/createlisting",
+        {
+          ...formData,
+          userRef: currentuser?.rest?._id,
+        },
+        {
+          headers: {
+            Authorization: `${currentuser?.data}`,
+          },
+        }
+      );
+      const data = await res.data;
+      setLoading(false);
+      if (data.success === false) {
+        setError(data.message);
+      }
+      console.log(data);
+      toast.success('listing created successfully');
+
+      // navigate(`/listing/${data._id}`);
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className=" py-4 px-8 overflow-y-auto max-h-screen">
       <Stepper
@@ -63,7 +148,7 @@ const Createlist = () => {
         <Step className="h-4 w-4" onClick={() => setActiveStep(1)} />
         <Step className="h-4 w-4" onClick={() => setActiveStep(2)} />
       </Stepper>
-      <form>
+      <form onSubmit={handleSubmit}>
         {activeStep === 0 && (
           <div>
             <div className=" max-w-3xl ">
@@ -90,14 +175,18 @@ const Createlist = () => {
                     id="name"
                     maxLength="62"
                     minLength="10"
+                    onChange={handleChange}
+                    value={formData.name}
                     required
                   />
                   <input
-                    type="tel"
+                    type="number"
                     placeholder="Phone number"
-                    className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="border p-3 rounded-lg"
                     id="phonenumber"
                     required
+                    onChange={handleChange}
+                    value={formData.phonenumber}
                   />
                   <textarea
                     type="text"
@@ -105,33 +194,35 @@ const Createlist = () => {
                     className="border p-3 rounded-lg "
                     id="description"
                     required
+                    onChange={handleChange}
+                    value={formData.description}
                   />
                   <input
                     type="text"
                     placeholder="Adress"
                     className="border p-3 rounded-lg "
-                    id="adress"
+                    id="address"
                     required
+                    onChange={handleChange}
+                    value={formData.address}
                   />
                 </div>
               </div>
-               <div className="flex justify-between">
-                    <Button onClick={handlePrev} disabled={activeStep === 0}>
-                      Prev
-                    </Button>
-                    {activeStep === 2 ? (
-                      <Button disabled={activeStep === 0}>
-                        Create Listing
-                      </Button>
-                    ) : null}
-                    <Button
-                      type="submit"
-                      onClick={handleNext}
-                      disabled={activeStep === 2}
-                    >
-                      Next
-                    </Button>
-                  </div>
+              <div className="flex justify-between">
+                <Button onClick={handlePrev} disabled={activeStep === 0}>
+                  Prev
+                </Button>
+                {activeStep === 2 ? (
+                  <Button disabled={activeStep === 0}>Create Listing</Button>
+                ) : null}
+                <Button
+                  type="submit"
+                  onClick={handleNext}
+                  disabled={activeStep === 2}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           </div>
         )}
@@ -155,20 +246,54 @@ const Createlist = () => {
 
               <div className="flex gap-6 flex-wrap flex-1 ">
                 <div className="flex gap-2 mx-3">
-                  <input type="checkbox" id="sell" className="w-5 " />
+                  <input
+                    type="checkbox"
+                    id="sell"
+                    className="w-5 "
+                    onChange={handleChange}
+                    checked={formData.type === "sell"}
+                  />
                   <span>Sell</span>
                 </div>
                 <div className="flex gap-2 mx-3">
-                  <input type="checkbox" id="rent" className="w-5 " />
+                  <input
+                    type="checkbox"
+                    id="rent"
+                    className="w-5 "
+                    onChange={handleChange}
+                    checked={formData.type === "rent"}
+                  />
                   <span>Rent</span>
                 </div>
                 <div className="flex gap-2 mx-3">
-                  <input type="checkbox" id="parking" className="w-5 " />
+                  <input
+                    type="checkbox"
+                    id="parking"
+                    className="w-5 "
+                    onChange={handleChange}
+                    checked={formData.parking}
+                  />
                   <span>Parking Spot</span>
                 </div>
                 <div className="flex gap-2 mx-3">
-                  <input type="checkbox" id="othe" className="w-5 " />
-                  <span>Others</span>
+                  <input
+                    type="checkbox"
+                    id="furnished"
+                    className="w-5 "
+                    onChange={handleChange}
+                    checked={formData.furnished}
+                  />
+                  <span>Furnished</span>
+                </div>
+                <div className="flex gap-2 mx-3">
+                  <input
+                    type="checkbox"
+                    id="offer"
+                    className="w-5 "
+                    onChange={handleChange}
+                    checked={formData.offer}
+                  />
+                  <span>Offers</span>
                 </div>
               </div>
 
@@ -181,6 +306,8 @@ const Createlist = () => {
                     max="10"
                     required
                     className="p-3 border border-gray-300 rounded-lg"
+                    onChange={handleChange}
+                    value={formData.bedrooms}
                   />
                   <p>Beds</p>
                 </div>
@@ -192,6 +319,8 @@ const Createlist = () => {
                     max="10"
                     required
                     className="p-3 border border-gray-300 rounded-lg"
+                    onChange={handleChange}
+                    value={formData.bathrooms}
                   />
                   <p>Baths</p>
                 </div>
@@ -203,42 +332,52 @@ const Createlist = () => {
                     max="10000000"
                     required
                     className="p-3 border border-gray-300 rounded-lg"
+                    onChange={handleChange}
+                    value={formData.regularPrice}
                   />
                   <div className="flex flex-col items-center">
                     <p>Regular price</p>
-                    <span className="text-xs">(RS/month)</span>
+                    {formData.type === "rent" && (
+                      <span className="text-xs">(RS / month)</span>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    id="discountprice"
-                    min="50"
-                    max="10000000"
-                    required
-                    className="p-3 border border-gray-300 rounded-lg"
-                  />
-                  <div className="flex flex-col items-center">
-                    <p>Discount price</p>
-                    <span className="text-xs">(RS/month)</span>
+                {formData.offer && (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      id="discountPrice"
+                      min="0"
+                      max="10000000"
+                      required
+                      className="p-3 border border-gray-300 rounded-lg"
+                      onChange={handleChange}
+                      value={formData.discountPrice}
+                    />
+                    <div className="flex flex-col items-center">
+                      <p>Discounted price</p>
+
+                      {formData.type === "rent" && (
+                        <span className="text-xs">($ / month)</span>
+                      )}
+                    </div>
                   </div>
-                  </div>
-                   <div className="flex justify-between gap-4">
-                    <Button onClick={handlePrev} disabled={activeStep === 0}>
-                      Prev
-                    </Button>
-                    {activeStep === 2 ? (
-                      <Button disabled={activeStep === 0}>
-                        Create Listing
-                      </Button>
-                    ) : null}
-                    <Button
-                      type="submit"
-                      onClick={handleNext}
-                      disabled={activeStep === 2}
-                    >
-                      Next
-                    </Button>
+                )}
+
+                <div className="flex justify-between gap-4">
+                  <Button onClick={handlePrev} disabled={activeStep === 0}>
+                    Prev
+                  </Button>
+                  {activeStep === 2 ? (
+                    <Button disabled={activeStep === 0}>Create Listing</Button>
+                  ) : null}
+                  <Button
+                    type="submit"
+                    onClick={handleNext}
+                    disabled={activeStep === 2}
+                  >
+                    Next
+                  </Button>
                 </div>
               </div>
             </div>
@@ -291,8 +430,11 @@ const Createlist = () => {
                       Prev
                     </Button>
                     {activeStep === 2 ? (
-                      <Button disabled={activeStep === 0}>
-                        Create Listing
+                      <Button
+                        type="submit"
+                        disabled={activeStep === 0 || loading || uploading}
+                      >
+                        {loading ? "Creating..." : "Create listing"}
                       </Button>
                     ) : null}
                     <Button
@@ -302,6 +444,7 @@ const Createlist = () => {
                     >
                       Next
                     </Button>
+                    {error && <p className="text-red-700 text-sm">{error}</p>}
                   </div>
                 </div>
               </div>
