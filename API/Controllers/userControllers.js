@@ -1,4 +1,5 @@
 import User from "../models/userSchema.js";
+import Listing from "../Models/listingSchema.js";
 
 export const editAvatar = async (req, res) => {
   const { Avatar } = req.body;
@@ -83,4 +84,20 @@ export const deleteUser = async (req, res) => {
   res.status(200).json({
     status:'success',
     message:'User has been deleted!'});
+};
+
+
+
+
+export const getUserListings = async (req, res, next) => {
+  if (req.user.id === req.params.id) {
+    try {
+      const listings = await Listing.find({ userRef: req.params.id });
+      res.status(200).json(listings);
+    } catch (error) {
+      next(error);
+    }
+  } else {
+    return next(errorHandler(401, 'You can only view your own listings!'));
+  }
 };
