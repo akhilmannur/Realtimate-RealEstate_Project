@@ -42,7 +42,8 @@ const Profile = () => {
   const [avatar, setavatar] = useState(null);
   const [formData, setFormData] = useState({});
   const [_, removeCookie] = useCookies(["token"]);
-
+  const [showListingsError, setShowListingsError] = useState(false);
+  const [userListings, setUserListings] = useState([]);
   const fileRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -148,6 +149,28 @@ const Profile = () => {
     toast.error("signout failed");
   };
   }
+  const handleShowListings = async () => {
+    try {
+      setShowListingsError(false);
+      const res = await axios.get(`http://localhost:3000/api/user/${currentuser?.rest?._id}/listing`,
+      {
+        headers: {
+          Authorization: `${currentuser?.data}`,
+        },
+      }
+      );
+      const data = await res.data;
+      setUserListings(data?.list)
+      console.log("userlisting",userListings)
+      console.log(data);
+      if (data.success === false) {
+        setShowListingsError(true);
+        return;
+      }
+    } catch (error) {
+      setShowListingsError(true);
+    }
+  };
 
   return (
     <div>
@@ -301,9 +324,60 @@ const Profile = () => {
           </CardBody>
         </Card>
       </Dialog>
-     <Link className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95 mt-10' to={'/createlisting'}>
+      <div className="mx-10 my-10">
+     <Link className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95' to={'/createlisting'}>
       creat your properties
      </Link>
+     </div>
+     <div >
+     <button onClick={handleShowListings} className='w-full text-3xl ' >
+        Show Listings
+      </button>
+      <p className='text-red-700 mt-5'>
+        {showListingsError ? 'Error showing listings' : ''}
+      </p>
+
+      {userListings && userListings.length > 0 && (
+        <div className='flex flex-col gap-4 m-20 justify-around'>
+          <h1 className='text-center mt-7 text-2xl font-semibold'>
+            Your Listings
+          </h1>
+          {userListings.map((listing) => (
+            <div
+              key={listing._id}
+              className='border rounded-lg p-3 flex justify-between items-center gap-4'
+            >
+              <Link to={`/listing/${listing._id}`}>
+                <img
+                  src={listing.ListingimageUrls[0]}
+                  alt='listing cover'
+                  className='h-16 w-16 object-contain'
+                />
+              </Link>
+              <Link
+                className='text-slate-700 font-semibold  hover:underline truncate flex-1'
+                to={`/listing/${listing._id}`}
+              >
+                <p>{listing.name}</p>
+              </Link>
+
+              <div className='flex flex-col item-center'>
+                <button
+                  onClick={() => handleListingDelete(listing._id)}
+                  className='text-red-700 uppercase'
+                >
+                  Delete
+                </button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className='text-green-700 uppercase'>Edit</button>
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+     </div>
+
     </div>
   );
 };
