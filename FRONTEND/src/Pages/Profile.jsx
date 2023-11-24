@@ -161,14 +161,35 @@ const Profile = () => {
       );
       const data = await res.data;
       setUserListings(data?.list)
-      console.log("userlisting",userListings)
-      console.log(data);
+   
       if (data.success === false) {
         setShowListingsError(true);
         return;
       }
     } catch (error) {
       setShowListingsError(true);
+    }
+  };
+
+   const handleListingDelete = async (listingId) => {
+    try {
+      const res = await axios.delete(`http://localhost:3000/api/list/${listingId}/deletelisting`, {
+        headers: {
+          Authorization: `${currentuser?.data}`,
+        },
+      });
+      const data = await res.data;
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+
+      setUserListings((prev) =>
+        prev.filter((listing) => listing._id !== listingId)
+      );
+      toast.success("listing deleted succesfully")
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -329,7 +350,7 @@ const Profile = () => {
       creat your properties
      </Link>
      </div>
-     <div >
+     <div className=" border border-gray-300 rounded-lg p-4 m-20" >
      <button onClick={handleShowListings} className='w-full text-3xl ' >
         Show Listings
       </button>
@@ -338,7 +359,7 @@ const Profile = () => {
       </p>
 
       {userListings && userListings.length > 0 && (
-        <div className='flex flex-col gap-4 m-20 justify-around'>
+        <div className='flex flex-col gap-4 justify-around'>
           <h1 className='text-center mt-7 text-2xl font-semibold'>
             Your Listings
           </h1>

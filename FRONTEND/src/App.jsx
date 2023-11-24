@@ -32,7 +32,7 @@ function App() {
         <Route path="/adminuserlist" element={<AdminUserList />} />
       </Routes>
       <ToastContainer position="top-right" autoClose={3000} />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
