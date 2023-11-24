@@ -32,3 +32,20 @@ export const deleteListing = async (req, res) => {
     .status(200)
     .json({ status: "sucess", message: "user deleted succesfully" });
 };
+
+
+
+export const getListing = async (req, res,) => {
+  const listing = await Listing.findById(req.params.id);
+  if (!listing) {
+    return res.status(404).json({ status: "error", message: "user not found" });
+  }
+  res.status(200).json({
+    status: "success",
+    message: "listed successfully",
+    list: listing,
+  });
+};
+
+
+

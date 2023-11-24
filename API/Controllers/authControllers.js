@@ -102,11 +102,12 @@ export const signIn = async (req, res) => {
       process.env.USER_ACCESS_TOKEN_SECRET,
       { expiresIn: 86400 }
     );
-
+    const { password: pass, ...rest } = user._doc;
     return res.status(200).json({
       status: "user_success",
       message: "Login successful",
-      data: token,username
+      data: token,
+      rest:rest
     });
   } else {
     return res.json({

@@ -17,6 +17,7 @@ const Header = () => {
    const navigate=useNavigate();
 
   const { currentuser } = useSelector((state) => state.user);
+  console.log(currentuser);
  
   const toggleDropdown = () => {
     setOpen(!open);
@@ -112,7 +113,7 @@ const Header = () => {
                     className={`rounded-full h-7 w-7 object-cover ${
                       open ? "dropdownOpen" : ""
                     }`}
-                    src={currentuser?.rest?.avatar}
+                    src={currentuser?.rest?.avatar||currentuser?.avatar}
                     alt="profile"
                   />
                 </button>
