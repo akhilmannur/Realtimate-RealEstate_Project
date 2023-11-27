@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 
 const Createlist = () => {
   const { currentuser } = useSelector((state) => state.user);
-  // console.log(currentuser);
   const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
   const [isFirstStep, setIsFirstStep] = React.useState(false);
@@ -72,7 +71,7 @@ const Createlist = () => {
   };
 
   const handleChange = (e) => {
-    if (e.target.id === "sale" || e.target.id === "rent") {
+    if (e.target.id === "sell" || e.target.id === "rent") {
       setFormData({
         ...formData,
         type: e.target.id,
