@@ -17,7 +17,7 @@ const Header = () => {
    const navigate=useNavigate();
 
   const { currentuser } = useSelector((state) => state.user);
-  console.log(currentuser);
+
  
   const toggleDropdown = () => {
     setOpen(!open);

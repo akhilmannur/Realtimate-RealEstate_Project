@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore from "swiper";
 import { useSelector } from "react-redux";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
@@ -14,29 +15,30 @@ import {
   FaParking,
   FaShare,
 } from "react-icons/fa";
+import Contact from "../Components/Contact";
 
 const Listing = () => {
-
-
+  SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [contact, setContact] = useState(false);
   const params = useParams();
   const { currentuser } = useSelector((state) => state.user);
-
-
-
 
   useEffect(() => {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`http://localhost:3000/api/list/${params.listingId}/getlisting`,{
+        const res = await axios.get(
+          `http://localhost:3000/api/list/${params.listingId}/getlisting`,
+          {
             headers: {
-                Authorization: `${currentuser?.data}`,
-              },
-        });
+              Authorization: `${currentuser?.data}`,
+            },
+          }
+        );
         const data = await res.data;
         if (data.success === false) {
           setError(true);
@@ -44,7 +46,7 @@ const Listing = () => {
           return;
         }
         setListing(data?.list);
-        
+
         setLoading(false);
         setError(false);
       } catch (error) {
@@ -53,7 +55,7 @@ const Listing = () => {
       }
     };
     fetchListing();
-  }, [params.listingI]);
+  }, [params.listing]);
 
   return (
     <main>
@@ -63,7 +65,7 @@ const Listing = () => {
       )}
       {listing && !loading && !error && (
         <div>
-          <Swiper navigation >
+          <Swiper navigation>
             {listing.ListingimageUrls.map((url) => (
               <SwiperSlide key={url}>
                 <div
@@ -141,15 +143,18 @@ const Listing = () => {
                 {listing.furnished ? "Furnished" : "Unfurnished"}
               </li>
             </ul>
-            {/* {currentuser && listing.userRef !== currentuser._id && !contact && (
-              <button
-                onClick={() => setContact(true)}
-                className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3"
-              >
-                Contact landlord
-              </button>
-            )} */}
-            {/* {contact && <Contact listing={listing} />} */}
+
+            {currentuser &&
+              listing?.userRef !== currentuser?.rest._id &&
+              !contact && (
+                <button
+                  onClick={() => setContact(true)}
+                  className="bg-black text-white rounded-lg uppercase hover:opacity-95 p-3"
+                >
+                  Contact Owner
+                </button>
+              )}
+            {contact && <Contact listing={listing} />}
           </div>
         </div>
       )}
