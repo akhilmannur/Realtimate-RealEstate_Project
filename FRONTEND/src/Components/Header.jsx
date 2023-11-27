@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import Logo from "../assets/logo.png";
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,19 +6,21 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
-import { signOutUserSuccess,signOutUserFailure } from "../redux/user/userSlice";
-
+import {
+  signOutUserSuccess,
+  signOutUserFailure,
+} from "../redux/user/userSlice";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [_, removeCookie] = useCookies(["token"]);
-   const dispatch = useDispatch();
-   const navigate=useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { currentuser } = useSelector((state) => state.user);
 
- 
   const toggleDropdown = () => {
     setOpen(!open);
   };
@@ -26,21 +28,34 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-    const handleSignOut = () => {
-
-    if(currentuser){
-    removeCookie("token");
-    dispatch(signOutUserSuccess());
-    toast.success("signout successful");
-    navigate('/sign-in');
+  const handleSignOut = () => {
+    if (currentuser) {
+      removeCookie("token");
+      dispatch(signOutUserSuccess());
+      toast.success("signout successful");
+      navigate("/sign-in");
+    } else {
+      dispatch(signOutUserFailure());
+      toast.error("signout failed");
     }
-    else{
-    dispatch(signOutUserFailure());
-    toast.error("signout failed");
   };
-  }
 
- 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set("searchTerm", searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
+
   return (
     <nav className="sticky top-0 z-50 shadow-md p-2 bg-blue-gray-100">
       <div className="flex justify-around items-center max-w-8xl mx-auto">
@@ -82,14 +97,21 @@ const Header = () => {
           </li>
         </ul>
         <div className="flex gap-6 item-center">
-          <form className="bg-gray-200 rounded-lg flex items-center p-2 ">
+          <form
+            className="bg-gray-200 rounded-lg flex items-center p-2 "
+            onSubmit={handleSubmit}
+          >
             <input
               type="text"
               id="search"
               placeholder="search..."
               className="bg-slate-200 p-3 rounded py-1 px-2 bg-transparent focus:outline-none w-20 sm:w-64"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <FaSearch className="text-slate-600 ml-2" />
+            <button type="submit">
+              <FaSearch className="text-slate-600 ml-2" />
+            </button>
           </form>
           <div className="flex gap-4 items-center">
             <ul>
@@ -113,7 +135,7 @@ const Header = () => {
                     className={`rounded-full h-7 w-7 object-cover ${
                       open ? "dropdownOpen" : ""
                     }`}
-                    src={currentuser?.rest?.avatar||currentuser?.avatar}
+                    src={currentuser?.rest?.avatar || currentuser?.avatar}
                     alt="profile"
                   />
                 </button>
@@ -131,12 +153,18 @@ const Header = () => {
                   >
                     <ul>
                       <Link to={"/profile"}>
-                        <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"   onClick={toggleDropdown}>
+                        <li
+                          className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                          onClick={toggleDropdown}
+                        >
                           Profile
                         </li>
                       </Link>
 
-                      <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"   onClick={handleSignOut}>
+                      <li
+                        className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                        onClick={handleSignOut}
+                      >
                         Logout
                       </li>
                     </ul>
