@@ -10,7 +10,7 @@ const listingRouter= express.Router();
 listingRouter.post('/createlisting',verifyToken,trycatch(createListing));
 listingRouter.delete('/:id/deletelisting',verifyToken,trycatch(deleteListing));
 listingRouter.get('/:id/getlisting',verifyToken,trycatch(getListing));
-listingRRouter.get('/getlistings',trycatch(getListings))
+listingRouter.get('/getlistings',trycatch(getListings));
 
 
 export default listingRouter;

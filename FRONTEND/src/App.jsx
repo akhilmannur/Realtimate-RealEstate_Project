@@ -9,10 +9,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminHome from "./Pages/AdminHome";
 import AdminUserList from "./Pages/AdminUserList";
-// import Footer from "./Components/Footer";
 import PrivateRoute from "./Components/PrivateRoute";
 import Createlist from "./Pages/Createlist";
 import Listing from "./Pages/Listing";
+import Search from "./Pages/Search";
 
 function App() {
   return (
@@ -24,6 +24,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/about" element={<About />} />
         <Route path="/listing/:listingId" element={<Listing />} />
+        <Route path='/search' element={<Search/>} />
 
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
