@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import withMT from "@material-tailwind/react/utils/withMT";
+import lineClamp from '@tailwindcss/line-clamp';
 
 const defaultTailwindConfig = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -11,9 +12,9 @@ const defaultTailwindConfig = {
       },
     },
   },
-  plugins: [
-   '@tailwindcss/line-clamp',
-    // ...
+    plugins: [
+    lineClamp,
+    
   ],
 };
 

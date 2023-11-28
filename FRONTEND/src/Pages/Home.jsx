@@ -1,9 +1,15 @@
 import React from 'react'
+import HomeTop from '../Components/HomeTop'
+import HomeListing from '../Components/HomeListing'
+import About from './About'
 
 const Home = () => {
   return (
     <div>
-        <h1>hi this is home page</h1>
+        <HomeTop/>
+        <About/>
+        <HomeListing/>
+        
     </div>
   )
 }

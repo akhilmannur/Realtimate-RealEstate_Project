@@ -70,8 +70,8 @@ const Search = () => {
   const handleChange = (e) => {
     if (
       e.target.id === "all" ||
-      e.target.id === "rent" ||
-      e.target.id === "sell"
+      e.target.id=== "rent" ||
+      e.target.id=== "sell"
     ) {
       setSidebardata({ ...sidebardata, type: e.target.id });
     }
@@ -104,7 +104,12 @@ const Search = () => {
     e.preventDefault();
     const urlParams = new URLSearchParams();
     urlParams.set("searchTerm", sidebardata.searchTerm);
-    urlParams.set("type", sidebardata.type);
+    if (sidebardata.type === "all") {
+      urlParams.append("type", "rent");
+      urlParams.append("type", "sell");
+    } else {
+      urlParams.set("type", sidebardata.type);
+    }
     urlParams.set("parking", sidebardata.parking);
     urlParams.set("furnished", sidebardata.furnished);
     urlParams.set("offer", sidebardata.offer);
@@ -120,7 +125,7 @@ const Search = () => {
     const urlParams = new URLSearchParams(location.search);
     urlParams.set("startIndex", startIndex);
     const searchQuery = urlParams.toString();
-    const res = await axios.get(`/api/listing/get?${searchQuery}`);
+    const res = await axios.get(`/api/list/getlistings?${searchQuery}`);
     const data = await res.data;
     if (data.length < 9) {
       setShowMore(false);
@@ -177,7 +182,7 @@ const Search = () => {
                   id="sell"
                   className="w-5"
                   onChange={handleChange}
-                  checked={sidebardata.type === "sale"}
+                  checked={sidebardata.type === "sell"}
                 />
                 <span>Sell</span>
               </div>
