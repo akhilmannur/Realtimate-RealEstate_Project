@@ -51,7 +51,7 @@ export const getListing = async (req, res,) => {
 
 export const getListings  =async (req ,res)=>{
 
-  
+
   const limit = parseInt(req.query.limit) || 9;
   const startIndex = parseInt(req.query.startIndex) || 0;
   let offer = req.query.offer;
@@ -95,8 +95,6 @@ export const getListings  =async (req ,res)=>{
     .limit(limit)
     .skip(startIndex);
 
-  return res.status(200).json({
-    status:'success',
-    listings});
+  return res.status(200).json(listings);
 }
 

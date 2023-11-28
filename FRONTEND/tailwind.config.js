@@ -11,7 +11,10 @@ const defaultTailwindConfig = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+   '@tailwindcss/line-clamp',
+    // ...
+  ],
 };
 
 const materialTailwindConfig = {

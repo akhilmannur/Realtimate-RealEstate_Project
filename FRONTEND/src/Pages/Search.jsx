@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Typography } from "@material-tailwind/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ListingItem from "../Components/ListingItem";
 
 const Search = () => {
   const navigate = useNavigate();
@@ -18,7 +19,6 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
   const [showMore, setShowMore] = useState(false);
-//   console.log(listings);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -67,7 +67,7 @@ const Search = () => {
     fetchListings();
   }, [location.search]);
 
-  const handleChange = () => {
+  const handleChange = (e) => {
     if (
       e.target.id === "all" ||
       e.target.id === "rent" ||
@@ -221,10 +221,35 @@ const Search = () => {
           </Card>
         </form>
       </div>
-      <div>
+      <div className="flex-1">
         <h1 className="text-3xl font-semibold border-b p-3 my-5">
           Search Result
         </h1>
+        <div className="p-7 flex flex-wrap gap-4">
+          {!loading && listings.length === 0 && (
+            <p className="text-xl text-slate-700"> oops!!! No listing found!</p>
+          )}
+          {loading && (
+            <p className="text-xl text-slate-700 text-center w-full">
+              Loading...
+            </p>
+          )}
+
+          {!loading &&
+            listings &&
+            listings.map((listing) => (
+              <ListingItem key={listing._id} listing={listing} />
+            ))}
+
+          {/* {showMore && (
+            <button
+              onClick={onShowMoreClick}
+              className='text-green-700 hover:underline p-7 text-center w-full'
+            >
+              Show more
+            </button>
+          )} */}
+        </div>
       </div>
     </div>
   );
