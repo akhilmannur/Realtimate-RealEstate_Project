@@ -13,6 +13,7 @@ import PrivateRoute from "./Components/PrivateRoute";
 import Createlist from "./Pages/Createlist";
 import Listing from "./Pages/Listing";
 import Search from "./Pages/Search";
+import Footer from "./Components/Footer";
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
         <Route path="/adminuserlist" element={<AdminUserList />} />
       </Routes>
       <ToastContainer position="top-right" autoClose={3000} />
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }
