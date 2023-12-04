@@ -4,7 +4,7 @@ import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import About from "./Pages/About";
 import Profile from "./Pages/Profile";
-import Header from "./Components/Header";
+// import Header from "./Components/Header";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminHome from "./Pages/AdminHome";
@@ -16,12 +16,13 @@ import Footer from "./Components/Footer";
 import RentListing from "./Pages/RentListing";
 import SellListing from "./Pages/SellListing";
 import BuyListing from "./Pages/BuyListing";
-import AdminSideBar from "./Pages/AdminSideBar"
+import AdminUserList from "./Pages/AdminUserList";
+
 
 function App() {
   return (
     <>
-      <Header  />
+      {/* <Header  /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/sign-in" element={<SignIn />} />
@@ -40,10 +41,11 @@ function App() {
         <Route path="/sell" element={<SellListing/>} />
         <Route path="/rent" element={<RentListing/>} />
 
-
-
+        <Route path="/adminhome" element={<AdminHome/>} />
         <Route  element={<AdminHome />} >
-        <Route path="/adminsidebar" element={<AdminSideBar/>} />
+        <Route path="/adminuserlist" element={<AdminUserList/>} />
+
+
         </Route>
 
 

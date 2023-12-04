@@ -5,8 +5,8 @@ import {
     List,
     ListItem,
     ListItemPrefix,
-    ListItemSuffix,
-    Chip,
+    // ListItemSuffix,
+    // Chip,
   } from "@material-tailwind/react";
   import {
     PresentationChartBarIcon,
@@ -16,14 +16,17 @@ import {
     InboxIcon,
     PowerIcon,
   } from "@heroicons/react/24/solid";
+  import {useNavigate } from 'react-router-dom'
 
 const AdminSideBar = () => {
+  const  navigate=useNavigate()
   return (
     <div>
-         <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
-      <div className="mb-2 p-4">
+         <Card className="h-[calc(100vh-2rem)] w-full sm:max-w-[25rem] max-w-[5rem] p-4 shadow-xl shadow-blue-gray-900/5 ">
+
+      <div className="mb-2 p-4 mt-10">
         <Typography variant="h5" color="blue-gray">
-          Sidebar
+        <span className="hidden sm:block">Realtimate</span>
         </Typography>
       </div>
       <List>
@@ -31,40 +34,40 @@ const AdminSideBar = () => {
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Dashboard
+          <span className="hidden sm:block">Dashboard</span>
         </ListItem>
         <ListItem>
           <ListItemPrefix>
             <ShoppingBagIcon className="h-5 w-5" />
           </ListItemPrefix>
-          E-Commerce
+          <span className="hidden sm:block">Dashboard</span>
         </ListItem>
         <ListItem>
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Inbox
-          <ListItemSuffix>
+          <span className="hidden sm:block">Dashboard</span>
+          {/* <ListItemSuffix>
             <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
-          </ListItemSuffix>
+          </ListItemSuffix> */}
         </ListItem>
         <ListItem>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Profile
+          <span className="hidden sm:block" onClick={()=>{navigate('/adminuserlist')}}>User</span>
         </ListItem>
         <ListItem>
           <ListItemPrefix>
             <Cog6ToothIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Settings
+          <span className="hidden sm:block">Dashboard</span>
         </ListItem>
         <ListItem>
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Log Out
+          <span className="hidden sm:block">Dashboard</span>
         </ListItem>
       </List>
     </Card>
