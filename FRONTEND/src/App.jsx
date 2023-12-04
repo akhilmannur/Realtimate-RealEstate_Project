@@ -8,12 +8,15 @@ import Header from "./Components/Header";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminHome from "./Pages/AdminHome";
-import AdminUserList from "./Pages/AdminUserList";
 import PrivateRoute from "./Components/PrivateRoute";
 import Createlist from "./Pages/Createlist";
 import Listing from "./Pages/Listing";
 import Search from "./Pages/Search";
 import Footer from "./Components/Footer";
+import RentListing from "./Pages/RentListing";
+import SellListing from "./Pages/SellListing";
+import BuyListing from "./Pages/BuyListing";
+import AdminSideBar from "./Pages/AdminSideBar"
 
 function App() {
   return (
@@ -31,9 +34,19 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/createlisting" element={<Createlist />} />
         </Route>
+       
 
-        <Route path="/adminhome" element={<AdminHome />} />
-        <Route path="/adminuserlist" element={<AdminUserList />} />
+        <Route path="/buy" element={<BuyListing/>} />
+        <Route path="/sell" element={<SellListing/>} />
+        <Route path="/rent" element={<RentListing/>} />
+
+
+
+        <Route  element={<AdminHome />} >
+        <Route path="/adminsidebar" element={<AdminSideBar/>} />
+        </Route>
+
+
       </Routes>
       <ToastContainer position="top-right" autoClose={3000} />
       <Footer />

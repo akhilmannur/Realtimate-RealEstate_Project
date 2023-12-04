@@ -10,8 +10,9 @@ import {
 } from "@material-tailwind/react";
 import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
+import BuyCard from "../Components/BuyCard";
 
-const HomeListing = () => {
+const BuyListing = () => {
   const [offerListings, setOfferListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
@@ -19,7 +20,7 @@ const HomeListing = () => {
   useEffect(() => {
     const fetchOfferListings = async () => {
       try {
-        const res = await axios.get("/api/list/getlistings?offer=true&limit=4");
+        const res = await axios.get("/api/list/getlistings?offer=true");
         const data = await res.data;
         setOfferListings(data);
         fetchRentListings();
@@ -29,7 +30,7 @@ const HomeListing = () => {
     };
     const fetchRentListings = async () => {
       try {
-        const res = await axios.get("/api/list/getlistings?type=rent&limit=4");
+        const res = await axios.get("/api/list/getlistings?type=rent");
         const data = await res.data;
         setRentListings(data);
         fetchSaleListings();
@@ -40,7 +41,7 @@ const HomeListing = () => {
 
     const fetchSaleListings = async () => {
       try {
-        const res = await axios.get("/api/list/getlistings?type=sell&limit=4");
+        const res = await axios.get("/api/list/getlistings?type=sell");
         const data = await res.data;
         setSaleListings(data);
       } catch (error) {
@@ -52,6 +53,7 @@ const HomeListing = () => {
 
   return (
     <div>
+        <BuyCard/>
       {offerListings && offerListings.length > 0 && (
         <div className="mx-10 border-t-2 border border-black rounded-lg shadow-lg my-5">
           <h1 className="text-2xl font-semibold text-slate-600 m-5">
@@ -59,8 +61,12 @@ const HomeListing = () => {
           </h1>
           <div className=" flex flex-wrap gap-6 mt-10  sm:mx-auto sm:justify-center p-3 max-w-[75rem] ">
             {offerListings.map((listing) => (
-              <Card className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0" listing={listing} key={listing._id} >
-                <CardHeader floated={false} color="blue-gray" >
+              <Card
+                className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
+                listing={listing}
+                key={listing._id}
+              >
+                <CardHeader floated={false} color="blue-gray">
                   <img
                     src={listing.ListingimageUrls[0]}
                     alt="ui/ux review check"
@@ -110,17 +116,14 @@ const HomeListing = () => {
                   </div>
                 </CardBody>
                 <CardFooter className="pt-0">
-                <Link to={`/listing/${listing._id}`}>
-                  <Button size="lg" fullWidth={true}>
-                    More Details
-                  </Button>
+                  <Link to={`/listing/${listing._id}`}>
+                    <Button size="lg" fullWidth={true}>
+                      More Details
+                    </Button>
                   </Link>
                 </CardFooter>
               </Card>
             ))}
-          </div>
-          <div className="flex justify-end m-5">
-            <p className="text-blue-500 text-xl">show more offer lists</p>
           </div>
         </div>
       )}
@@ -131,8 +134,12 @@ const HomeListing = () => {
           </h1>
           <div className=" flex flex-wrap gap-6 mt-10  sm:mx-auto sm:justify-center p-3 max-w-[75rem] ">
             {rentListings.map((listing) => (
-              <Card className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0" listing={listing} key={listing._id} >
-                <CardHeader floated={false} color="blue-gray" >
+              <Card
+                className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
+                listing={listing}
+                key={listing._id}
+              >
+                <CardHeader floated={false} color="blue-gray">
                   <img
                     src={listing.ListingimageUrls[0]}
                     alt="ui/ux review check"
@@ -188,9 +195,6 @@ const HomeListing = () => {
                 </CardFooter>
               </Card>
             ))}
-          </div>
-          <div className="flex justify-end m-5">
-            <p className="text-blue-500 text-xl">show more Rent lists</p>
           </div>
         </div>
       )}
@@ -202,8 +206,12 @@ const HomeListing = () => {
           </h1>
           <div className=" flex flex-wrap gap-6 mt-10  sm:mx-auto sm:justify-center p-3 max-w-[75rem] ">
             {saleListings.map((listing) => (
-              <Card className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0" listing={listing} key={listing._id}>
-                <CardHeader floated={false} color="blue-gray" >
+              <Card
+                className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
+                listing={listing}
+                key={listing._id}
+              >
+                <CardHeader floated={false} color="blue-gray">
                   <img
                     src={listing.ListingimageUrls[0]}
                     alt="ui/ux review check"
@@ -260,13 +268,10 @@ const HomeListing = () => {
               </Card>
             ))}
           </div>
-          <div className="flex justify-end m-5">
-            <p className="text-blue-500 text-xl">show more sale lists</p>
-          </div>
         </div>
       )}
     </div>
   );
 };
 
-export default HomeListing;
+export default BuyListing;

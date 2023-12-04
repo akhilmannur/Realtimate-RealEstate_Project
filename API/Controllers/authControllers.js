@@ -118,7 +118,7 @@ export const signIn = async (req, res) => {
 };
 
 export const google = async (req, res) => {
-  console.log(req.body)
+  
   const user = await User.findOne({ email: req.body.email });
   if (user) {
     const gtoken = jwt.sign(

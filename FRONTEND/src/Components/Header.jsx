@@ -66,35 +66,48 @@ const Header = () => {
             <FaBars className="text-slate-600 text-2xl" onClick={toggleMenu} />
           )}
         </div>
+        <Link to={'/'}>
         <img src={Logo} alt="My Logo" className="h-10 w-30" />
+        </Link>
         <ul
           className={`sm:hidden ${
             isMenuOpen ? "block" : "hidden"
           } dropdown-menu transition-[opacity,margin] duration opacity-100 min-w-[8rem] bg-white shadow-md rounded-lg p-2 mt-2  absolute top-16 left-0 right-40`}
-        >
+        ><Link to={'/buy'}>
           <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
             Buy
           </li>
+          </Link>
+          <Link to={'/sell'}>
           <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
             Sell
           </li>
+          </Link>
+          <Link to={"/rent"}>
           <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
             Rent
           </li>
+          </Link>
           <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
             News & Insight
           </li>
         </ul>
         <ul className="flex gap-4">
+          <Link to={'/buy'}>
           <li className="hidden sm:inline hover:underline cursor-pointer">
             Buy
           </li>
+          </Link>
+          <Link to={'/sell'}>
           <li className="hidden sm:inline hover:underline cursor-pointer">
             Sell
           </li>
+          </Link>
+          <Link to={"/rent"}>
           <li className="hidden sm:inline hover:underline cursor-pointer">
             Rent
           </li>
+          </Link>
         </ul>
         <div className="flex gap-6 item-center">
           <form
