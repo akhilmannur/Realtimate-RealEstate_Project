@@ -7,6 +7,7 @@ import listingRouter from './Routes/propertyListingRoutes.js';
 import ErrorHandler from './middlewares/errorHandler.js';
 dotenv.config();
 import cors from 'cors';
+import adminRouter from './Routes/AdminRoutes.js';
 
 const app= express();
 app.use(cors());
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use('/api/user',userRouterr);
 app.use('/api/auth',authRouterr);
 app.use('/api/list',listingRouter);
+app.use('/api/admin',adminRouter);
 app.use(ErrorHandler);
 
 

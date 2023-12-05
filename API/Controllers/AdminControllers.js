@@ -10,6 +10,6 @@ export const showAllUser= async (req, res) => {
     res.status(200).json({
       status: "success",
       message: "Successfully fetched user datas.",
-      data: alluser,
+      alluser,
     });
   };

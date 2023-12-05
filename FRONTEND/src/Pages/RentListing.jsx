@@ -9,7 +9,7 @@ import {
 } from "@material-tailwind/react";
 import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
-import CreateProperty from "../Components/CreateProperty";
+
 
 const RentListing = () => {
   const [rentListings, setRentListings] = useState([]);

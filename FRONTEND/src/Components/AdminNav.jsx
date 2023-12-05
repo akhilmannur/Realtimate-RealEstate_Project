@@ -5,6 +5,7 @@ import {
   Typography,
   Button,
   IconButton,
+  Collapse,
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logo.png";
@@ -20,8 +21,9 @@ const AdminNav = () => {
   }, []);
  
   return (
-    <Navbar className="w-100">
-      <div className="container mx-auto flex items-center justify-between text-blue-gray-900 ">
+    
+    <Navbar className="max-w-10xl p-3" >
+      <div className="container mx-auto flex items-center justify-between text-blue-gray-900 w-full">
         <Typography
           className="mr-4 cursor-pointer py-1.5 font-medium"
         >
@@ -77,7 +79,7 @@ const AdminNav = () => {
           )}
         </IconButton>
       </div>
-      <MobileNav open={openNav}>
+      <Collapse open={openNav}>
         <div className="container mx-auto">
      
           <div className="flex items-center">
@@ -86,8 +88,9 @@ const AdminNav = () => {
             </Button>
           </div>
         </div>
-      </MobileNav>
+      </Collapse>
     </Navbar>
+    
   );
 }
 

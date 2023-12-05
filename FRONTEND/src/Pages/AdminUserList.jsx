@@ -1,67 +1,203 @@
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import {
+  MagnifyingGlassIcon,
+  ChevronUpDownIcon,
+} from "@heroicons/react/24/outline";
+import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import {
   Card,
   CardHeader,
-  CardBody,
-  CardFooter,
+  Input,
   Typography,
+  Button,
+  CardBody,
+  Chip,
+  CardFooter,
+  Tabs,
+  TabsHeader,
+  Tab,
+  Avatar,
+  IconButton,
   Tooltip,
 } from "@material-tailwind/react";
+import axios from 'axios';
+import Pagination from './pagination';
+ 
+const TABS = [
+  {
+    label: "All",
+    value: "all",
+  },
+  {
+    label: "Blocked",
+    value: "Blocked",
+  },
+ 
+];
+ 
+const TABLE_HEAD = ["User", "email", "Status", "joined", ""];
+const ITEMS_PER_PAGE = 5;
 
-const AdminUserList = () => {
+
+
+ 
+export default function AdminUserList() {
+
+  const [user,setUser]=useState([])
+  const [currentPage, setCurrentPage] = useState(1);
+  // console.log(user);
+    useEffect(() => {
+      const fetchUserList = async () => {
+        try {
+          const res = await axios.get("/api/admin/getalluser");
+          const data = await res.data;
+          console.log(data);
+          setUser(data.alluser);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchUserList();
+    }, []);
+
+
+    const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+    const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+    const currentUsers = user.slice(indexOfFirstItem, indexOfLastItem);
+  
 
 
   return (
-    <Card className="w-96">
-    <CardHeader floated={false} className="h-80">
-      <img src="https://docs.material-tailwind.com/img/team-3.jpg" alt="profile-picture" />
-    </CardHeader>
-    <CardBody className="text-center">
-      <Typography variant="h4" color="blue-gray" className="mb-2">
-        Natalie Paisley
-      </Typography>
-      <Typography color="blue-gray" className="font-medium" textGradient>
-        CEO / Co-Founder
-      </Typography>
-    </CardBody>
-    <CardFooter className="flex justify-center gap-7 pt-2">
-      <Tooltip content="Like">
-        <Typography
-          as="a"
-          href="#facebook"
-          variant="lead"
-          color="blue"
-          textGradient
-        >
-          <i className="fab fa-facebook" />
-        </Typography>
-      </Tooltip>
-      <Tooltip content="Follow">
-        <Typography
-          as="a"
-          href="#twitter"
-          variant="lead"
-          color="light-blue"
-          textGradient
-        >
-          <i className="fab fa-twitter" />
-        </Typography>
-      </Tooltip>
-      <Tooltip content="Follow">
-        <Typography
-          as="a"
-          href="#instagram"
-          variant="lead"
-          color="purple"
-          textGradient
-        >
-          <i className="fab fa-instagram" />
-        </Typography>
-      </Tooltip>
-    </CardFooter>
-  </Card>
-   
+    <Card className="max-h-[80rem] w-[19rem] sm:w-full m-5">
+      <CardHeader floated={false} shadow={false} className="rounded-none">
+        <div className="mb-8 flex items-center justify-between gap-8">
+          <div>
+            <Typography variant="h5" color="blue-gray">
+              Members list
+            </Typography>
+            <Typography color="gray" className="mt-1 font-normal">
+              See information about all members
+            </Typography>
+          </div>
+          <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+            <Button variant="outlined" size="sm">
+              view all
+            </Button>
+            <Button className="flex items-center gap-3" size="sm">
+              <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add member
+            </Button>
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          <Tabs value="all" className="w-full md:w-max">
+            <TabsHeader>
+              {TABS.map(({ label, value }) => (
+                <Tab key={value} value={value}>
+                  &nbsp;&nbsp;{label}&nbsp;&nbsp;
+                </Tab>
+              ))}
+            </TabsHeader>
+          </Tabs>
+          <div className="w-full md:w-72">
+            <Input
+              label="Search"
+              icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+            />
+          </div>
+        </div>
+      </CardHeader>
+      <CardBody className="overflow-scroll px-0">
+        <table className="mt-4 w-full min-w-max table-auto text-left">
+          <thead>
+            <tr>
+              {TABLE_HEAD.map((head, index) => (
+                <th
+                  key={head}
+                  className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
+                >
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+                  >
+                    {head}{" "}
+                    {index !== TABLE_HEAD.length - 1 && (
+                      <ChevronUpDownIcon strokeWidth={2} className="h-4 w-4" />
+                    )}
+                  </Typography>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+          {currentUsers.map((users) => (
+                  <tr key={users.id}>
+                    <td >
+                      <div className="flex items-center gap-3">
+                        <Avatar src={users.avatar} alt="img" size="sm" />
+                        <div className="flex flex-col">
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal"
+                          >
+                         {users.name}
+                          </Typography>
+                       
+                        </div>
+                      </div>
+                    </td>
+                    <td >
+                      <div className="flex flex-col">
+                      <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal opacity-70"
+                          >
+                            {users.email}
+                          </Typography>
+                      
+                      </div>
+                    </td>
+                    <td >
+                      <div className="w-max">
+                        <Chip
+                          variant="ghost"
+                          size="sm"
+                          // value={online ? "online" : "offline"}
+                          // color={online ? "green" : "blue-gray"}
+                        />
+                      </div>
+                    </td>
+                    <td >
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                    {users.createdAt}
+                      </Typography>
+                    </td>
+                    <td >
+                      <Tooltip content="Edit User">
+                        <IconButton variant="text">
+                          <PencilIcon className="h-4 w-4" />
+                        </IconButton>
+                      </Tooltip>
+                    </td>
+                  </tr>
+               ))}
+          </tbody>
+        </table>
+      </CardBody>
+      <CardFooter className="flex items-center justify-center border-t border-blue-gray-50 p-auto">
+       <Pagination
+        itemsPerPage={ITEMS_PER_PAGE}
+        totalItems={user.length}
+        paginate={setCurrentPage}
+        currentPage={currentPage}/>
+      </CardFooter>
+    </Card>
   );
-};
-
-export default AdminUserList;
+}
