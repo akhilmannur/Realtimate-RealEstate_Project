@@ -1,5 +1,5 @@
 import User from "../models/userSchema.js";
-import Listing from "../Models/listingSchema.js";
+import Listing from '../models/listingSchema.js';
 
 export const editAvatar = async (req, res) => {
   const { Avatar } = req.body;

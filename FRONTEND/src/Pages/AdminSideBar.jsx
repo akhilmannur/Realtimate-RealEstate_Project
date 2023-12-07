@@ -29,17 +29,25 @@ const AdminSideBar = () => {
           </Typography>
         </div>
         <List>
-          <ListItem>
+          <ListItem
+            onClick={() => {
+              navigate("/admindashbord");
+            }}
+          >
             <ListItemPrefix>
               <PresentationChartBarIcon className="h-5 w-5" />
             </ListItemPrefix>
             <span className="hidden sm:block">Dashboard</span>
           </ListItem>
-          <ListItem>
+          <ListItem
+            onClick={() => {
+              navigate("/admindpropertyList");
+            }}
+          >
             <ListItemPrefix>
               <ShoppingBagIcon className="h-5 w-5" />
             </ListItemPrefix>
-            <span className="hidden sm:block">Dashboard</span>
+            <span className="hidden sm:block">PropertyListings</span>
           </ListItem>
           <ListItem>
             <ListItemPrefix>
@@ -50,7 +58,11 @@ const AdminSideBar = () => {
             <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
           </ListItemSuffix> */}
           </ListItem>
-          <ListItem onClick={()=>{navigate('/adminuserlist')}}>
+          <ListItem
+            onClick={() => {
+              navigate("/adminuserlist");
+            }}
+          >
             <ListItemPrefix>
               <UserCircleIcon className="h-5 w-5" />
             </ListItemPrefix>

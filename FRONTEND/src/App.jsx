@@ -17,6 +17,8 @@ import RentListing from "./Pages/RentListing";
 import SellListing from "./Pages/SellListing";
 import BuyListing from "./Pages/BuyListing";
 import AdminUserList from "./Pages/AdminUserList";
+import AdminDashbord from "./Pages/AdminDashbord";
+import AdminPropertyList from "./Pages/AdminPropertyList";
 
 
 function App() {
@@ -44,8 +46,8 @@ function App() {
         <Route path="/adminhome" element={<AdminHome/>} />
         <Route  element={<AdminHome />} >
         <Route path="/adminuserlist" element={<AdminUserList/>} />
-
-
+        <Route path='/admindashbord' element={<AdminDashbord/>}/>
+        <Route path='/admindpropertyList' element={<AdminPropertyList/>}/>
         </Route>
 
 

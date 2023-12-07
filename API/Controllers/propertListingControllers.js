@@ -1,4 +1,4 @@
-import Listing from "../Models/listingSchema.js";
+import Listing from '../models/listingSchema.js';
 
 export const createListing = async (req, res) => {
   try {
