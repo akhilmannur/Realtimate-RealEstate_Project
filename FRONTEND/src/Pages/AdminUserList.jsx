@@ -191,13 +191,15 @@ export default function AdminUserList() {
           </tbody>
         </table>
       </CardBody>
-      <CardFooter className="flex items-center justify-center border-t border-blue-gray-50 p-auto">
-       <Pagination
-        itemsPerPage={ITEMS_PER_PAGE}
-        totalItems={user.length}
-        paginate={setCurrentPage}
-        currentPage={currentPage}/>
+      <CardFooter className="flex items-center justify-center border-t border-blue-gray-50 p-auto w-full">
+      <Pagination
+       itemsPerPage={ITEMS_PER_PAGE}
+       totalItems={user.length}
+       paginate={setCurrentPage}
+       currentPage={currentPage}/>
       </CardFooter>
     </Card>
+    
+    
   );
 }

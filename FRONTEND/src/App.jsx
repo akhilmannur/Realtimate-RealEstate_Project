@@ -20,40 +20,36 @@ import AdminUserList from "./Pages/AdminUserList";
 import AdminDashbord from "./Pages/AdminDashbord";
 import AdminPropertyList from "./Pages/AdminPropertyList";
 
-
 function App() {
   return (
     <>
-      {/* <Header  /> */}
+      {/* <Header /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/about" element={<About />} />
         <Route path="/listing/:listingId" element={<Listing />} />
-        <Route path='/search' element={<Search/>} />
+        <Route path="/search" element={<Search />} />
 
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/createlisting" element={<Createlist />} />
         </Route>
-       
 
-        <Route path="/buy" element={<BuyListing/>} />
-        <Route path="/sell" element={<SellListing/>} />
-        <Route path="/rent" element={<RentListing/>} />
+        <Route path="/buy" element={<BuyListing />} />
+        <Route path="/sell" element={<SellListing />} />
+        <Route path="/rent" element={<RentListing />} />
 
-        <Route path="/adminhome" element={<AdminHome/>} />
-        <Route  element={<AdminHome />} >
-        <Route path="/adminuserlist" element={<AdminUserList/>} />
-        <Route path='/admindashbord' element={<AdminDashbord/>}/>
-        <Route path='/admindpropertyList' element={<AdminPropertyList/>}/>
+        <Route path="/adminhome" element={<AdminHome />} />
+        <Route element={<AdminHome />}>
+          <Route path="/adminuserlist" element={<AdminUserList />} />
+          <Route path="/admindashbord" element={<AdminDashbord />} />
+          <Route path="/admindpropertyList" element={<AdminPropertyList />} />
         </Route>
-
-
       </Routes>
-      <ToastContainer position="top-right" autoClose={3000} />
-      <Footer />
+      {/* <Footer /> */}
+      <ToastContainer position="top-center" autoClose={3000} />
     </>
   );
 }

@@ -22,7 +22,7 @@ const AdminSideBar = () => {
   const navigate = useNavigate();
   return (
     <div>
-      <Card className="h-[calc(90vh-2rem)] w-full sm:max-w-[25rem] max-w-[5rem] p-4 mt-3">
+      <Card className="h-[calc(100vh-2rem)] w-full sm:max-w-[25rem] max-w-[5rem] p-4 mt-3 h-full">
         <div className="mb-2 p-4 mt-10">
           <Typography variant="h5" color="blue-gray">
             <span className="hidden sm:block">Realtimate</span>
