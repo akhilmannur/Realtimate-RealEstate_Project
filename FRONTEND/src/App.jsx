@@ -19,6 +19,7 @@ import BuyListing from "./Pages/BuyListing";
 import AdminUserList from "./Pages/AdminUserList";
 import AdminDashbord from "./Pages/AdminDashbord";
 import AdminPropertyList from "./Pages/AdminPropertyList";
+import AdminUSerProfile from "./Pages/AdminUSerProfile";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
           <Route path="/adminuserlist" element={<AdminUserList />} />
           <Route path="/admindashbord" element={<AdminDashbord />} />
           <Route path="/admindpropertyList" element={<AdminPropertyList />} />
+          <Route path="/adminuserprofile" element={<AdminUSerProfile />} />
         </Route>
       </Routes>
       {/* <Footer /> */}

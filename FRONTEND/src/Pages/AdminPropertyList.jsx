@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogBody,
   Avatar,
-  // DialogFooter,
+  IconButton,
 } from "@material-tailwind/react";
 import {
   FaBath,
@@ -30,12 +30,13 @@ const AdminPropertyList = () => {
   const [propertyById, setPropertyById] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [open, setOpen] = React.useState(false);
-  const [selectedPropertyId, setSelectedPropertyId] = useState(null);
+  const [selectedTab, setSelectedTab] = useState("All");
 
   const handleOpen = (id) => {
     setOpen(true);
-    setSelectedPropertyId(id);
+  
   };
+
   useEffect(() => {
     const fetchPropertyList = async () => {
       try {
@@ -59,66 +60,132 @@ const AdminPropertyList = () => {
     }
   };
 
+  const handleTabChange = (tab) => {
+    setCurrentPage(1);
+    setSelectedTab(tab);
+  };
+
+  const filteredList =
+    selectedTab === "All"
+      ? Property
+      : Property.filter(
+          (listing) => listing.type.toLowerCase() === selectedTab.toLowerCase()
+        );
+
+  const totalItemsForPagination = filteredList.length;
+
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentList = Property.slice(indexOfFirstItem, indexOfLastItem);
+  const currentList = filteredList.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="flex sm:flex-row flex:col flex-wrap w-full">
-      {currentList.map((listing, index) => (
-        <Card
-          className="sm:max-w-[18rem] sm:max-h-[25rem] max-w-[5rem] max-h-[5rem] m-5 sm:[mt-20 ] mx-auto"
-          key={index}
+    <Card className="h-full sm:h-full sm:w-full w-full mx-2 mt-3 sm:[mt-20 ] p-5 ">
+      <div className="flex justify-center space-x-4 mt-4">
+        
+        <button
+          onClick={() => handleTabChange("All")}
+          className={`${
+            selectedTab === "All"
+              ? "bg-black text-white"
+              : "bg-gray-300 text-gray-700"
+          } py-2 px-4 rounded`}
         >
-          <CardHeader shadow={false} floated={false} className="h-96">
-            <img
-              src={listing.ListingimageUrls[0]}
-              alt="card-image"
-              className="min-h-[15rem] min-w-[18rem] max-h-[15rem] max-w-[15rem] object-cover"
-            />
-          </CardHeader>
-          <CardBody>
-            <div className="flex items-center justify-between">
-              <Typography color="blue-gray" className="font-medium">
-                {listing.name}
-              </Typography>
-              <Typography color="blue-gray" className="font-medium">
-                Rs{listing.regularPrice.toLocaleString("en-IN")}
-              </Typography>
-            </div>
-            <Typography
-              variant="small"
-              color="gray"
-              className="font-normal opacity-75  line-clamp-1 w-30"
-            >
-              {listing.description}
-            </Typography>
-            <Typography
-              variant="small"
-              color="gray"
-              className="font-medium bg-green-200 rounded-lg w-20 text-center my-2"
-            >
-              {listing.type}
-            </Typography>
-          </CardBody>
-          <CardFooter className="pt-0">
-            <Button
-              ripple={false}
-              fullWidth={true}
-              className="bg-black text-white shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
-              onClick={() => {
-                fetchPropertyListById(listing._id);
-                handleOpen(listing._id);
-              }}
-            >
-              View
-            </Button>
-          </CardFooter>
-        </Card>
-      ))}
+          All
+        </button>
+        <button
+          onClick={() => handleTabChange("rent")}
+          className={`${
+            selectedTab === "rent"
+              ? "bg-black text-white"
+              : "bg-gray-300 text-gray-700"
+          } py-2 px-4 rounded`}
+        >
+          Rent
+        </button>
+        <button
+          onClick={() => handleTabChange("Sell")}
+          className={`${
+            selectedTab === "Sell"
+              ? "bg-black text-white"
+              : "bg-gray-300 text-gray-700"
+          } py-2 px-4 rounded`}
+        >
+          Sell
+        </button>
+      </div>
 
+      <div className="flex sm:flex-row flex:col flex-wrap w-full">
+        {currentList.map((listing, index) => (
+          <Card
+            className="sm:max-w-[18rem] sm:max-h-[25rem] max-w-[14rem] max-h-[25rem] m-5 sm:[mt-20 ] mx-auto"
+            key={index}
+          >
+            <CardHeader shadow={false} floated={false} className="h-96">
+              <img
+                src={listing.ListingimageUrls[0]}
+                alt="card-image"
+                className="min-h-[15rem] min-w-[18rem] max-h-[15rem] max-w-[15rem] object-cover"
+              />
+            </CardHeader>
+            <CardBody>
+              <div className="flex items-center justify-between">
+                <Typography color="blue-gray" className="font-medium">
+                  {listing.name}
+                </Typography>
+                <Typography color="blue-gray" className="font-medium">
+                  Rs{listing.regularPrice.toLocaleString("en-IN")}
+                </Typography>
+              </div>
+              <Typography
+                variant="small"
+                color="gray"
+                className="font-normal opacity-75  line-clamp-1 w-30"
+              >
+                {listing.description}
+              </Typography>
+              <Typography
+                variant="small"
+                color="gray"
+                className="font-medium bg-green-200 rounded-lg w-20 text-center my-2"
+              >
+                {listing.type}
+              </Typography>
+            </CardBody>
+            <CardFooter className="pt-0">
+              <Button
+                ripple={false}
+                fullWidth={true}
+                className="bg-black text-white shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
+                onClick={() => {
+                  fetchPropertyListById(listing._id);
+                  handleOpen(listing._id);
+                }}
+              >
+                View
+              </Button>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
       <Dialog open={open} handler={() => handleOpen(null)}>
         <DialogHeader>PropertyListing</DialogHeader>
+        <IconButton variant="text" color="blue-gray" style={{position:"relative",
+      left:"35rem"}}onClick={() => setOpen(false)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </IconButton>
         <Carousel>
           <img
             src={propertyById?.Listings?.ListingimageUrls[0]}
@@ -139,9 +206,9 @@ const AdminPropertyList = () => {
         <DialogBody className="h-[20rem] overflow-scroll ">
           {propertyById ? (
             <div>
-              <Typography className="text-3xl text-3xl font-bold">
+              <h1 className="text-3xl text-3xl font-bold">
                 {propertyById?.Listings?.name}
-              </Typography>
+              </h1>
               <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
                 <Typography>Posted By</Typography>
                 <div className="flex items-center">
@@ -157,9 +224,9 @@ const AdminPropertyList = () => {
                       alt="avatar"
                     />
                     <div className="ml-2">
-                      <Typography variant="h5" color="blue-gray">
+                      <h5>
                         {propertyById?.Listings?.userRef.name}
-                      </Typography>
+                      </h5>
                     </div>
                   </Card>
                 </div>
@@ -240,11 +307,11 @@ const AdminPropertyList = () => {
 
       <Pagination
         itemsPerPage={ITEMS_PER_PAGE}
-        totalItems={Property.length}
+        totalItems={totalItemsForPagination}
         paginate={setCurrentPage}
         currentPage={currentPage}
       />
-    </div>
+    </Card>
   );
 };
 
