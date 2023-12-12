@@ -13,13 +13,38 @@ import {
   ShoppingBagIcon,
   UserCircleIcon,
   Cog6ToothIcon,
-  InboxIcon,
+  ArrowUpTrayIcon,
   PowerIcon,
 } from "@heroicons/react/24/solid";
+import {
+  signOutAdminFailure,
+  signOutAdminSuccess,
+} from "../redux/user/adminSlice";
 import { useNavigate } from "react-router-dom";
+import { clearPersistedState } from "../redux/store";
+import { useSelector, useDispatch } from "react-redux";
+import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
 
 const AdminSideBar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [_, removeCookie] = useCookies(["token"]);
+  const { currentadmin } = useSelector((state) => state.admin);
+
+  const handleSignOut = () => {
+    if (currentadmin) {
+      removeCookie("token");
+      dispatch(signOutAdminSuccess());
+      toast.success("signout successful");
+      clearPersistedState();
+      navigate("/sign-in");
+    } else {
+      dispatch(signOutAdminFailure());
+      toast.error("signout failed");
+    }
+  };
+
   return (
     <div>
       <Card className="h-[calc(100vh-2rem)] w-full sm:max-w-[25rem] max-w-[5rem] p-4 mt-3 h-full">
@@ -31,7 +56,7 @@ const AdminSideBar = () => {
         <List>
           <ListItem
             onClick={() => {
-              navigate("/admindashbord");
+              navigate("admindashbord");
             }}
           >
             <ListItemPrefix>
@@ -41,7 +66,7 @@ const AdminSideBar = () => {
           </ListItem>
           <ListItem
             onClick={() => {
-              navigate("/admindpropertyList");
+              navigate("admindpropertyList");
             }}
           >
             <ListItemPrefix>
@@ -51,16 +76,13 @@ const AdminSideBar = () => {
           </ListItem>
           <ListItem>
             <ListItemPrefix>
-              <InboxIcon className="h-5 w-5" />
+              <ArrowUpTrayIcon className="h-5 w-5" />
             </ListItemPrefix>
-            <span className="hidden sm:block">Dashboard</span>
-            {/* <ListItemSuffix>
-            <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
-          </ListItemSuffix> */}
+            <span className="hidden sm:block">add</span>
           </ListItem>
           <ListItem
             onClick={() => {
-              navigate("/adminuserlist");
+              navigate("adminuserlist");
             }}
           >
             <ListItemPrefix>
@@ -68,17 +90,11 @@ const AdminSideBar = () => {
             </ListItemPrefix>
             <span className="hidden sm:block">User</span>
           </ListItem>
-          <ListItem>
-            <ListItemPrefix>
-              <Cog6ToothIcon className="h-5 w-5" />
-            </ListItemPrefix>
-            <span className="hidden sm:block">Dashboard</span>
-          </ListItem>
-          <ListItem>
+          <ListItem onClick={handleSignOut}>
             <ListItemPrefix>
               <PowerIcon className="h-5 w-5" />
             </ListItemPrefix>
-            <span className="hidden sm:block">Dashboard</span>
+            <span className="hidden sm:block">LogOut</span>
           </ListItem>
         </List>
       </Card>

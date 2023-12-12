@@ -10,6 +10,7 @@ import {
   signOutUserSuccess,
   signOutUserFailure,
 } from "../redux/user/userSlice";
+import { clearPersistedState } from '../redux/store'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,6 +33,7 @@ const Header = () => {
     if (currentuser) {
       removeCookie("token");
       dispatch(signOutUserSuccess());
+      clearPersistedState();
       toast.success("signout successful");
       navigate("/sign-in");
     } else {

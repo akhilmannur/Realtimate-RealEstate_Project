@@ -11,6 +11,8 @@ import {
 import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
 import BuyCard from "../Components/BuyCard";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 
 const BuyListing = () => {
   const [offerListings, setOfferListings] = useState([]);
@@ -53,6 +55,7 @@ const BuyListing = () => {
 
   return (
     <div>
+      <Header/>
         <BuyCard/>
       {offerListings && offerListings.length > 0 && (
         <div className="mx-10 border-t-2 border border-black rounded-lg shadow-lg my-5">
@@ -270,6 +273,7 @@ const BuyListing = () => {
           </div>
         </div>
       )}
+      <Footer/>
     </div>
   );
 };

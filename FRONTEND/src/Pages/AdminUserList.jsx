@@ -22,6 +22,8 @@ import {
 } from "@material-tailwind/react";
 import axios from "axios";
 import Pagination from "./pagination";
+import { Link, useNavigate } from "react-router-dom";
+import AdminUSerProfile from "./AdminUSerProfile";
 
 const TABS = [
   {
@@ -40,16 +42,16 @@ const ITEMS_PER_PAGE = 5;
 export default function AdminUserList() {
   const [user, setUser] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  // console.log(user);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchUserList = async () => {
       try {
         const res = await axios.get("/api/admin/getalluser");
         const data = await res.data;
-        console.log(data);
         setUser(data.alluser);
       } catch (error) {
-        console.log(error);
+       error.message(error)
       }
     };
     fetchUserList();
@@ -60,7 +62,7 @@ export default function AdminUserList() {
   const currentUsers = user.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <Card className="max-h-[80rem] w-[19rem] sm:w-full m-5">
+    <Card className="max-h-[80rem] w-[19rem] sm:w-full w-full m-5">
       <CardHeader floated={false} shadow={false} className="rounded-none">
         <div className="mb-8 flex items-center justify-between gap-8">
           <div>
@@ -122,8 +124,8 @@ export default function AdminUserList() {
             </tr>
           </thead>
           <tbody>
-            {currentUsers.map((users) => (
-              <tr key={users.id}>
+            {currentUsers.map(( users) => ( 
+              <tr key={users._id}>
                 <td>
                   <div className="flex items-center gap-3">
                     <Avatar src={users.avatar} alt="img" size="sm" />
@@ -149,29 +151,21 @@ export default function AdminUserList() {
                     </Typography>
                   </div>
                 </td>
-                <td>
-                  <div className="w-max">
-                    <Chip
-                      variant="ghost"
-                      size="sm"
-                      // value={online ? "online" : "offline"}
-                      // color={online ? "green" : "blue-gray"}
-                    />
-                  </div>
-                </td>
+                <td></td>
                 <td>
                   <Typography
                     variant="small"
                     color="blue-gray"
                     className="font-normal"
+                    
                   >
                     {users.createdAt}
                   </Typography>
                 </td>
                 <td className="flex flex-row gap-2">
+                  <Button onClick={()=>navigate(`/adminuserprofile/${users._id}`)}>View</Button>
                   <Button className="bg-red-500 ">Block</Button>
                   <Button className="bg-green-500">UnBlock</Button>
-                 
                 </td>
               </tr>
             ))}

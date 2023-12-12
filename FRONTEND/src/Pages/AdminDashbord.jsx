@@ -212,9 +212,9 @@ const chartConfige = {
 const AdminDashbord = () => {
   return (
     <div>
-      {/* <h1 class="font-bold sm:text-5xl text-2xl  text-center mt-10 mx-20">
+      <h1 class="font-bold sm:text-5xl text-2xl  text-center mt-10 mx-20">
         Welcome to AdminDashboard
-      </h1> */}
+      </h1>
       <div className="mt-5  flex sm:flex-row flex-col gap-4 sm:mx-20 mx-2">
         <div>
           <Card className="sm:w-[30rem] w-[19rem] ">

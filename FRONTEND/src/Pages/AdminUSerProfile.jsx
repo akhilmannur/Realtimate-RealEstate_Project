@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   Typography,
@@ -17,12 +17,49 @@ import {
   ArrowDownTrayIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const AdminUSerProfile = () => {
+  const [userById, setUserById] = useState({});
+  const [listingByUser, setListingByUser] = useState([]);
+  const params = useParams();
+  const { userId } = params;
+
+  const fetchUserById = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/api/admin/getUserById/${userId}`
+      );
+      const data = res.data;
+      setUserById(data);
+    } catch (error) {
+      error.message(error);
+    }
+  };
+
+  const fetchPropertyList = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/api/admin/getpropertiesByUser/${userId}`
+      );
+      const data = res.data;
+      setListingByUser(data);
+    } catch (error) {
+      error.message(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserById();
+    fetchPropertyList();
+  }, []);
+  console.log(listingByUser);
+
   return (
-  <div>
-      <div className="flex gap-10 flex-col sm:flex-row ">
-        <Card className="h-[calc(60vh-2rem)] w-full max-w-[20rem] p-2 shadow-xl shadow-blue-gray-900/5 m-5 ">
+    <div>
+      <div className="flex gap-10 flex-col sm:flex-row">
+        <Card className="h-[calc(60vh-2rem)] w-full sm:max-w-[20rem] max-w-[15rem] p-2 shadow-xl shadow-blue-gray-900/5 m-5 ">
           <div className=" p-2 flex justify-center items-center">
             <Typography variant="h2" color="blue-gray">
               UserProfile
@@ -30,7 +67,7 @@ const AdminUSerProfile = () => {
           </div>
           <div className="flex justify-center items-center h-[40rem]">
             <Avatar
-              src="https://docs.material-tailwind.com/img/face-2.jpg"
+              src={userById?.users?.avatar}
               alt="avatar"
               className="w-40 h-40 object-cover rounded-full"
             />
@@ -50,124 +87,84 @@ const AdminUSerProfile = () => {
             <Avatar
               size="lg"
               variant="circular"
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+              src={userById?.users?.avatar}
               alt="tania andrew"
+              className="h-10 w-10"
             />
             <div className="flex w-full flex-col gap-0.5">
               <div className="flex items-center justify-between">
                 <Typography variant="h5" color="blue-gray">
-                  Tania Andrew
+                  {userById?.users?.name}
                 </Typography>
               </div>
-              <Typography color="blue-gray">Frontend Lead @ Google</Typography>
+              <Typography color="blue-gray">
+                Username: {userById?.users?.username}
+              </Typography>
             </div>
           </CardHeader>
           <CardBody className="mb-6 p-0">
-            <Typography>
-              &quot;I found solution to all my design needs from Creative Tim. I
-              use them as a freelancer in my hobby projects for fun! And its
-              really affordable, very humble guys !!!&quot;
-            </Typography>
+            <Typography>Email: {userById?.users?.email}</Typography>
+            <div className="flex gap-4 mt-10">
+              <Button className="bg-red-500 gap-4">Block</Button>
+              <Button className="bg-green-500">UnBlock</Button>
+            </div>
           </CardBody>
         </Card>
       </div>
-      <div>
-      </div>
-    <div className="flex justify-center">
-      <Card className=" mx-10 h-full w-full ">
-        <CardHeader floated={false} shadow={false} className="rounded-none">
-          <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
-            <div>
-              <Typography variant="h5" color="blue-gray">
-           User Posted Property Lists
-              </Typography>
-           
-            </div>
-            <div className="flex w-full shrink-0 gap-2 md:w-max">
-              <div className="w-full md:w-72">
-                <Input
-                  label="Search"
-                  icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                />
+      <div className="flex justify-center sm:mx-60 mx-4">
+        <Card className="h-full w-full">
+          <CardHeader floated={false} shadow={false} className="rounded-none">
+            <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
+              <div>
+                <Typography variant="h5" color="blue-gray">
+                  User Posted Property Lists
+                </Typography>
+              </div>
+              <div className="flex w-full shrink-0 gap-2 md:w-max">
+                <div className="w-full md:w-72">
+                  <Input
+                    label="Search"
+                    icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        </CardHeader>
-        <CardBody className=" px-0">
-          <table className="w-full min-w-max table-auto text-left">
-            
-            <tbody>
-              <tr>
-                <td>
-                  <div className="flex items-center gap-3">
-                    <Avatar
-                      src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-                      alt=".."
-                      size="md"
-                      className="border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1"
-                    />
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-bold"
-                    ></Typography>
-                  </div>
-                </td>
-                <td>
+          </CardHeader>
+          { listingByUser.length > 0 ?(
+          listingByUser.map((listing) => (
+            <CardBody className="px-0" key={listing._id}>
+              <div className="w-full min-w-max ">
+                <div className="flex items-center  justify-around">
+                  <Avatar
+                    src={listing.ListingimageUrls[0]}
+                    alt=".."
+                    size="md"
+                    className="border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1"
+                  />
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal"
-                  ></Typography>
-                </td>
-                <td>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  ></Typography>
-                </td>
-                <td>
-                </td>
-                <td>
-                  <div className="flex items-center gap-3">
-                    <div className="h-9 w-12 rounded-md border border-blue-gray-50 p-1">
-                      <Avatar
-                        src="https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/logos/visa.png"
-                        size="sm"
-                        alt="mastercard"
-                        variant="square"
-                        className="h-full w-full object-contain p-1"
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal capitalize"
-                      ></Typography>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal opacity-70"
-                      ></Typography>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <Tooltip content="Edit User">
-                    <IconButton variant="text">
-                      <PencilIcon className="h-4 w-4" />
-                    </IconButton>
-                  </Tooltip>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </CardBody>
-      </Card>
+                    className="font-bold"
+                  >
+                    {listing.name}
+                  </Typography>
+
+                  <Button>view</Button>
+                </div>
+              </div>
+            </CardBody>
+          ))):(
+            <CardBody className="px-0">
+            <div className="flex items-center justify-center h-20">
+              <Typography variant="small" color="blue-gray">
+                No listing posted by this user.
+              </Typography>
+            </div>
+          </CardBody>
+          )}
+        </Card>
       </div>
-</div>
+    </div>
   );
 };
 

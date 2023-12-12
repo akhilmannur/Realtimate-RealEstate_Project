@@ -3,6 +3,8 @@ import { Card, Typography } from "@material-tailwind/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ListingItem from "../Components/ListingItem";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 
 const Search = () => {
   const navigate = useNavigate();
@@ -133,6 +135,8 @@ const Search = () => {
     setListings([...listings, ...data]);
   };
   return (
+    <div>
+      <Header/>
     <div className="flex flex-col md:flex-row  ">
       <div className=" p-7 border-b-2 md:border-r-2 md:min-h-screen">
         <form onSubmit={handleSubmit}>
@@ -270,6 +274,8 @@ const Search = () => {
           )}
         </div>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 };

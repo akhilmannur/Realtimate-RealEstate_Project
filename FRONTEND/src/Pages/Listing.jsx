@@ -16,6 +16,8 @@ import {
   FaShare,
 } from "react-icons/fa";
 import Contact from "../Components/Contact";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 
 const Listing = () => {
   SwiperCore.use([Navigation]);
@@ -58,6 +60,8 @@ const Listing = () => {
   }, [params.listing]);
 
   return (
+    <>
+    <Header/>
     <main>
       {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
       {error && (
@@ -159,6 +163,8 @@ const Listing = () => {
         </div>
       )}
     </main>
+    <Footer/>
+    </>
   );
 };
 

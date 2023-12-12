@@ -1,10 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from './user/userSlice'
+import adminReducer from './user/adminSlice'
 import{ persistReducer,persistStore }from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
 
-const rootReducer = combineReducers({ user: userReducer });
+const rootReducer = combineReducers({ user: userReducer,admin: adminReducer});
 
 const persistConfig = {
   key: 'root',
@@ -20,3 +21,5 @@ export const store = configureStore({
   }),
 })
 export const persistor = persistStore(store);
+export const clearPersistedState = () => {
+  persistor.purge();}

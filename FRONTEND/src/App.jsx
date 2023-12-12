@@ -42,12 +42,12 @@ function App() {
         <Route path="/sell" element={<SellListing />} />
         <Route path="/rent" element={<RentListing />} />
 
-        <Route path="/adminhome" element={<AdminHome />} />
-        <Route element={<AdminHome />}>
-          <Route path="/adminuserlist" element={<AdminUserList />} />
-          <Route path="/admindashbord" element={<AdminDashbord />} />
-          <Route path="/admindpropertyList" element={<AdminPropertyList />} />
-          <Route path="/adminuserprofile" element={<AdminUSerProfile />} />
+        <Route path="/adminhome" element={<AdminHome />}>
+          <Route index element={<AdminDashbord />} />
+          <Route path="adminuserlist" element={<AdminUserList />} />
+          <Route path="admindashbord" element={<AdminDashbord />} />
+          <Route path="admindpropertyList" element={<AdminPropertyList />} />
+          <Route path="adminuserprofile/:userId" element={<AdminUSerProfile />}/>
         </Route>
       </Routes>
       {/* <Footer /> */}

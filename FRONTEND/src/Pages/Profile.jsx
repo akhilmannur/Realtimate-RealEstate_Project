@@ -33,6 +33,8 @@ import AvatarUpload from "./AvatarUpload";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 
 
 const Profile = () => {
@@ -195,6 +197,7 @@ const Profile = () => {
 
   return (
     <div>
+      <Header/>
       <figure className="relative h-96 w-full">
         <img
           className="h-full w-full rounded-xl object-cover object-center"
@@ -398,7 +401,7 @@ const Profile = () => {
         </div>
       )}
      </div>
-
+<Footer/>
     </div>
   );
 };

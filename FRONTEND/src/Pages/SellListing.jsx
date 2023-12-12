@@ -12,6 +12,8 @@ import {
 import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
 import CreateProperty from "../Components/CreateProperty";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 
 const SellListing = () => {
     const [saleListings, setSaleListings] = useState([]);
@@ -31,6 +33,7 @@ const SellListing = () => {
     
   return (
     <div>
+      <Header/>
         <CreateProperty/>
           {saleListings && saleListings.length > 0 && (
         <div className="mx-10 border-t-2 border rounded-lg shadow-lg my-5">
@@ -99,6 +102,7 @@ const SellListing = () => {
           </div>
         </div>
       )}
+      <Footer/>
     </div>
   )
 }

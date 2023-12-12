@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as yup from "yup";
 import OAuth from "../Components/OAuth";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});
@@ -83,6 +85,8 @@ const SignUp = () => {
   };
 
   return (
+    <div>
+      <Header/>
   <div className="bg-white p-10 max-w-md mx-auto border shadow-lg mt-10">
     <h1 className="text-3xl text-center font-bold p-5 uppercase">Sign up</h1>
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -132,6 +136,8 @@ const SignUp = () => {
         <span className="text-blue-800">click here</span>
       </Link>
     </div>
+  </div>
+  <Footer/>
   </div>
 );
 };

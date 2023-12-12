@@ -9,6 +9,9 @@ import {
 } from "@material-tailwind/react";
 import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
+import CreateProperty from "../Components/CreateProperty";
 
 
 const RentListing = () => {
@@ -29,6 +32,7 @@ const RentListing = () => {
 
   return (
     <div>
+      <Header/>
         <CreateProperty/>
       
       {rentListings && rentListings.length > 0 && (
@@ -102,6 +106,7 @@ const RentListing = () => {
           </div>
         </div>
       )}
+      <Footer/>
     </div>
   );
 };

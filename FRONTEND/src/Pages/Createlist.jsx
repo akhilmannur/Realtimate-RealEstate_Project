@@ -4,6 +4,8 @@ import ListingimageUrls from "./ListingimageUrls";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 
 const Createlist = () => {
   const { currentuser } = useSelector((state) => state.user);
@@ -137,6 +139,8 @@ const Createlist = () => {
   };
 
   return (
+    <>
+    <Header/>
     <div className=" py-4 px-8 overflow-y-auto max-h-screen">
       <Stepper
         activeStep={activeStep}
@@ -479,6 +483,8 @@ const Createlist = () => {
         )}
       </form>
     </div>
+    <Footer/>
+    </>
   );
 };
 

@@ -11,11 +11,19 @@ import {
   signInSuccess,
   signInFailure,
 } from "../redux/user/userSlice";
+import{  adminSignInStart,
+  adminSignInSuccess,
+  adminSignInFailure} from "../redux/user/adminSlice"
 import OAuth from "../Components/OAuth";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 
 const SignIn = () => {
   const { loading, error} = useSelector(
     (state) => state.user
+  );
+  const { loadingg, errorr} = useSelector(
+    (state) => state.admin
   );
   const [_, setCookie] = useCookies(["token"]);
   const [errors, setErrors] = useState({});
@@ -82,7 +90,7 @@ const SignIn = () => {
 
     try {
       await validationSchema.validate(formData, { abortEarly: false });
-      dispatch(signInStart());
+      dispatch(signInStart()) 
 
       const Response = await axios.post("/api/auth/signin", formData);
       const Data = Response.data;
@@ -91,7 +99,7 @@ const SignIn = () => {
         setCookie("token", Data.data);
         navigate("/adminhome");
         handleLoginResponse(Data);
-        dispatch(signInSuccess(Data));
+        dispatch(adminSignInSuccess(Data));
       } else if (Data.status === "user_success") {
         setCookie("token", Data.data);
         navigate("/");
@@ -99,15 +107,26 @@ const SignIn = () => {
         dispatch(signInSuccess(Data));
       } else {
         handleLoginResponse(Data);
-        dispatch(signInFailure());
+        if (Data.status === "admin_failure") {
+          dispatch(adminSignInFailure());
+        } else {
+          dispatch(signInFailure());
+        }
       }
     } catch (error) {
       toast.error("No matching validations. Please check your credentials.");
-      dispatch(signInFailure(error.message));
+      if (errorr) {
+        dispatch(adminSignInFailure(errorr.message));
+      } else {
+        dispatch(signInFailure(error.message));
+      }
+    
     }
   };
 
   return (
+    <div>
+    <Header/>
     <div className="bg-white p-10 max-w-md mx-auto border shadow-lg mt-12">
       <h1 className="text-3xl text-center font-bold p-5 uppercase">login</h1>
       <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
@@ -144,6 +163,8 @@ const SignIn = () => {
           <span className="text-blue-800">click here</span>
         </Link>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 };

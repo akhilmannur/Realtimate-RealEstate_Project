@@ -3,14 +3,18 @@ import HomeTop from '../Components/HomeTop'
 import HomeListing from '../Components/HomeListing'
 import About from './About'
 import HomeAnime from '../Components/HomeAnime'
+import Header from '../Components/Header'
+import Footer from '../Components/Footer'
 
 const Home = () => {
   return (
     <div>
+      <Header/>
         <HomeTop/>
         <About/>
         <HomeListing/>
         <HomeAnime/>
+        <Footer/>
      
     </div>
   )
