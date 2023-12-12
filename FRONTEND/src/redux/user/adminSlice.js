@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = {
     currentadmin: null,
     errorr: null,
@@ -26,6 +27,7 @@ const initialState = {
                 state.currentadmin = null;  
                 state.loadingg = false;
                 state.errorr = null;
+               
               },
               signOutAdminFailure: (state, action) => {
                 state.errorr = action.payload;

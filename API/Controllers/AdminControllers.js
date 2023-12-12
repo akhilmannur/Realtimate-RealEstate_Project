@@ -56,4 +56,72 @@ export const showPropertiesBasedOnUser= async (req, res) => {
   res.status(200).json(
     properties
   )
+};
+
+export const usersPermonth = async (req,res)=>{
+  const userCounts = await User.aggregate([
+    {
+      $project: {
+        month: { $month: '$createdAt' } 
+      }
+    },
+    {
+      $group: {
+        _id: '$month',
+        count: { $sum: 1 } 
+      }
+    },
+    {
+      $sort: { _id: 1 } 
+    }
+  ]);
+
+  res.status(200).json(userCounts);
+};
+
+export const listingPerMonth= async(req,res)=>{
+
+  const listingsPerMonth = await Listing.aggregate([
+    {
+      $group: {
+        _id: {
+          $dateToString: { format: '%Y-%m', date: '$createdAt' } 
+        },
+        count: { $sum: 1 } 
+      }
+    },
+    {
+      $sort: { _id: 1 } 
+    }
+  ]);
+
+    res.status(200).json(listingsPerMonth);
+};
+
+export const typeCount = async (req,res)=>{
+  const typeCounts = await Listing.aggregate([
+    {
+      $group: {
+        _id: null,
+        sellCount: {
+          $sum: {
+            $cond: { if: { $eq: ['$type', 'sell'] }, then: 1, else: 0 }
+          }
+        },
+        rentCount: {
+          $sum: {
+            $cond: { if: { $eq: ['$type', 'rent'] }, then: 1, else: 0 }
+          }
+        }
+      }
+    }
+  ]);
+
+
+  const [result] = typeCounts;
+
+  const { sellCount, rentCount } = result;
+  
+  return res.status(200).json( { sellCount, rentCount });
+
 }

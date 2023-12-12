@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardBody,
@@ -7,14 +7,90 @@ import {
 } from "@material-tailwind/react";
 import Chart from "react-apexcharts";
 import { Square3Stack3DIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
 
+
+const chartConfige = {
+  type: "pie",
+  width: 280,
+  height: 280,
+  series: [44, 55],
+  options: {
+    chart: {
+      toolbar: {
+        show: false,
+      },
+    },
+    title: {
+      show: "",
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    labels: ["Rent", "sale"],
+    colors: ["#020617", "#ff8f00", "#00897b", "#1e88e5", "#d81b60"],
+    legend: {
+      show: false,
+    },
+  },
+};
+
+
+
+const AdminDashbord = () => {
+  const [userCounts, setUserCounts] = useState([]);
+  const [listCounts, setListCounts] = useState([]);
+  const [typeCounts, setTypeCounts] = useState({ sellCount: 0, rentCount: 0 });
+
+  useEffect(() => {
+    const fetchUserCounts = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/api/admin/usersjoinedpermonth');
+        const data = res.data;
+        setUserCounts(data);
+        fetchListingCount();
+      } catch (error) {
+        console.error('Error fetching user counts:', error);
+      }
+    };
+  
+    const fetchListingCount = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/api/admin/listingpermonth');
+        const data = res.data;
+        setListCounts(data);
+        fetchTypesCount();
+      } catch (error) {
+        console.error('Error fetching listing count:', error);
+      }
+    };
+  
+    const fetchTypesCount = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/api/admin/typecount');
+        const data = res.data;
+        setTypeCounts(data);      
+      } catch (error) {
+        console.error('Error fetching type count:', error);
+      }
+    };
+  
+    fetchUserCounts();
+  }, []);
+  
+
+  const userCountData = userCounts.map((count) => count.count);
+const listCountData =listCounts.map((count) => count.count);
+const { sellCount, rentCount } = typeCounts;
+
+  
 const chartConfig = {
   type: "line",
   height: 240,
   series: [
     {
-      name: "users/momth",
-      data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+      name: "users/month",
+      data: userCountData,
     },
   ],
   options: {
@@ -102,7 +178,7 @@ const chartConfigg = {
   series: [
     {
       name: "Listing",
-      data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+      data:listCountData ,
     },
   ],
   options: {
@@ -188,7 +264,7 @@ const chartConfige = {
   type: "pie",
   width: 280,
   height: 280,
-  series: [44, 55],
+  series: [sellCount, rentCount],
   options: {
     chart: {
       toolbar: {
@@ -209,10 +285,10 @@ const chartConfige = {
   },
 };
 
-const AdminDashbord = () => {
+
   return (
     <div>
-      <h1 class="font-bold sm:text-5xl text-2xl  text-center mt-10 mx-20">
+      <h1 className="font-bold sm:text-5xl text-2xl  text-center mt-10 mx-20">
         Welcome to AdminDashboard
       </h1>
       <div className="mt-5  flex sm:flex-row flex-col gap-4 sm:mx-20 mx-2">

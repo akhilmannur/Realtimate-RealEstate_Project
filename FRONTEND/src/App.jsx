@@ -20,6 +20,7 @@ import AdminUserList from "./Pages/AdminUserList";
 import AdminDashbord from "./Pages/AdminDashbord";
 import AdminPropertyList from "./Pages/AdminPropertyList";
 import AdminUSerProfile from "./Pages/AdminUSerProfile";
+import ChatBox from "./Pages/ChatBox";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/buy" element={<BuyListing />} />
         <Route path="/sell" element={<SellListing />} />
         <Route path="/rent" element={<RentListing />} />
+        <Route path="/chatbox" element={<ChatBox/>} />
 
         <Route path="/adminhome" element={<AdminHome />}>
           <Route index element={<AdminDashbord />} />

@@ -163,7 +163,7 @@ export default function AdminUserList() {
                   </Typography>
                 </td>
                 <td className="flex flex-row gap-2">
-                  <Button onClick={()=>navigate(`/adminuserprofile/${users._id}`)}>View</Button>
+                  <Button onClick={()=>navigate(`/adminhome/adminuserprofile/${users._id}`)}>View</Button>
                   <Button className="bg-red-500 ">Block</Button>
                   <Button className="bg-green-500">UnBlock</Button>
                 </td>
