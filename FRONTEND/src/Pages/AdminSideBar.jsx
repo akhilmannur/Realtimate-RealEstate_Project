@@ -12,7 +12,7 @@ import {
   PresentationChartBarIcon,
   ShoppingBagIcon,
   UserCircleIcon,
-  Cog6ToothIcon,
+  TicketIcon,
   ArrowUpTrayIcon,
   PowerIcon,
 } from "@heroicons/react/24/solid";
@@ -74,7 +74,11 @@ const AdminSideBar = () => {
             </ListItemPrefix>
             <span className="hidden sm:block">PropertyListings</span>
           </ListItem>
-          <ListItem>
+          <ListItem
+            onClick={() => {
+              navigate("admincreatlisting");
+            }}
+          >
             <ListItemPrefix>
               <ArrowUpTrayIcon className="h-5 w-5" />
             </ListItemPrefix>
@@ -90,6 +94,17 @@ const AdminSideBar = () => {
             </ListItemPrefix>
             <span className="hidden sm:block">User</span>
           </ListItem>
+          <ListItem
+            onClick={() => {
+              navigate("admincouponadd");
+            }}
+          >
+            <ListItemPrefix>
+              <TicketIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            <span className="hidden sm:block">Add Discound Coupon</span>
+          </ListItem>
+
           <ListItem onClick={handleSignOut}>
             <ListItemPrefix>
               <PowerIcon className="h-5 w-5" />

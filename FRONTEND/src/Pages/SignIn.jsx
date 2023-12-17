@@ -18,6 +18,7 @@ import OAuth from "../Components/OAuth";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 
+
 const SignIn = () => {
   const { loading, error} = useSelector(
     (state) => state.user
@@ -103,6 +104,7 @@ const SignIn = () => {
       } else if (Data.status === "user_success") {
         setCookie("token", Data.data);
         navigate("/");
+    
         handleLoginResponse(Data);
         dispatch(signInSuccess(Data));
       } else {

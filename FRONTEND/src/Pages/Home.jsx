@@ -6,10 +6,10 @@ import HomeAnime from '../Components/HomeAnime'
 import Header from '../Components/Header'
 import Footer from '../Components/Footer'
 
-const Home = () => {
+const Home = ( {socket}) => {
   return (
     <div>
-      <Header/>
+      <Header scoket={socket}/>
         <HomeTop/>
         <About/>
         <HomeListing/>

@@ -12,7 +12,7 @@ import {
 } from "../redux/user/userSlice";
 import { clearPersistedState } from '../redux/store'
 
-const Header = () => {
+const Header = ({socket}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [_, removeCookie] = useCookies(["token"]);
@@ -110,6 +110,10 @@ const Header = () => {
             Rent
           </li>
           </Link>
+         
+          <li className="hidden sm:inline hover:underline cursor-pointer" onClick={()=>{navigate("/chatbox");}}>
+           message
+          </li>
         </ul>
         <div className="flex gap-6 item-center">
           <form

@@ -55,7 +55,7 @@ const HomeListing = () => {
       {offerListings && offerListings.length > 0 && (
         <div className="mx-10 border-t-2 border border-black rounded-lg shadow-lg my-5">
           <h1 className="text-2xl font-semibold text-slate-600 m-5">
-            Recent offers
+            Recent plots in offer
           </h1>
           <div className=" flex flex-wrap gap-6 mt-10  sm:mx-auto sm:justify-center p-3 max-w-[75rem] ">
             {offerListings.map((listing) => (
