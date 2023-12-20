@@ -19,18 +19,19 @@ import AdminDashbord from "./Pages/AdminDashbord";
 import AdminPropertyList from "./Pages/AdminPropertyList";
 import AdminUSerProfile from "./Pages/AdminUSerProfile";
 import ChatBox from "./Pages/ChatBox";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 import AdminListing from "./Pages/AdminListing";
 import AdminCouponAdd from "./Pages/AdminCouponAdd";
+import AdminCouponDetails from "./Pages/AdminCouponDetails";
 
-const socket = io.connect("http://localhost:3000");
+// const socket = io.connect("http://localhost:3000");
 
 function App() {
   return (
     <>
   
       <Routes>
-        <Route path="/" element={<Home socket={socket}/>} />
+        <Route path="/" element={<Home/>} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/about" element={<About />} />
@@ -46,6 +47,7 @@ function App() {
         <Route path="/sell" element={<SellListing />} />
         <Route path="/rent" element={<RentListing />} />
         <Route path="/chatbox" element={<ChatBox/>} />
+       
 
         <Route path="/adminhome" element={<AdminHome />}>
           <Route index element={<AdminDashbord />} />
@@ -56,6 +58,7 @@ function App() {
           <Route path="admincreatlisting" element={<AdminListing/>} />
           <Route path="admincreatlisting" element={<AdminListing/>} />
           <Route path="admincouponadd" element={<AdminCouponAdd/>} />
+          <Route path="admincoupondetails" element={<AdminCouponDetails/>} />
         </Route>
       </Routes>
       <ToastContainer position="top-center" autoClose={3000} />

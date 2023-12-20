@@ -14,7 +14,6 @@ const couponSchema = new mongoose.Schema({
     discountAmount: Number,
     minimumPurchase: Number,
     expirationDate: Date,
-    applicableListings: []
 });
 
 export default mongoose.model('Coupon', couponSchema);

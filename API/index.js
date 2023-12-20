@@ -9,19 +9,19 @@ dotenv.config();
 import cors from 'cors';
 import adminRouter from './Routes/AdminRoutes.js';
 import chatRouter from './Routes/chatRoutes.js';
-import{ Server} from "socket.io";
-import http from "http";
+// import{ Server} from "socket.io";
+// import http from "http";
 import couponRouter from './Routes/couponRoutes.js';
 
 const app= express();
 app.use(cors());
-const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-      origin: "http://localhost:5173",
-      methods: ["GET", "POST"],
-    },
-  });
+// const server = http.createServer(app);
+// const io = new Server(server, {
+//     cors: {
+//       origin: "http://localhost:5173",
+//       methods: ["GET", "POST"],
+//     },
+//   });
 
 
 mongoose.connect(process.env.MONGO_DB)
@@ -43,24 +43,24 @@ app.use(ErrorHandler);
 
 
 
-io.on("connection", (socket) => {
-    console.log(`User Connected: ${socket.id}`);
+// io.on("connection", (socket) => {
+//     console.log(`User Connected: ${socket.id}`);
   
-    // socket.on("join_room", (data) => {
-    //   socket.join(data);
-    //   console.log(`User with ID: ${socket.id} joined room: ${data}`);
-    // });
+//     // socket.on("join_room", (data) => {
+//     //   socket.join(data);
+//     //   console.log(`User with ID: ${socket.id} joined room: ${data}`);
+//     // });
   
-    // socket.on("send_message", (data) => {
-    //   socket.to(data.room).emit("receive_message", data);
-    // });
+//     // socket.on("send_message", (data) => {
+//     //   socket.to(data.room).emit("receive_message", data);
+//     // });
   
-    socket.on("disconnect", () => {
-      console.log("User Disconnected", socket.id);
-    });
-  });
+//     socket.on("disconnect", () => {
+//       console.log("User Disconnected", socket.id);
+//     });
+//   });
 
 
-server.listen(3000,()=>{
+app.listen(3000,()=>{
     console.log('listening on port 3000');
 })

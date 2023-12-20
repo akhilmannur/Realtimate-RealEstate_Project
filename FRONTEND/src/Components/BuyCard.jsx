@@ -8,7 +8,7 @@ import {
 
 const BuyCard = () => {
   return (
-    <div className="flex flex justify-center mt-0">
+    <div className="flex flex justify-center mt-5">
       <Card
         shadow={false}
         className="relative grid h-[16rem] w-full max-w-[38rem] items-end justify-center overflow-hidden text-center"

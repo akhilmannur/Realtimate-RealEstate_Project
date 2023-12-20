@@ -75,7 +75,6 @@ const SignUp = () => {
 
       const response = await axios.post("/api/auth/signup", formData);
       const data = response.data;
-      console.log(data);
       handleResponse(data);
     } catch (error) {
       toast.error("no matching validations please check your credentials");

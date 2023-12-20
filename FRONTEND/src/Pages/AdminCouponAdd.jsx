@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import {useNavigate} from 'react-router-dom'
 import axios from "axios";
 import { Typography, } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 
 const AddCouponForm = () => {
+  const navigate= useNavigate()
   const [couponData, setCouponData] = useState({
     code: "",
     discountType: "",
@@ -11,6 +13,7 @@ const AddCouponForm = () => {
     minimumPurchase: 0,
     expirationDate: "",
   });
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,13 +29,14 @@ const AddCouponForm = () => {
         couponData
       );
      toast.success("coupon added successfully")
+     navigate("/adminhome/admincoupondetails")
     } catch (error) {
     error.message( error);
     }
   };
 
   return (
-    <div className="flex justify-center items-center mx-auto w-[355rem] bg-red-100 h-full">
+    <div className="flex justify-center items-center mx-auto w-[355rem]  h-full">
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-lg h-full mt-10"

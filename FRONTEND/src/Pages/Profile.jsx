@@ -97,7 +97,6 @@ const Profile = () => {
         }
       );
       const data = res.data;
-      console.log(data);
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
         return;

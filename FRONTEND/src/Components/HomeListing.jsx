@@ -53,7 +53,7 @@ const HomeListing = () => {
   return (
     <div>
       {offerListings && offerListings.length > 0 && (
-        <div className="mx-10 border-t-2 border border-black rounded-lg shadow-lg my-5">
+        <div className="mx-10 border rounded-lg shadow-lg my-5">
           <h1 className="text-2xl font-semibold text-slate-600 m-5">
             Recent plots in offer
           </h1>
@@ -125,7 +125,7 @@ const HomeListing = () => {
         </div>
       )}
       {rentListings && rentListings.length > 0 && (
-        <div className="mx-10 border-t-2 border border-black rounded-lg shadow-lg my-5">
+        <div className="mx-10  border rounded-lg shadow-lg my-5">
           <h1 className="text-2xl font-semibold text-slate-600 m-5">
             Recent plots for Rent
           </h1>
@@ -182,9 +182,11 @@ const HomeListing = () => {
                   </div>
                 </CardBody>
                 <CardFooter className="pt-0">
+                <Link to={`/listing/${listing._id}`}>
                   <Button size="lg" fullWidth={true}>
                     More Details
                   </Button>
+                  </Link>
                 </CardFooter>
               </Card>
             ))}
@@ -196,7 +198,7 @@ const HomeListing = () => {
       )}
 
       {saleListings && saleListings.length > 0 && (
-        <div className="mx-10 border-t-2 border border-black rounded-lg shadow-lg my-5">
+        <div className="mx-10  border  rounded-lg shadow-lg my-5">
           <h1 className="text-2xl font-semibold text-slate-600 m-5">
             Recent plots for Sale
           </h1>
@@ -253,9 +255,11 @@ const HomeListing = () => {
                   </div>
                 </CardBody>
                 <CardFooter className="pt-0">
+                <Link to={`/listing/${listing._id}`}>
                   <Button size="lg" fullWidth={true}>
                     More Details
                   </Button>
+                  </Link>
                 </CardFooter>
               </Card>
             ))}

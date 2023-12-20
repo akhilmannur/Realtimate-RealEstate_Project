@@ -104,6 +104,16 @@ const AdminSideBar = () => {
             </ListItemPrefix>
             <span className="hidden sm:block">Add Discound Coupon</span>
           </ListItem>
+          <ListItem
+            onClick={() => {
+              navigate("admincoupondetails");
+            }}
+          >
+            <ListItemPrefix>
+              <TicketIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            <span className="hidden sm:block">Coupons</span>
+          </ListItem>
 
           <ListItem onClick={handleSignOut}>
             <ListItemPrefix>
