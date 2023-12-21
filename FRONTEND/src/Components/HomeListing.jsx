@@ -9,13 +9,14 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { MdLocationOn } from "react-icons/md";
+import { Navigation } from "swiper/modules";
 import axios from "axios";
 
 const HomeListing = () => {
   const [offerListings, setOfferListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
-
+ 
   useEffect(() => {
     const fetchOfferListings = async () => {
       try {
@@ -49,7 +50,8 @@ const HomeListing = () => {
     };
     fetchOfferListings();
   }, []);
-
+  
+  SwiperCore.use([Navigation]);
   return (
     <div>
       {offerListings && offerListings.length > 0 && (
@@ -59,8 +61,12 @@ const HomeListing = () => {
           </h1>
           <div className=" flex flex-wrap gap-6 mt-10  sm:mx-auto sm:justify-center p-3 max-w-[75rem] ">
             {offerListings.map((listing) => (
-              <Card className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0" listing={listing} key={listing._id} >
-                <CardHeader floated={false} color="blue-gray" >
+              <Card
+                className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
+                listing={listing}
+                key={listing._id}
+              >
+                <CardHeader floated={false} color="blue-gray">
                   <img
                     src={listing.ListingimageUrls[0]}
                     alt="ui/ux review check"
@@ -110,10 +116,10 @@ const HomeListing = () => {
                   </div>
                 </CardBody>
                 <CardFooter className="pt-0">
-                <Link to={`/listing/${listing._id}`}>
-                  <Button size="lg" fullWidth={true}>
-                    More Details
-                  </Button>
+                  <Link to={`/listing/${listing._id}`}>
+                    <Button size="lg" fullWidth={true}>
+                      More Details
+                    </Button>
                   </Link>
                 </CardFooter>
               </Card>
@@ -131,8 +137,12 @@ const HomeListing = () => {
           </h1>
           <div className=" flex flex-wrap gap-6 mt-10  sm:mx-auto sm:justify-center p-3 max-w-[75rem] ">
             {rentListings.map((listing) => (
-              <Card className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0" listing={listing} key={listing._id} >
-                <CardHeader floated={false} color="blue-gray" >
+              <Card
+                className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
+                listing={listing}
+                key={listing._id}
+              >
+                <CardHeader floated={false} color="blue-gray">
                   <img
                     src={listing.ListingimageUrls[0]}
                     alt="ui/ux review check"
@@ -182,10 +192,10 @@ const HomeListing = () => {
                   </div>
                 </CardBody>
                 <CardFooter className="pt-0">
-                <Link to={`/listing/${listing._id}`}>
-                  <Button size="lg" fullWidth={true}>
-                    More Details
-                  </Button>
+                  <Link to={`/listing/${listing._id}`}>
+                    <Button size="lg" fullWidth={true}>
+                      More Details
+                    </Button>
                   </Link>
                 </CardFooter>
               </Card>
@@ -204,8 +214,12 @@ const HomeListing = () => {
           </h1>
           <div className=" flex flex-wrap gap-6 mt-10  sm:mx-auto sm:justify-center p-3 max-w-[75rem] ">
             {saleListings.map((listing) => (
-              <Card className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0" listing={listing} key={listing._id}>
-                <CardHeader floated={false} color="blue-gray" >
+              <Card
+                className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
+                listing={listing}
+                key={listing._id}
+              >
+                <CardHeader floated={false} color="blue-gray">
                   <img
                     src={listing.ListingimageUrls[0]}
                     alt="ui/ux review check"
@@ -255,17 +269,19 @@ const HomeListing = () => {
                   </div>
                 </CardBody>
                 <CardFooter className="pt-0">
-                <Link to={`/listing/${listing._id}`}>
-                  <Button size="lg" fullWidth={true}>
-                    More Details
-                  </Button>
+                  <Link to={`/listing/${listing._id}`}>
+                    <Button size="lg" fullWidth={true}>
+                      More Details
+                    </Button>
                   </Link>
                 </CardFooter>
               </Card>
             ))}
           </div>
           <div className="flex justify-end m-5">
-            <p className="text-blue-500 text-xl">show more sale lists</p>
+            <p className="text-blue-500 text-xl" onClick={handleSwiperClick}>
+              show more sale lists
+            </p>
           </div>
         </div>
       )}

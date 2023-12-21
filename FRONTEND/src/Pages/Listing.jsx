@@ -93,10 +93,12 @@ const Listing = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error("An error occurred");
+      toast.error("An error occurred", error);
     }
     setShowInput(false);
   };
+
+ 
   return (
     <>
       <Header />
