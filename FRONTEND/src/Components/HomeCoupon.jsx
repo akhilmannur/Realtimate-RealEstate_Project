@@ -48,13 +48,12 @@ const HomeCoupon = () => {
 
   return (
     <div className="container mx-auto p-4 mt-20">
-      {/* <img src={ticket} alt="" /> */}
       <h1 className="text-3xl font-bold mb-4">Available Coupons</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {coupons.map((coupon) => (
           <div
             key={coupon._id}
-            className="p-10 shadow-lg  rounded-lg h-[13rem] "
+            className="p-10  rounded-lg h-[13rem] "
             style={{
               backgroundImage: `url(${ticket})`,
               backgroundSize: "cover",

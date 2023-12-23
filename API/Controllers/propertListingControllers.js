@@ -47,6 +47,18 @@ export const getListing = async (req, res,) => {
   });
 };
 
+export const getAllListing = async (req, res,) => {
+  const allListing = await Listing.find();
+  if (!allListing) {
+    return res.status(404).json({ status: "error", message: "user not found" });
+  }
+  res.status(200).json({
+    status: "success",
+    message: "listed successfully",
+    list: allListing,
+  });
+};
+
 
 
 export const getListings  =async (req ,res)=>{

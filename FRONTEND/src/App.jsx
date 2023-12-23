@@ -23,6 +23,7 @@ import ChatBox from "./Pages/ChatBox";
 import AdminListing from "./Pages/AdminListing";
 import AdminCouponAdd from "./Pages/AdminCouponAdd";
 import AdminCouponDetails from "./Pages/AdminCouponDetails";
+import UnAuthorized from "./Components/UnAuthorized";
 
 // const socket = io.connect("http://localhost:3000");
 
@@ -47,6 +48,7 @@ function App() {
         <Route path="/sell" element={<SellListing />} />
         <Route path="/rent" element={<RentListing />} />
         <Route path="/chatbox" element={<ChatBox/>} />
+        <Route path="/unauthourized" element={<UnAuthorized/>} />
        
 
         <Route path="/adminhome" element={<AdminHome />}>

@@ -17,7 +17,7 @@ import {
   deleteUserSuccess,
   deleteUserFailure,
   signOutUserSuccess,
-  signOutUserFailure
+  signOutUserFailure,
 } from "../redux/user/userSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -35,7 +35,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
-
 
 const Profile = () => {
   const { currentuser, loading, error } = useSelector((state) => state.user);
@@ -138,47 +137,57 @@ const Profile = () => {
   };
 
   const handleSignOut = () => {
-
-    if(currentuser){
-    removeCookie("token");
-    dispatch(signOutUserSuccess());
-    toast.success("signout successful");
-    navigate('/sign-in');
+    if (currentuser) {
+      removeCookie("token");
+      dispatch(signOutUserSuccess());
+      toast.success("signout successful");
+      navigate("/sign-in");
+    } else {
+      dispatch(signOutUserFailure());
+      toast.error("signout failed");
     }
-    else{
-    dispatch(signOutUserFailure());
-    toast.error("signout failed");
   };
-  }
   const handleShowListings = async () => {
     try {
       setShowListingsError(false);
-      const res = await axios.get(`http://localhost:3000/api/user/${currentuser?.rest?._id}/listing`,
-      {
-        headers: {
-          Authorization: `${currentuser?.data}`,
-        },
-      }
+      const res = await axios.get(
+        `http://localhost:3000/api/user/${currentuser?.rest?._id}/listing`,
+        {
+          headers: {
+            Authorization: `${currentuser?.data}`,
+          },
+        }
       );
       const data = await res.data;
-      setUserListings(data?.list)
-   
+      setUserListings(data?.list);
+
       if (data.success === false) {
         setShowListingsError(true);
         return;
       }
     } catch (error) {
-      setShowListingsError(true);
+      if (error.response.status === 401) {
+        setShowListingsError({
+          meseege: "Unauthorized access. Please log in again.",
+          status: 401,
+        });
+      } else {
+        setShowListingsError(error.message);
+      }
+      console.log(error);
     }
   };
 
-   const handleListingDelete = async (listingId) => {
+  const handleListingDelete = async (listingId) => {
     try {
-      const res = await axios.delete(`http://localhost:3000/api/list/${listingId}/deletelisting`, {
-        headers: {
-          Authorization: `${currentuser?.data}`,
-        },
-      });
+      const res = await axios.delete(
+        `http://localhost:3000/api/list/${listingId}/deletelisting`,
+        {
+          headers: {
+            Authorization: `${currentuser?.data}`,
+          },
+        }
+      );
       const data = await res.data;
       if (data.success === false) {
         console.log(data.message);
@@ -188,7 +197,7 @@ const Profile = () => {
       setUserListings((prev) =>
         prev.filter((listing) => listing._id !== listingId)
       );
-      toast.success("listing deleted succesfully")
+      toast.success("listing deleted succesfully");
     } catch (error) {
       console.log(error.message);
     }
@@ -196,7 +205,7 @@ const Profile = () => {
 
   return (
     <div>
-      <Header/>
+      <Header />
       <figure className="relative h-96 w-full">
         <img
           className="h-full w-full rounded-xl object-cover object-center"
@@ -240,7 +249,9 @@ const Profile = () => {
             </div>
             <div className="flex items-center gap-1">
               <FaSignOutAlt size={18} onClick={handleSignOut} />
-              <Typography color="gray"  onClick={handleSignOut} >Logout</Typography>
+              <Typography color="gray" onClick={handleSignOut}>
+                Logout
+              </Typography>
             </div>
             <div className="flex items-center">
               <FaTrash size={18} onClick={handleDeleteUser} />
@@ -348,59 +359,65 @@ const Profile = () => {
         </Card>
       </Dialog>
       <div className="mx-10 my-10">
-     <Link className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95' to={'/createlisting'}>
-      creat your properties
-     </Link>
-     </div>
-     <div className=" border border-gray-300 rounded-lg p-4 m-20" >
-     <button onClick={handleShowListings} className='w-full text-3xl ' >
-        Show Listings
-      </button>
-      <p className='text-red-700 mt-5'>
-        {showListingsError ? 'Error showing listings' : ''}
-      </p>
-
-      {userListings && userListings.length > 0 && (
-        <div className='flex flex-col gap-4 justify-around'>
-          <h1 className='text-center mt-7 text-2xl font-semibold'>
-            Your Listings
-          </h1>
-          {userListings.map((listing) => (
-            <div
-              key={listing._id}
-              className='border rounded-lg p-3 flex justify-between items-center gap-4'
-            >
-              <Link to={`/listing/${listing._id}`}>
-                <img
-                  src={listing.ListingimageUrls[0]}
-                  alt='listing cover'
-                  className='h-16 w-16 object-contain'
-                />
-              </Link>
-              <Link
-                className='text-slate-700 font-semibold  hover:underline truncate flex-1'
-                to={`/listing/${listing._id}`}
+        <Link
+          className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"
+          to={"/createlisting"}
+        >
+          creat your properties
+        </Link>
+      </div>
+      <div className=" border border-gray-300 rounded-lg p-4 m-20">
+        <button onClick={handleShowListings} className="w-full text-3xl ">
+          Show Listings
+        </button>{" "}
+        {showListingsError && (
+          <div>
+          <p className="text-red-700 mt-5">'Error showing listings'</p>
+     
+          {showListingsError.status == 401 && navigate("/unauthourized")}
+          </div>
+        )}
+        {userListings && userListings.length > 0 && (
+          <div className="flex flex-col gap-4 justify-around">
+            <h1 className="text-center mt-7 text-2xl font-semibold">
+              Your Listings
+            </h1>
+            {userListings.map((listing) => (
+              <div
+                key={listing._id}
+                className="border rounded-lg p-3 flex justify-between items-center gap-4"
               >
-                <p>{listing.name}</p>
-              </Link>
-
-              <div className='flex flex-col item-center'>
-                <button
-                  onClick={() => handleListingDelete(listing._id)}
-                  className='text-red-700 uppercase'
-                >
-                  Delete
-                </button>
-                <Link to={`/update-listing/${listing._id}`}>
-                  <button className='text-green-700 uppercase'>Edit</button>
+                <Link to={`/listing/${listing._id}`}>
+                  <img
+                    src={listing.ListingimageUrls[0]}
+                    alt="listing cover"
+                    className="h-16 w-16 object-contain"
+                  />
                 </Link>
+                <Link
+                  className="text-slate-700 font-semibold  hover:underline truncate flex-1"
+                  to={`/listing/${listing._id}`}
+                >
+                  <p>{listing.name}</p>
+                </Link>
+
+                <div className="flex flex-col item-center">
+                  <button
+                    onClick={() => handleListingDelete(listing._id)}
+                    className="text-red-700 uppercase"
+                  >
+                    Delete
+                  </button>
+                  <Link to={`/update-listing/${listing._id}`}>
+                    <button className="text-green-700 uppercase">Edit</button>
+                  </Link>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
-     </div>
-<Footer/>
+            ))}
+          </div>
+        )}
+      </div>
+      <Footer />
     </div>
   );
 };

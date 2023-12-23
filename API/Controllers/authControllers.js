@@ -124,7 +124,8 @@ export const google = async (req, res) => {
     const gtoken = jwt.sign(
       { username: user.username },
       process.env.USER_ACCESS_TOKEN_SECRET,
-      { expiresIn: 86400 }
+      { expiresIn: 86400}
+
     );
     const { password: pass, ...rest } = user._doc;
     res

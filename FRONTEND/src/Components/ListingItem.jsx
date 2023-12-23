@@ -44,9 +44,8 @@ const ListingItem = ({ listing }) => {
             <div className="mb-3 flex items-center justify-between">
               <Typography variant="h5" color="blue-gray" className="font-medium">
                 Rs
-                {listing.offer
-                  ? listing.regularPrice.toLocaleString("en-IN")
-                  : listing.discountPrice.toLocaleString("en-IN")}
+             
+                  { listing.regularPrice.toLocaleString("en-IN")}
                 {listing.type === "rent" && " / month"}
               </Typography>
             </div>
