@@ -31,7 +31,7 @@ const AddCouponForm = () => {
      toast.success("coupon added successfully")
      navigate("/adminhome/admincoupondetails")
     } catch (error) {
-    error.message( error);
+   toast.error(error);
     }
   };
 

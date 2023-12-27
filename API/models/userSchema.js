@@ -24,6 +24,10 @@ const userSchema= new mongoose.Schema({
         type: String,
         default: "https://w0.peakpx.com/wallpaper/979/89/HD-wallpaper-purple-smile-design-eye-smily-profile-pic-face-thumbnail.jpg"
       },
+  token:{type:String,default:""  },
+   
+   
+    
 },{timestamps:true});
 
 userSchema.pre("save", async function (next) {

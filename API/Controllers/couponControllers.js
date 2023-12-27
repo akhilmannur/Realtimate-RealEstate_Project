@@ -72,7 +72,7 @@ export const applyCouponToProperty = async (req, res) => {
   if (!coupon) {
     return res.status(404).json({ success: false, message: "Coupon not found" });
   }
- 
+    
 
   if (coupon.expirationDate < new Date()) {
     return res.status(400).json({ success: false, message: "Coupon has expired" });

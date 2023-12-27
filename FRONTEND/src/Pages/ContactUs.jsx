@@ -1,17 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Typography,
   Input,
-  Select,
   Textarea,
   Button,
-  Option,
 } from "@material-tailwind/react";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/solid";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const ContactUs = () => {
+  const { currentuser } = useSelector((state) => state.user);
+  const userRef=currentuser?.rest?._id;
+  const [contactForm, setContactForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber:"",
+    enquiryType: "",
+    message: "",
+   userRef
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setContactForm({ ...contactForm, [name]: value });
+  };
+
+  const handleSubmit=async(e)=>{
+    e.preventDefault();
+    try {
+      const res=await axios.post( "http://localhost:3000/api/contact/sendmessage",contactForm)
+      toast.success("message sent successfully")
+      console.log(res);
+    } catch (error) {
+      toast.error(error)
+    }
+  }
+ 
   return (
     <>
       <Header />
@@ -26,21 +55,26 @@ const ContactUs = () => {
             <Typography variant="h2" color="white">
               Contact Us
             </Typography>
+            <form onSubmit={handleSubmit}>
             <div className="mb-4 mt-4 flex flex-col sm:flex-row gap-4 ">
               <div className="sm:flex-1 ">
                 <Input
                   type="text"
                   placeholder="First Name"
+                  name="firstName"
                   size="md"
-                  outline={false}
+                  onChange={handleInputChange}
+                  value={contactForm.firstName}
                 />
               </div>
               <div className="flex-1">
                 <Input
                   type="text"
                   placeholder="Last Name"
+                  name="lastName"
                   size="md"
-                  outline={false}
+                  onChange={handleInputChange}
+                  value={contactForm.lastName}
                 />
               </div>
             </div>
@@ -49,39 +83,43 @@ const ContactUs = () => {
                 <Input
                   type="tel"
                   placeholder="Phone Number"
+                  name="phoneNumber"
                   size="md"
-                  outline={false}
+                  onChange={handleInputChange}
+                  value={contactForm.phoneNumber}
                 />
               </div>
               <div className="flex-1">
-                <Select color="" size="md" outline={false} value="select">
-                  <Option Value="" >
-                    Option 1
-                  </Option>
-                  <Option value="2">
-                    Option 2
-                  </Option>
-                  <Option value="3" >
-                    Option 3
-                  </Option>
-                </Select>
+                <select  value={contactForm.enquiryType}  onChange={handleInputChange} name="enquiryType"
+                 className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-md">
+                  <option value="">Select EnquiryType</option>
+                  <option value="complaint">Complaint</option>
+                  <option value="genaralenquiry">GeneralEnquries</option>
+                </select>
               </div>
             </div>
             <div className="mb-4 sm:w-[43.5rem]">
               <Input
                 type="email"
                 placeholder="Email"
+                name="email"
                 size="md"
-                outline={false}
+                onChange={handleInputChange}
+                value={contactForm.email}
               />
             </div>
             <div className="mb-4">
-              <Textarea placeholder="Your Message" size="md" outline={false} />
+              <Textarea
+               type="text"
+                placeholder="Your Message"
+                size="md"
+                name="message"
+                onChange={handleInputChange}
+                value={contactForm.message}
+              />
             </div>
             <div>
-              <Button color="lightBlue" ripple="light">
-                send message
-              </Button>
+              <Button type="submit">send message</Button>
             </div>
             <div className="flex justify-between mt-10 gap-10">
               <div>
@@ -111,6 +149,7 @@ const ContactUs = () => {
                 </span>
               </div>
             </div>
+            </form>
           </div>
         </figcaption>
       </figure>

@@ -26,6 +26,9 @@ import AdminCouponDetails from "./Pages/AdminCouponDetails";
 import UnAuthorized from "./Components/UnAuthorized";
 import NotFound from "./Components/NotFound";
 import ContactUs from "./Pages/ContactUs";
+import AdminEnquiries from "./Pages/AdminEnquiries";
+import ForgetPassword from "./Pages/ForgetPassword";
+import ResetPassword from "./Pages/ResetPassword";
 
 // const socket = io.connect("http://localhost:3000");
 
@@ -53,6 +56,8 @@ function App() {
         <Route path="/rent" element={<RentListing />} />
         <Route path="/chatbox" element={<ChatBox/>} />
         <Route path="/unauthourized" element={<UnAuthorized/>} />
+        <Route path="/forgetPassword" element={<ForgetPassword/>} />
+        <Route path="/resetPassword" element={<ResetPassword/>} />
        
 
         <Route path="/adminhome" element={<AdminHome />}>
@@ -65,6 +70,7 @@ function App() {
           <Route path="admincreatlisting" element={<AdminListing/>} />
           <Route path="admincouponadd" element={<AdminCouponAdd/>} />
           <Route path="admincoupondetails" element={<AdminCouponDetails/>} />
+          <Route path="adminenquiry" element={<AdminEnquiries/>} />
         </Route>
       </Routes>
       <ToastContainer position="top-center" autoClose={3000} />

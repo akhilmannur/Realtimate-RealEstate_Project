@@ -12,6 +12,7 @@ import chatRouter from './Routes/chatRoutes.js';
 // import{ Server} from "socket.io";
 // import http from "http";
 import couponRouter from './Routes/couponRoutes.js';
+import ContactUSRouter from './Routes/ContactUsRoutes.js';
 
 const app= express();
 app.use(cors());
@@ -39,6 +40,7 @@ app.use('/api/list',listingRouter);
 app.use('/api/admin',adminRouter);
 app.use('/api/chat',chatRouter);
 app.use('/api/coupon',couponRouter);
+app.use('/api/contact',ContactUSRouter)
 app.use(ErrorHandler);
 
 

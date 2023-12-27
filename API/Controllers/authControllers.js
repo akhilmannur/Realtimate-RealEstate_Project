@@ -7,7 +7,8 @@ import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
 dotenv.config();
-
+import randomString from "randomstring";
+import nodemailer from"nodemailer";
 export const signUp = async (req, res) => {
   const { value, error } = joiUservalidationSchema.validate(req.body);
 
@@ -155,3 +156,74 @@ export const google = async (req, res) => {
         rest:rest});
   }
 };
+
+
+export const forgetPassword=async(req,res)=>{
+  const {email}=req.body;
+  const userExist= await User.findOne({email:email})
+  if(userExist){
+    const token=randomString.generate()
+  
+  const user= await User.updateOne({email},{$set:{token:token}})
+  sentResetPassword(email,token)
+  res.status(200).send({message:"sent email succesfully",success:true})
+  }
+  else{
+    res.status(400).send({message:"inavalid email",success:false})
+  }
+};
+
+
+ export const sentResetPassword = async (email, token) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      tls: {
+        rejectUnauthorized: false,
+      },
+      requireTLS: true,
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASS,
+      },
+    });
+    const mailOption = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: "To verify your mail",
+      html: `http://localhost:5173/resetPassword?token=${token}> Please click here to Reset your Password...`,
+    };
+
+    const info = await transporter.sendMail(mailOption);
+
+    // console.log("email has been sent", info.response);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
+export const changepassword = async(req,res) =>{
+  const password = req.body.password
+  const token = req.body.queryValues
+  try {
+    const userData = await User.findOne({token:token})  
+  if(userData){
+    const salt = await bcryptjs.genSalt(10);
+    const hashedPassword = await bcryptjs.hash(password, salt);
+    const updatepassword = await User.findOneAndUpdate({token:token},{$set:{password:hashedPassword}})
+    if(updatepassword){
+      res.status(200)
+      .send({message:"Password is updated successfully",success:true})
+    }
+  }
+  else{
+    res.status(404)
+    .send({message:"Something went Wrong while Updating Password..."})
+  }
+  } catch (error) {
+   console.log(error); 
+  }
+  }

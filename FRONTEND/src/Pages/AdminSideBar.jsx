@@ -11,8 +11,8 @@ import {
   ShoppingBagIcon,
   UserCircleIcon,
   TicketIcon,
-  ArrowUpTrayIcon,
   PowerIcon,
+  ChatBubbleBottomCenterIcon,
 } from "@heroicons/react/24/solid";
 import {
   signOutAdminFailure,
@@ -75,13 +75,13 @@ const AdminSideBar = () => {
           </ListItem>
           <ListItem
             onClick={() => {
-              navigate("admincreatlisting");
+              navigate("adminenquiry");
             }}
           >
             <ListItemPrefix>
-              <ArrowUpTrayIcon className="h-5 w-5" />
+              <ChatBubbleBottomCenterIcon className="h-5 w-5" />
             </ListItemPrefix>
-            <span className="hidden sm:block">add</span>
+            <span className="hidden sm:block">Enquiries</span>
           </ListItem>
           <ListItem
             onClick={() => {

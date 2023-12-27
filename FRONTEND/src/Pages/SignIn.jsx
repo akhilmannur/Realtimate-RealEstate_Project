@@ -157,9 +157,15 @@ const SignIn = () => {
           <OAuth />
         </form>
         <div className="flex gap-2 mt-5">
-          <p>Dont have account </p>
+          <p>Dont have account? </p>
           <Link to="/sign-up">
-            <span className="text-blue-800">click here</span>
+            <span className="text-blue-800 hover:underline">click here</span>
+          </Link>
+        </div>
+        <div className="flex gap-2 mt-2">
+          <p>Forgot Password? </p>
+          <Link to="/forgetPassword">
+            <span className="text-blue-800 hover:underline">click here</span>
           </Link>
         </div>
       </div>
