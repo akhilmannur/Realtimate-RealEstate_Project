@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
 import {
   Card,
   CardHeader,
@@ -14,14 +13,17 @@ import axios from "axios";
 import CreateProperty from "../Components/CreateProperty";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
+import UserPagination from "../Components/UserPagination";
 
 const SellListing = () => {
     const [saleListings, setSaleListings] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const ITEMS_PER_PAGE = 8;
 
     useEffect(() => {
         const fetchSaleListings = async () => {
             try {
-              const res = await axios.get("/api/list/getlistings?type=sell&limit=4");
+              const res = await axios.get("/api/list/getlistings?type=sell");
               const data = await res.data;
               setSaleListings(data);
             } catch (error) {
@@ -30,6 +32,9 @@ const SellListing = () => {
           };
         fetchSaleListings();
       }, []);
+      const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+      const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+      const currentSellList = saleListings.slice(indexOfFirstItem, indexOfLastItem); 
     
   return (
     <div>
@@ -41,13 +46,13 @@ const SellListing = () => {
             plots for Sale
           </h1>
           <div className=" flex flex-wrap gap-6 mt-10  sm:mx-auto sm:justify-center p-3 max-w-[75rem] ">
-            {saleListings.map((listing) => (
+            {currentSellList.map((listing) => (
               <Card className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0" listing={listing} key={listing._id}>
                 <CardHeader floated={false} color="blue-gray" >
                   <img
                     src={listing.ListingimageUrls[0]}
                     alt="ui/ux review check"
-                    className="h-40 w-50 object-cover object-center"
+                    className="min-h-[15rem] min-w-[18rem] max-h-[15rem] max-w-[15rem] object-cover"
                   />
                   <div className="to-bg-black-10 absolute inset-0 h-full w-30 bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
                 </CardHeader>
@@ -85,10 +90,7 @@ const SellListing = () => {
                       className="font-medium"
                     >
                       Rs
-                      {listing.offer
-                        ? listing.regularPrice.toLocaleString("en-IN")
-                        : listing.discountPrice.toLocaleString("en-IN")}
-                      {listing.type === "rent" && " / month"}
+                      {listing.regularPrice.toLocaleString("en-IN")}
                     </Typography>
                   </div>
                 </CardBody>
@@ -102,6 +104,12 @@ const SellListing = () => {
           </div>
         </div>
       )}
+      <UserPagination
+       itemsPerPage={ITEMS_PER_PAGE}
+       totalItems={saleListings.length}
+       paginate={setCurrentPage}
+       currentPage={currentPage}
+       />
       <Footer/>
     </div>
   )

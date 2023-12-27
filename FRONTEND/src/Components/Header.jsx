@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../assets/logo.png";
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,9 +10,9 @@ import {
   signOutUserSuccess,
   signOutUserFailure,
 } from "../redux/user/userSlice";
-import { clearPersistedState } from '../redux/store'
+import { clearPersistedState } from "../redux/store";
 
-const Header = ({socket}) => {
+const Header = ({ socket }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [_, removeCookie] = useCookies(["token"]);
@@ -68,51 +68,64 @@ const Header = ({socket}) => {
             <FaBars className="text-slate-600 text-2xl" onClick={toggleMenu} />
           )}
         </div>
-        <Link to={'/'}>
-        <img src={Logo} alt="My Logo" className="h-10 w-30" />
+        <Link to={"/"}>
+          <img
+            src={Logo}
+            alt="My Logo"
+            className="h-10 w-30"
+            contentEditable={false}
+          />
         </Link>
         <ul
           className={`sm:hidden ${
             isMenuOpen ? "block" : "hidden"
           } dropdown-menu transition-[opacity,margin] duration opacity-100 min-w-[8rem] bg-white shadow-md rounded-lg p-2 mt-2  absolute top-16 left-0 right-40`}
-        ><Link to={'/buy'}>
-          <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
-            Buy
-          </li>
+        >
+          <Link to={"/buy"}>
+            <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
+              Buy
+            </li>
           </Link>
-          <Link to={'/sell'}>
-          <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
-            Sell
-          </li>
+          <Link to={"/sell"}>
+            <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
+              Sell
+            </li>
           </Link>
           <Link to={"/rent"}>
+            <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
+              Rent
+            </li>
+          </Link>
+          <Link to={"/contactus"}>
           <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
-            Rent
+            Contact Us
           </li>
           </Link>
-          <li className="block py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
-            News & Insight
-          </li>
         </ul>
         <ul className="flex gap-4">
-          <Link to={'/buy'}>
-          <li className="hidden sm:inline hover:underline cursor-pointer">
-            Buy
-          </li>
+          <Link to={"/buy"}>
+            <li className="hidden sm:inline hover:underline cursor-pointer ">
+              Buy
+            </li>
           </Link>
-          <Link to={'/sell'}>
-          <li className="hidden sm:inline hover:underline cursor-pointer">
-            Sell
-          </li>
+          <Link to={"/sell"}>
+            <li className="hidden sm:inline hover:underline cursor-pointer">
+              Sell
+            </li>
           </Link>
           <Link to={"/rent"}>
-          <li className="hidden sm:inline hover:underline cursor-pointer">
-            Rent
-          </li>
+            <li className="hidden sm:inline hover:underline cursor-pointer">
+              Rent
+            </li>
           </Link>
-         
-          <li className="hidden sm:inline hover:underline cursor-pointer" onClick={()=>{navigate("/chatbox");}}>
-           message
+
+          <li
+            className="hidden sm:inline hover:underline cursor-pointer"
+            onClick={() => {
+              navigate("/chatbox");
+            }}
+          >
+            message
           </li>
         </ul>
         <div className="flex gap-6 item-center">
@@ -134,9 +147,11 @@ const Header = ({socket}) => {
           </form>
           <div className="flex gap-4 items-center">
             <ul>
+              <Link to={"/contactus"}>
               <li className="hidden sm:inline hover:underline cursor-pointer">
-                News & Insight
+              Contact Us
               </li>
+              </Link>
             </ul>
             {currentuser ? (
               <div

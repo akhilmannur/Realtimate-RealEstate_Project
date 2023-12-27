@@ -3,7 +3,6 @@ import {
   MagnifyingGlassIcon,
   ChevronUpDownIcon,
 } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import {
   Card,
   CardHeader,
@@ -11,19 +10,15 @@ import {
   Typography,
   Button,
   CardBody,
-  Chip,
   CardFooter,
   Tabs,
   TabsHeader,
   Tab,
   Avatar,
-  IconButton,
-  Tooltip,
 } from "@material-tailwind/react";
 import axios from "axios";
-import Pagination from "./pagination";
-import { Link, useNavigate } from "react-router-dom";
-import AdminUSerProfile from "./AdminUSerProfile";
+import Pagination from "./Pagination";
+import {  useNavigate } from "react-router-dom";
 
 const TABS = [
   {
@@ -51,7 +46,7 @@ export default function AdminUserList() {
         const data = await res.data;
         setUser(data.alluser);
       } catch (error) {
-       error.message(error)
+        error.message(error);
       }
     };
     fetchUserList();
@@ -72,14 +67,6 @@ export default function AdminUserList() {
             <Typography color="gray" className="mt-1 font-normal">
               See information about all members
             </Typography>
-          </div>
-          <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-            <Button variant="outlined" size="sm">
-              view all
-            </Button>
-            <Button className="flex items-center gap-3" size="sm">
-              <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add member
-            </Button>
           </div>
         </div>
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
@@ -124,7 +111,7 @@ export default function AdminUserList() {
             </tr>
           </thead>
           <tbody>
-            {currentUsers.map(( users) => ( 
+            {currentUsers.map((users) => (
               <tr key={users._id}>
                 <td>
                   <div className="flex items-center gap-3">
@@ -157,13 +144,18 @@ export default function AdminUserList() {
                     variant="small"
                     color="blue-gray"
                     className="font-normal"
-                    
                   >
                     {users.createdAt}
                   </Typography>
                 </td>
-                <td className="flex flex-row gap-2">
-                  <Button onClick={()=>navigate(`/adminhome/adminuserprofile/${users._id}`)}>View</Button>
+                <td className="flex flex-row gap-2 p-2">
+                  <Button
+                    onClick={() =>
+                      navigate(`/adminhome/adminuserprofile/${users._id}`)
+                    }
+                  >
+                    View
+                  </Button>
                   <Button className="bg-red-500 ">Block</Button>
                   <Button className="bg-green-500">UnBlock</Button>
                 </td>

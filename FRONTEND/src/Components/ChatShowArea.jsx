@@ -29,7 +29,7 @@ const ChatShowArea = () => {
           <div className="container  flex items-center justify-between text-blue-gray-900 w-full">
             <div className="flex items-center mx-8">
               <Avatar
-                src="https://res.cloudinary.com/dstfms4d6/image/upload/v1700824578/Avatar/opedkwre15phg4w9c540.jpg"
+                src="https://cdn2.vectorstock.com/i/1000x1000/23/81/default-avatar-profile-icon-vector-18942381.jpg"
                 alt="avatar"
                 className="h-8 w-8"
               />

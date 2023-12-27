@@ -101,9 +101,9 @@ const HomeCoupon = () => {
               >
                 Copy this code and Redeem it on the property view section
               </Typography>
-              <Typography variant="h3" color="blue-gray">
+              <h3 color="blue-gray">
                 {selectedCoupon}
-              </Typography>
+              </h3>
             </CardBody>
             <CardFooter className="pt-0 flex gap-2">
               <Button

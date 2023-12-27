@@ -10,8 +10,7 @@ import {
 } from "@material-tailwind/react";
 import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
-import {  ChevronLeftIcon, ChevronRightIcon,} from '@heroicons/react/24/solid';
-
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
 const HomeListing = () => {
   const [offerListings, setOfferListings] = useState([]);
@@ -20,24 +19,25 @@ const HomeListing = () => {
   const [offerVisible, setOfferVisible] = useState(4);
   const [saleVisible, setSaleVisible] = useState(4);
   const [rentVisible, setRentVisible] = useState(4);
-  const scrollRef = useRef(null);
-  
+  const offerScrollRef = useRef(null);
+  const rentScrollRef = useRef(null);
+  const saleScrollRef = useRef(null);
 
-  const scrollLeft = () => {
+  const scrollLeft = (scrollRef) => {
     if (scrollRef.current) {
       scrollRef.current.scrollBy({
         top: 0,
-        left: -300,
+        left: -400,
         behavior: "smooth",
       });
     }
   };
 
-  const scrollRight = () => {
+  const scrollRight = (scrollRef) => {
     if (scrollRef.current) {
       scrollRef.current.scrollBy({
         top: 0,
-        left: 300,
+        left: 400,
         behavior: "smooth",
       });
     }
@@ -90,10 +90,10 @@ const HomeListing = () => {
                 className="bg-white text-black p-4 rounded-full"
                 onClick={() => {
                   setOfferVisible(offerVisible - 1);
-                  scrollLeft();
+                  scrollLeft(offerScrollRef);
                 }}
               >
-              <ChevronLeftIcon className="h-5 w-5"/>
+                <ChevronLeftIcon className="h-5 w-5" />
               </button>
             </div>
             <div
@@ -103,90 +103,90 @@ const HomeListing = () => {
                 scrollbarWidth: "none",
                 WebkitOverflowScrolling: "touch",
               }}
-              ref={scrollRef}
+              ref={offerScrollRef}
             >
-         
-            {offerListings.map((listing) => (
-              <Card
-                className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
-                listing={listing}
-                key={listing._id}
-              >
-                <CardHeader floated={false} color="blue-gray">
-                  <img
-                    src={listing.ListingimageUrls[0]}
-                    alt="ui/ux review check"
-                    className="h-40 w-50 object-cover object-center"
-                  />
-                  <div className="to-bg-black-10 absolute inset-0 h-full w-30 bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
-                </CardHeader>
-                <CardBody>
-                  <div className="mb-3 flex items-center justify-between">
-                    <Typography
-                      variant="h5"
-                      color="blue-gray"
-                      className="font-medium"
-                    >
-                      {listing.name}
+              {offerListings.map((listing) => (
+                <Card
+                  className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
+                  listing={listing}
+                  key={listing._id}
+                >
+                  <CardHeader floated={false} color="blue-gray">
+                    <img
+                      src={listing.ListingimageUrls[0]}
+                      alt="ui/ux review check"
+                      className="min-h-[15rem] min-w-[18rem] max-h-[15rem] max-w-[15rem] object-cover"
+                    />
+                    <div className="to-bg-black-10 absolute inset-0 h-full w-30 bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
+                  </CardHeader>
+                  <CardBody>
+                    <div className="mb-3 flex items-center justify-between">
+                      <Typography
+                        variant="h5"
+                        color="blue-gray"
+                        className="font-medium"
+                      >
+                        {listing.name}
+                      </Typography>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <MdLocationOn className="h-4 w-4 text-green-700" />
+                      <Typography className="text-sm text-gray-600 truncate line-clamp-1 w-16rem">
+                        {listing.address}
+                      </Typography>
+                    </div>
+                    <Typography color="gray" className=" line-clamp-1 w-16rem">
+                      {listing.description}
                     </Typography>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <MdLocationOn className="h-4 w-4 text-green-700" />
-                    <Typography className="text-sm text-gray-600 truncate line-clamp-1 w-16rem">
-                      {listing.address}
-                    </Typography>
-                  </div>
-                  <Typography color="gray" className=" line-clamp-1 w-16rem">
-                    {listing.description}
-                  </Typography>
-                  <div className="mb-3 flex items-center justify-between">
-                    <Typography
-                      variant="h5"
-                      className="font-medium bg-green-200 rounded-lg w-20 text-center my-2"
-                    >
-                      {listing.type}
-                    </Typography>
-                  </div>
-                  <div className="mb-3 flex items-center justify-between">
-                    <Typography
-                      variant="h5"
-                      color="blue-gray"
-                      className="font-medium"
-                    >
-                      Rs
-                      {listing.offer
-                        ? listing.regularPrice.toLocaleString("en-IN")
-                        : listing.discountPrice.toLocaleString("en-IN")}
-                    
-                    </Typography>
-                  </div>
-                </CardBody>
-                <CardFooter className="pt-0">
-                  <Link to={`/listing/${listing._id}`}>
-                    <Button size="lg" fullWidth={true}>
-                      More Details
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            ))}
-             {saleVisible < saleListings.length && (
-              <button
-                className="bg-white text-black p-4 rounded-full absolute right-0 top-2/4 transform -translate-y-2/4"
-                onClick={() => {
-                  setOfferVisible(offerVisible+ 1);
-                  scrollRight();
-                }}
-              >
-               <ChevronRightIcon className="h-5 w-5"/>
-              </button>
-            )}
-          </div>
+                    <div className="mb-3 flex items-center justify-between">
+                      <Typography
+                        variant="h5"
+                        className="font-medium bg-green-200 rounded-lg w-20 text-center my-2"
+                      >
+                        {listing.type}
+                      </Typography>
+                    </div>
+                    <div className="mb-3 flex items-center justify-between">
+                      <Typography
+                        variant="h5"
+                        color="blue-gray"
+                        className="font-medium"
+                      >
+                        Rs
+                        {listing.offer
+                          ? listing.regularPrice.toLocaleString("en-IN")
+                          : listing.discountPrice.toLocaleString("en-IN")}
+                      </Typography>
+                    </div>
+                  </CardBody>
+                  <CardFooter className="pt-0">
+                    <Link to={`/listing/${listing._id}`}>
+                      <Button size="lg" fullWidth={true}>
+                        More Details
+                      </Button>
+                    </Link>
+                  </CardFooter>
+                </Card>
+              ))}
+              {offerVisible < offerListings.length && (
+                <button
+                  className="bg-white text-black p-4 rounded-full absolute right-0 top-2/4 transform -translate-y-2/4"
+                  onClick={() => {
+                    setOfferVisible(offerVisible + 1);
+                    scrollRight(offerScrollRef);
+                  }}
+                >
+                  <ChevronRightIcon className="h-5 w-5" />
+                </button>
+              )}
+            </div>
           </div>
           {offerVisible === offerListings.length && (
-         <div className="flex justify-end m-5">
-         <p className="text-blue-500 text-xl  cursor-pointer">show more Rent lists</p>
-       </div>
+            <div className="flex justify-end m-5">
+              <p className="text-blue-500 text-xl  cursor-pointer">
+                show more Rent lists
+              </p>
+            </div>
           )}
         </div>
       )}
@@ -201,10 +201,10 @@ const HomeListing = () => {
                 className="bg-white text-black p-4 rounded-full"
                 onClick={() => {
                   setRentVisible(rentVisible - 1);
-                  scrollLeft();
+                  scrollLeft(rentScrollRef);
                 }}
               >
-              <ChevronLeftIcon className="h-5 w-5"/>
+                <ChevronLeftIcon className="h-5 w-5" />
               </button>
             </div>
             <div
@@ -214,120 +214,9 @@ const HomeListing = () => {
                 scrollbarWidth: "none",
                 WebkitOverflowScrolling: "touch",
               }}
-              ref={scrollRef}
+              ref={rentScrollRef}
             >
-            {rentListings.map((listing) => (
-              <Card
-                className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
-                listing={listing}
-                key={listing._id}
-              >
-                <CardHeader floated={false} color="blue-gray">
-                  <img
-                    src={listing.ListingimageUrls[0]}
-                    alt="ui/ux review check"
-                    className="h-40 w-50 object-cover object-center"
-                  />
-                  <div className="to-bg-black-10 absolute inset-0 h-full w-30 bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
-                </CardHeader>
-                <CardBody>
-                  <div className="mb-3 flex items-center justify-between">
-                    <Typography
-                      variant="h5"
-                      color="blue-gray"
-                      className="font-medium"
-                    >
-                      {listing.name}
-                    </Typography>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <MdLocationOn className="h-4 w-4 text-green-700" />
-                    <Typography className="text-sm text-gray-600 truncate line-clamp-1 w-16rem">
-                      {listing.address}
-                    </Typography>
-                  </div>
-                  <Typography color="gray" className=" line-clamp-1 w-16rem">
-                    {listing.description}
-                  </Typography>
-                  <div className="mb-3 flex items-center justify-between">
-                    <Typography
-                      variant="h5"
-                      className="font-medium bg-green-200 rounded-lg w-20 text-center my-2"
-                    >
-                      {listing.type}
-                    </Typography>
-                  </div>
-                  <div className="mb-3 flex items-center justify-between">
-                    <Typography
-                      variant="h5"
-                      color="blue-gray"
-                      className="font-medium"
-                    >
-                      Rs
-                      {listing.offer
-                        ? listing.regularPrice.toLocaleString("en-IN")
-                        : listing.discountPrice.toLocaleString("en-IN")}
-                      {listing.type === "rent" && " / month"}
-                    </Typography>
-                  </div>
-                </CardBody>
-                <CardFooter className="pt-0">
-                  <Link to={`/listing/${listing._id}`}>
-                    <Button size="lg" fullWidth={true}>
-                      More Details
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            ))}
-             {rentVisible < rentListings.length && (
-              <button
-                className="bg-white text-black p-4 rounded-full absolute right-0 top-2/4 transform -translate-y-2/4"
-                onClick={() => {
-                  setRentVisible(rentVisible + 1);
-                  scrollRight();
-                }}
-              >
-               <ChevronRightIcon className="h-5 w-5"/>
-              </button>
-            )}
-          </div>
-          </div>
-          {rentVisible === rentListings.length && (
-         <div className="flex justify-end m-5">
-         <p className="text-blue-500 text-xl cursor-pointer">show more Rent lists</p>
-       </div>
-          )}
-        </div>
-      )}
-
-      {saleListings && saleListings.length > 0 && (
-        <div className="mx-10  border  rounded-lg shadow-lg my-5">
-          <h1 className="text-2xl font-semibold text-slate-600 m-5">
-            Recent plots for Sale
-          </h1>
-          <div className="relative flex items-center">
-            <div className="absolute top-1/2 transform -translate-y-1/2">
-              <button
-                className="bg-white text-black p-4 rounded-full"
-                onClick={() => {
-                  setSaleVisible(saleVisible - 1);
-                  scrollLeft();
-                }}
-              >
-              <ChevronLeftIcon className="h-5 w-5"/>
-              </button>
-            </div>
-            <div
-              className="flex overflow-x-hidden overflow-y-hidden mt-10 gap-5 p-3 py-4 mx-10 w-full"
-              style={{
-                scrollSnapType: "x mandatory",
-                scrollbarWidth: "none",
-                WebkitOverflowScrolling: "touch",
-              }}
-              ref={scrollRef}
-            >
-              {saleListings.map((listing) => (
+              {rentListings.map((listing) => (
                 <Card
                   className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
                   listing={listing}
@@ -337,7 +226,7 @@ const HomeListing = () => {
                     <img
                       src={listing.ListingimageUrls[0]}
                       alt="ui/ux review check"
-                      className="h-40 w-50 object-cover object-center"
+                      className="min-h-[15rem] min-w-[18rem] max-h-[15rem] max-w-[15rem] object-cover"
                     />
                     <div className="to-bg-black-10 absolute inset-0 h-full w-30 bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
                   </CardHeader>
@@ -391,27 +280,138 @@ const HomeListing = () => {
                   </CardFooter>
                 </Card>
               ))}
-            {saleVisible < saleListings.length && (
-              <button
-                className="bg-white text-black p-4 rounded-full absolute right-0 top-2/4 transform -translate-y-2/4"
-                onClick={() => {
-                  setSaleVisible(saleVisible + 1);
-                  scrollRight();
-                }}
-              >
-               <ChevronRightIcon className="h-5 w-5"/>
-              </button>
-            )}
+              {rentVisible < rentListings.length && (
+                <button
+                  className="bg-white text-black p-4 rounded-full absolute right-0 top-2/4 transform -translate-y-2/4"
+                  onClick={() => {
+                    setRentVisible(rentVisible + 1);
+                    scrollRight(rentScrollRef);
+                  }}
+                >
+                  <ChevronRightIcon className="h-5 w-5" />
+                </button>
+              )}
             </div>
           </div>
-          {saleVisible === saleListings.length && (
-         <div className="flex justify-end m-5">
-         <p className="text-blue-500 text-xl  cursor-pointer">show more Rent lists</p>
-       </div>
+          {rentVisible === rentListings.length && (
+            <div className="flex justify-end m-5">
+              <p className="text-blue-500 text-xl cursor-pointer">
+                show more Rent lists
+              </p>
+            </div>
           )}
         </div>
       )}
 
+      {saleListings && saleListings.length > 0 && (
+        <div className="mx-10  border  rounded-lg shadow-lg my-5">
+          <h1 className="text-2xl font-semibold text-slate-600 m-5">
+            Recent plots for Sale
+          </h1>
+          <div className="relative flex items-center">
+            <div className="absolute top-1/2 transform -translate-y-1/2">
+              <button
+                className="bg-white text-black p-4 rounded-full"
+                onClick={() => {
+                  setSaleVisible(saleVisible - 1);
+                  scrollLeft(saleScrollRef);
+                }}
+              >
+                <ChevronLeftIcon className="h-5 w-5" />
+              </button>
+            </div>
+            <div
+              className="flex overflow-x-hidden overflow-y-hidden mt-10 gap-5 p-3 py-4 mx-10 w-full"
+              style={{
+                scrollSnapType: "x mandatory",
+                scrollbarWidth: "none",
+                WebkitOverflowScrolling: "touch",
+              }}
+              ref={saleScrollRef}
+            >
+              {saleListings.map((listing) => (
+                <Card
+                  className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
+                  listing={listing}
+                  key={listing._id}
+                >
+                  <CardHeader floated={false} color="blue-gray">
+                    <img
+                      src={listing.ListingimageUrls[0]}
+                      alt="ui/ux review check"
+                      className="min-h-[15rem] min-w-[18rem] max-h-[15rem] max-w-[15rem] object-cover"
+                    />
+                    <div className="to-bg-black-10 absolute inset-0 h-full w-30 bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
+                  </CardHeader>
+                  <CardBody>
+                    <div className="mb-3 flex items-center justify-between">
+                      <Typography
+                        variant="h5"
+                        color="blue-gray"
+                        className="font-medium"
+                      >
+                        {listing.name}
+                      </Typography>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <MdLocationOn className="h-4 w-4 text-green-700" />
+                      <Typography className="text-sm text-gray-600 truncate line-clamp-1 w-16rem">
+                        {listing.address}
+                      </Typography>
+                    </div>
+                    <Typography color="gray" className=" line-clamp-1 w-16rem">
+                      {listing.description}
+                    </Typography>
+                    <div className="mb-3 flex items-center justify-between">
+                      <Typography
+                        variant="h5"
+                        className="font-medium bg-green-200 rounded-lg w-20 text-center my-2"
+                      >
+                        {listing.type}
+                      </Typography>
+                    </div>
+                    <div className="mb-3 flex items-center justify-between">
+                      <Typography
+                        variant="h5"
+                        color="blue-gray"
+                        className="font-medium"
+                      >
+                        Rs
+                        {listing.regularPrice.toLocaleString("en-IN")}
+                      </Typography>
+                    </div>
+                  </CardBody>
+                  <CardFooter className="pt-0">
+                    <Link to={`/listing/${listing._id}`}>
+                      <Button size="lg" fullWidth={true}>
+                        More Details
+                      </Button>
+                    </Link>
+                  </CardFooter>
+                </Card>
+              ))}
+              {saleVisible < saleListings.length && (
+                <button
+                  className="bg-white text-black p-4 rounded-full absolute right-0 top-2/4 transform -translate-y-2/4"
+                  onClick={() => {
+                    setSaleVisible(saleVisible + 1);
+                    scrollRight(saleScrollRef);
+                  }}
+                >
+                  <ChevronRightIcon className="h-5 w-5" />
+                </button>
+              )}
+            </div>
+          </div>
+          {saleVisible === saleListings.length && (
+            <div className="flex justify-end m-5">
+              <p className="text-blue-500 text-xl  cursor-pointer">
+                show more Rent lists
+              </p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -38,7 +38,7 @@ const Contact = ({listing}) => {
   return (
     <div>
          {owner && (
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 w-[20rem] sm:[40rem]'>
           <p>
             Contact <span className='font-semibold'>{owner?.rest?.username}</span>{' '}
             for{' '}

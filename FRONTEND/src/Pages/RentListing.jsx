@@ -12,10 +12,13 @@ import axios from "axios";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import CreateProperty from "../Components/CreateProperty";
+import UserPagination from "../Components/UserPagination";
 
 
 const RentListing = () => {
   const [rentListings, setRentListings] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 8;
 
   useEffect(() => {
     const fetchRentListings = async () => {
@@ -30,6 +33,11 @@ const RentListing = () => {
     fetchRentListings();
   }, []);
 
+
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentRentList = rentListings.slice(indexOfFirstItem, indexOfLastItem); 
+
   return (
     <div>
       <Header/>
@@ -41,7 +49,7 @@ const RentListing = () => {
             Plots For Rent
           </h1>
           <div className=" flex flex-wrap gap-6 mt-10  sm:mx-auto sm:justify-center p-3 max-w-[75rem] ">
-            {rentListings.map((listing) => (
+            {currentRentList.map((listing) => (
               <Card
                 className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
                 listing={listing}
@@ -51,7 +59,7 @@ const RentListing = () => {
                   <img
                     src={listing.ListingimageUrls[0]}
                     alt="ui/ux review check"
-                    className="h-40 w-50 object-cover object-center"
+                    className="min-h-[15rem] min-w-[18rem] max-h-[15rem] max-w-[15rem] object-cover"
                   />
                   <div className="to-bg-black-10 absolute inset-0 h-full w-30 bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
                 </CardHeader>
@@ -106,6 +114,12 @@ const RentListing = () => {
           </div>
         </div>
       )}
+       <UserPagination
+       itemsPerPage={ITEMS_PER_PAGE}
+       totalItems={rentListings.length}
+       paginate={setCurrentPage}
+       currentPage={currentPage}
+       />
       <Footer/>
     </div>
   );

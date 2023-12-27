@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { useSelector } from "react-redux";
@@ -30,8 +30,8 @@ const Listing = () => {
   const [copied, setCopied] = useState(false);
   const [contact, setContact] = useState(false);
   const [showInput, setShowInput] = useState(false);
-  const [couponCode, setCouponCode] = useState("");
   const [discountedPrice, setDiscountedPrice] = useState(null);
+  const navigate =useNavigate();
   const params = useParams();
   const { currentuser } = useSelector((state) => state.user);
   const {
@@ -224,15 +224,19 @@ const Listing = () => {
                   </div>
                 )}
               </div>
+              
               {currentuser &&
                 listing?.userRef !== currentuser?.rest._id &&
                 !contact && (
+                  <div className="flex gap-4 flex-col sm:flex-row">
                   <button
                     onClick={() => setContact(true)}
-                    className="bg-black text-white rounded-lg uppercase hover:opacity-95 p-3"
+                    className="bg-black text-white rounded-lg uppercase hover:opacity-95 p-3 w-[20rem]"
                   >
                     Contact Owner
                   </button>
+                  <button className="bg-black text-white rounded-lg uppercase hover:opacity-95 p-3 w-[20rem]"  onClick={()=>{navigate("/chatbox");}}>LiveChat</button>
+                  </div>
                 )}
               {contact && <Contact listing={listing} />}
             </div>

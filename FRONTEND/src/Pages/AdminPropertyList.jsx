@@ -20,7 +20,7 @@ import {
   FaParking,
 } from "react-icons/fa";
 import axios from "axios";
-import Pagination from "./pagination";
+import Pagination from "./Pagination";
 import { Carousel } from "@material-tailwind/react";
 
 const ITEMS_PER_PAGE = 4;

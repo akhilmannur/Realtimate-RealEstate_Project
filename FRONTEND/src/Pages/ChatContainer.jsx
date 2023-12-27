@@ -8,15 +8,15 @@ const ChatContainer = () => {
         <div>
           <Avatar
             alt="Tailwind CSS chat bubble component"
-            src="https://res.cloudinary.com/dstfms4d6/image/upload/v1700824578/Avatar/opedkwre15phg4w9c540.jpg"
+            src="https://cdn2.vectorstock.com/i/1000x1000/23/81/default-avatar-profile-icon-vector-18942381.jpg"
           />
         </div>
 
-        <div className="bg-white rounded-lg p-2 break-words max-w-[15rem]">hy Dundu</div>
+        <div className="bg-white rounded-lg p-2 break-words max-w-[15rem]">hello</div>
       </div>
 
       <div className="flex justify-end items-center space-x-2">
-      <div className="bg-white rounded-lg p-2 break-words max-w-[18rem] ">hy sundari</div>
+      <div className="bg-white rounded-lg p-2 break-words max-w-[18rem] ">hy</div>
 
       </div>
     </div>

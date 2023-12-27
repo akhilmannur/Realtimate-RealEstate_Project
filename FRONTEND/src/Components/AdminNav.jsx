@@ -16,7 +16,6 @@ import {
 } from "../redux/user/adminSlice";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
-import { clearPersistedState } from "../redux/store";
 
 const AdminNav = () => {
   const [openNav, setOpenNav] = React.useState(false);
@@ -29,8 +28,10 @@ const AdminNav = () => {
     if (currentadmin) {
       removeCookie("token");
       dispatch(signOutAdminSuccess());
+      localStorage.removeItem('persist:root');
+      localStorage.clear();
       toast.success("signout successful");
-      clearPersistedState();
+    ;
       navigate("/sign-in");
     } else {
       dispatch(signOutAdminFailure());

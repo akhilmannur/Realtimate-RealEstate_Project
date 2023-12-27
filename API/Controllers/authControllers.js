@@ -81,7 +81,6 @@ export const signIn = async (req, res) => {
 
   if (user) {
     if (!password || !user.password) {
-      console.log(password, user.password);
       return res.json({
         status: "error",
         message: "Incorrect password",

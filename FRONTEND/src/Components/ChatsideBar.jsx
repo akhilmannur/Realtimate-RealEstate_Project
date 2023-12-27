@@ -40,13 +40,13 @@ const ChatsideBar = () => {
         <Avatar
           size="sm"
           variant="circular"
-          src="https://res.cloudinary.com/dstfms4d6/image/upload/v1700824578/Avatar/opedkwre15phg4w9c540.jpg"
+          src="https://cdn2.vectorstock.com/i/1000x1000/23/81/default-avatar-profile-icon-vector-18942381.jpg"
           alt="tania andrew"
         />
         <div className="flex w-full flex-col gap-0.5">
           <div className="flex items-center justify-between h-5">
             <Typography variant="h6" color="blue-gray">
-            Hridya Ramesh
+       User
             </Typography>
             <div className="5 flex items-center gap-0">
           <p>Today</p>

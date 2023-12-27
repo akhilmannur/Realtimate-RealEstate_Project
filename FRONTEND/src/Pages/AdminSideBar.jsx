@@ -5,8 +5,6 @@ import {
   List,
   ListItem,
   ListItemPrefix,
-  // ListItemSuffix,
-  // Chip,
 } from "@material-tailwind/react";
 import {
   PresentationChartBarIcon,
@@ -21,7 +19,6 @@ import {
   signOutAdminSuccess,
 } from "../redux/user/adminSlice";
 import { useNavigate } from "react-router-dom";
-import { clearPersistedState } from "../redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
@@ -36,8 +33,10 @@ const AdminSideBar = () => {
     if (currentadmin) {
       removeCookie("token");
       dispatch(signOutAdminSuccess());
+      localStorage.removeItem('persist:root');
+      localStorage.clear();
       toast.success("signout successful");
-      clearPersistedState();
+    ;
       navigate("/sign-in");
     } else {
       dispatch(signOutAdminFailure());

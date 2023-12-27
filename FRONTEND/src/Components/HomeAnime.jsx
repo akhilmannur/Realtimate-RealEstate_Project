@@ -30,7 +30,7 @@ function HomeAnime() {
     };
   }, []);
   return (
-<div className='mx-auto max-w-screen-md'>
+<div className='mx-auto max-w-screen-sm'>
   <div className="text-center ">
     <div ref={lottieContainer}></div>
   </div>

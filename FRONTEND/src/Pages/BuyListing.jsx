@@ -13,43 +13,51 @@ import axios from "axios";
 import BuyCard from "../Components/BuyCard";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
-
+import UserPagination from "../Components/UserPagination";
 
 const BuyListing = () => {
+  const [allListings, setAllListings] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 8;
 
-    const [allListings, setAllListings] = useState([]);
+  useEffect(() => {
+    const fetchAllListings = async () => {
+      try {
+        const res = await axios.get("/api/list/getAlllisting");
+        const data = await res.data;
+        setAllListings(data.list);
+      } catch (error) {
+        log(error);
+      }
+    };
+    fetchAllListings();
+  }, []);
 
-    useEffect(() => {
-        const fetchAllListings = async () => {
-            try {
-              const res = await axios.get("/api/list/getAlllisting");
-              const data = await res.data;
-              setAllListings(data.list);
-            } catch (error) {
-              log(error);
-            }
-          };
-        fetchAllListings();
-      }, []);
-    
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentList = allListings.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div>
-      <Header/>
-        <BuyCard/>
-        {allListings && allListings.length > 0 && (
+      <Header />
+      <BuyCard />
+      {allListings && allListings.length > 0 && (
         <div className="mx-10 border-t-2 border rounded-lg shadow-lg my-5">
           <h1 className="text-2xl font-semibold text-center m-5">
             plots for Sale and rent
           </h1>
           <div className=" flex flex-wrap gap-6 mt-10  sm:mx-auto sm:justify-center p-3 max-w-[75rem] ">
-            {allListings.map((listing) => (
-              <Card className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0" listing={listing} key={listing._id}>
-                <CardHeader floated={false} color="blue-gray" >
+            {currentList.map((listing) => (
+              <Card
+                className=" max-w-[16rem] max-h-[30rem] shadow-lg  flex-shrink-0"
+                listing={listing}
+                key={listing._id}
+              >
+                <CardHeader floated={false} color="blue-gray">
                   <img
                     src={listing.ListingimageUrls[0]}
                     alt="ui/ux review check"
-                    className="h-40 w-50 object-cover object-center"
+                    className="min-h-[15rem] min-w-[18rem] max-h-[15rem] max-w-[15rem] object-cover"
                   />
                   <div className="to-bg-black-10 absolute inset-0 h-full w-30 bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
                 </CardHeader>
@@ -87,10 +95,10 @@ const BuyListing = () => {
                       className="font-medium"
                     >
                       Rs
-                      {listing.offer
-                        ? listing.regularPrice.toLocaleString("en-IN")
-                        : listing.discountPrice.toLocaleString("en-IN")}
-                      {listing.type === "rent" && " / month"}
+                  
+                       {listing.regularPrice.toLocaleString("en-IN")}  
+                  
+                 
                     </Typography>
                   </div>
                 </CardBody>
@@ -104,7 +112,14 @@ const BuyListing = () => {
           </div>
         </div>
       )}
-      <Footer/>
+
+      <UserPagination
+        itemsPerPage={ITEMS_PER_PAGE}
+        totalItems={allListings.length}
+        paginate={setCurrentPage}
+        currentPage={currentPage}
+      />
+      <Footer />
     </div>
   );
 };

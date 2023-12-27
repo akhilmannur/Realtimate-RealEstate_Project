@@ -24,6 +24,8 @@ import AdminListing from "./Pages/AdminListing";
 import AdminCouponAdd from "./Pages/AdminCouponAdd";
 import AdminCouponDetails from "./Pages/AdminCouponDetails";
 import UnAuthorized from "./Components/UnAuthorized";
+import NotFound from "./Components/NotFound";
+import ContactUs from "./Pages/ContactUs";
 
 // const socket = io.connect("http://localhost:3000");
 
@@ -38,6 +40,8 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/listing/:listingId" element={<Listing />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/contactus" element={<ContactUs />} />
+        <Route path="*" element={<NotFound />} />
 
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
