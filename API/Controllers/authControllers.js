@@ -122,7 +122,7 @@ export const google = async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   if (user) {
     const gtoken = jwt.sign(
-      { username: user.username },
+      { id: user._id },
       process.env.USER_ACCESS_TOKEN_SECRET,
       { expiresIn: 86400}
 
@@ -137,7 +137,7 @@ export const google = async (req, res) => {
       Math.random().toString(36).slice(-8) +
       Math.random().toString(36).slice(-8);
     const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
-    const newUser = User.create({
+    const newUser =  new User({
       username: req.body.name.split(' ').join('').toLowerCase() +
       Math.random().toString(36).slice(-4),
       name:req.body.name,  
@@ -147,7 +147,7 @@ export const google = async (req, res) => {
     });
   
     const gtoken = jwt.sign(
-      { username: user.username },
+      { id: newUser._id },
       process.env.USER_ACCESS_TOKEN_SECRET,
       { expiresIn: 86400 }
     );

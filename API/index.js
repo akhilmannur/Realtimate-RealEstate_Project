@@ -13,6 +13,7 @@ import chatRouter from './Routes/chatRoutes.js';
 // import http from "http";
 import couponRouter from './Routes/couponRoutes.js';
 import ContactUSRouter from './Routes/ContactUsRoutes.js';
+import path from 'path';
 
 const app= express();
 app.use(cors());
@@ -32,6 +33,7 @@ mongoose.connect(process.env.MONGO_DB)
 .catch((err)=>{
     console.log(err);
 })
+const __dirname = path.resolve();
 
 app.use(express.json());
 app.use('/api/user',userRouterr);
@@ -43,7 +45,10 @@ app.use('/api/coupon',couponRouter);
 app.use('/api/contact',ContactUSRouter)
 app.use(ErrorHandler);
 
-
+app.use(express.static(path.join(__dirname, '/FRONTEND/dist')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'FRONTEND', 'dist', 'index.html'));
+  })
 
 // io.on("connection", (socket) => {
 //     console.log(`User Connected: ${socket.id}`);

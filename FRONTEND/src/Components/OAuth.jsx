@@ -5,6 +5,7 @@ import { signInSuccess } from '../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { FaGoogle } from "react-icons/fa";
 import { useCookies } from 'react-cookie';
+import { toast } from 'react-toastify';
 
  function OAuth() {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ import { useCookies } from 'react-cookie';
       setCookie("token", Data.data);
       navigate('/');
     } catch (error) {
-      console.log('could not sign in with google', error);
+      toast.error('could not sign in with google', error);
     }
   };
   return (
