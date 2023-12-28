@@ -2,7 +2,7 @@ import User from "../models/userSchema.js";
 import {
   joiUservalidationSchema,
   joiUserLoginvalidationSchema,
-} from "../Models/validationSchema.js";
+} from "../models/validationSchema.js";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
