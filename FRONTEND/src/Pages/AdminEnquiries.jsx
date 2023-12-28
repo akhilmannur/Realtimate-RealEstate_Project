@@ -1,27 +1,207 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  IconButton,
+  Typography,
+  MenuItem,
+} from "@material-tailwind/react";
+import { toast } from "react-toastify";
+import { TrashIcon, } from "@heroicons/react/24/solid";
 
 const AdminEnquiries = () => {
+  const [contacts, setContacts] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [userMessages, setUserMessages] = useState({});
+
+  const handleOpen = (id) => setOpen((cur) => !cur);
+
+  const handleOpenUser = async (userId) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/api/contact/${userId}/getUserMessages`
+      );
+
+      setUserMessages(res.data.userMessages);
+    } catch (error) {
+      toast.error("Error fetching user messages:", error);
+    }
+  };
+
+  const markAsRead = async (id) => {
+    try {
+      await axios.put(
+        `http://localhost:3000/api/contact/${userMessages._id}/markAsRead`
+      );
+      setUserMessages({ ...userMessages, isRead: true });
+    } catch (error) {
+      toast.error("Error marking message as read:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/contact/getallmessage"
+        );
+
+        setContacts(response.data.allContact);
+      } catch (error) {
+        toast.error("error");
+      }
+    };
+
+    if (contacts.length === 0) {
+      fetchContacts();
+    }
+  }, [contacts]);
+
+
+  const handleDeleteMessage = async (messageId) => {
+    try {
+      await axios.delete(`http://localhost:3000/api/contact/${messageId}/deleteMessage`);
+      setContacts((prevContacts) => prevContacts.filter((contact) => contact._id !== messageId));
+      toast.success('Message deleted successfully');
+    } catch (error) {
+      toast.error('Error deleting message:', error);
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-semibold mb-4">Enquiries</h1>
-      <div className="flex gap-4 ">
-        <div className="bg-white shadow-md rounded-md p-4 flex flex-row gap-2">
-          <img
-            src="data:image/png;base64,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"
-            alt="User Avatar"
-            className="w-10 h-10 rounded-full mb-4"
-          />
-          <div >
-            <h3 className="text-lg font-semibold">name</h3>
-            <button className="bg-black hover:bg-gray-800 text-white font-semibold px-4 py-2 rounded-md mt-4">
-              View Enquiry
-            </button>
+      <div className="flex gap-4 flex-wrap">
+        {contacts.map((contact) => (
+          <div
+            className="bg-white shadow-md rounded-md p-4 flex sm:flex-row flex-col gap-2"
+            key={contact._id}
+          >
+            <img
+              src={contact.userRef.avatar}
+              alt="User Avatar"
+              className="w-10 h-10 rounded-full mb-4"
+            />
+            <div>
+              <h3 className="text-lg font-semibold">{contact.userRef.name}</h3>
+              <h3 className="text-lg font-semibold">
+                Type of Enquiry:{contact.enquiryType}
+              </h3>
+              <button
+                className="bg-black hover:bg-gray-800 text-white font-semibold px-4 py-2 rounded-md mt-4"
+                onClick={() => {
+                  handleOpenUser(contact._id);
+                  handleOpen(contact._id);
+                }}
+              >
+                View Enquiry
+              </button>
+              {contact.isRead === true ? (
+                <Typography color="blue-gray" variant="body">
+                  Marked as Read
+                </Typography>
+              ) : null}
+            </div>
+            <div>
+              <button >
+              <TrashIcon
+                  className="h-5 w-5 text-blue-gray-500"
+                  onClick={() => handleDeleteMessage(contact._id)}
+                />
+              </button>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
+      <Dialog size="xs" open={open} handler={handleOpen}>
+        <DialogHeader className="justify-between">
+          <div>
+            <Typography variant="h5" color="blue-gray">
+              User Enquries
+            </Typography>
+          </div>
+          <IconButton
+            color="blue-gray"
+            size="sm"
+            variant="text"
+            onClick={handleOpen}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </IconButton>
+        </DialogHeader>
+        <DialogBody className="overflow-y-scroll !px-5">
+          <div className="mb-6">
+            <ul className="mt-3 -ml-2 flex flex-col gap-1">
+              <MenuItem className="mb-4 flex items-center justify-center gap-3 !py-4 shadow-md">
+                <Typography
+                  className="uppercase"
+                  color="blue-gray"
+                  variant="h6"
+                >
+                  name:{userMessages?.firstName}
+                </Typography>
+              </MenuItem>
+              <MenuItem className="mb-1 flex items-center justify-center gap-3 !py-4 shadow-md">
+                <Typography color="blue-gray" variant="h6">
+                  email:{userMessages?.email}
+                </Typography>
+              </MenuItem>
+            </ul>
+          </div>
+          <div>
+            <ul className="mt-4 -ml-2.5 flex flex-col gap-1">
+              <MenuItem className="mb-4 flex items-center justify-center gap-3 !py-4 shadow-md">
+                <Typography
+                  className="uppsecase"
+                  color="blue-gray"
+                  variant="h6"
+                >
+                  Phone Number: {userMessages?.phoneNumber}
+                </Typography>
+              </MenuItem>
+              <MenuItem className="mb-4 flex items-center justify-center gap-3 !py-4 shadow-md">
+                <Typography
+                  className="uppsecase"
+                  color="blue-gray"
+                  variant="h6"
+                >
+                  Message:{userMessages?.message}
+                </Typography>
+              </MenuItem>
+            </ul>
+          </div>
+        </DialogBody>
+        <DialogFooter className="justify-between gap-2">
+          {!userMessages.isRead ? (
+            <Button variant="outlined" size="sm" onClick={markAsRead}>
+              Mark as Read
+            </Button>
+          ) : (
+            <Typography color="blue-gray" variant="body">
+              Marked as Read
+            </Typography>
+          )}
+        </DialogFooter>
+      </Dialog>
     </div>
   );
 };
 
 export default AdminEnquiries;
-
