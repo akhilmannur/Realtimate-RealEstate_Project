@@ -33,7 +33,7 @@ const ContactUs = () => {
   const handleSubmit=async(e)=>{
     e.preventDefault();
     try {
-      const res=await axios.post( "http://localhost:3000/api/contact/sendmessage",contactForm)
+      const res=await axios.post( "/api/contact/sendmessage",contactForm)
       toast.success("message sent successfully")
       console.log(res);
     } catch (error) {

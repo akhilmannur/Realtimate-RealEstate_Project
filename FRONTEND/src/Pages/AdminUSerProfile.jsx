@@ -29,7 +29,7 @@ const AdminUSerProfile = () => {
   const fetchUserById = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/admin/getUserById/${userId}`
+        `/api/admin/getUserById/${userId}`
       );
       const data = res.data;
       setUserById(data);
@@ -41,7 +41,7 @@ const AdminUSerProfile = () => {
   const fetchPropertyList = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/admin/getpropertiesByUser/${userId}`
+        `/api/admin/getpropertiesByUser/${userId}`
       );
       const data = res.data;
       setListingByUser(data);

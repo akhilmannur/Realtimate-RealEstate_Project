@@ -56,7 +56,7 @@ const Profile = () => {
       const url = await AvatarUpload(avatar);
 
       await axios.put(
-        `http://localhost:3000/api/user/${currentuser?.rest?._id}/avatar`,
+        `/api/user/${currentuser?.rest?._id}/avatar`,
         {
           Avatar: url,
         },
@@ -87,7 +87,7 @@ const Profile = () => {
     try {
       dispatch(updateUserStart());
       const res = await axios.put(
-        `http://localhost:3000/api/user/${currentuser?.rest?._id}/updateuser`,
+        `/api/user/${currentuser?.rest?._id}/updateuser`,
         formData,
         {
           headers: {
@@ -112,7 +112,7 @@ const Profile = () => {
     try {
       dispatch(deleteUserStart());
       const res = await axios.delete(
-        `http://localhost:3000/api/user/${currentuser?.rest?._id}/deleteuser`,
+        `/api/user/${currentuser?.rest?._id}/deleteuser`,
         {
           headers: {
             Authorization: `${currentuser?.data}`,
@@ -151,7 +151,7 @@ const Profile = () => {
     try {
       setShowListingsError(false);
       const res = await axios.get(
-        `http://localhost:3000/api/user/${currentuser?.rest?._id}/listing`,
+        `/api/user/${currentuser?.rest?._id}/listing`,
         {
           headers: {
             Authorization: `${currentuser?.data}`,
@@ -181,7 +181,7 @@ const Profile = () => {
   const handleListingDelete = async (listingId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:3000/api/list/${listingId}/deletelisting`,
+        `/api/list/${listingId}/deletelisting`,
         {
           headers: {
             Authorization: `${currentuser?.data}`,

@@ -23,7 +23,7 @@ const AdminEnquiries = () => {
   const handleOpenUser = async (userId) => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/contact/${userId}/getUserMessages`
+        `/api/contact/${userId}/getUserMessages`
       );
 
       setUserMessages(res.data.userMessages);
@@ -35,7 +35,7 @@ const AdminEnquiries = () => {
   const markAsRead = async (id) => {
     try {
       await axios.put(
-        `http://localhost:3000/api/contact/${userMessages._id}/markAsRead`
+        `/api/contact/${userMessages._id}/markAsRead`
       );
       setUserMessages({ ...userMessages, isRead: true });
     } catch (error) {
@@ -47,7 +47,7 @@ const AdminEnquiries = () => {
     const fetchContacts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/contact/getallmessage"
+          "/api/contact/getallmessage"
         );
 
         setContacts(response.data.allContact);
@@ -64,7 +64,7 @@ const AdminEnquiries = () => {
 
   const handleDeleteMessage = async (messageId) => {
     try {
-      await axios.delete(`http://localhost:3000/api/contact/${messageId}/deleteMessage`);
+      await axios.delete(`/api/contact/${messageId}/deleteMessage`);
       setContacts((prevContacts) => prevContacts.filter((contact) => contact._id !== messageId));
       toast.success('Message deleted successfully');
     } catch (error) {

@@ -19,7 +19,7 @@ const Contact = ({listing}) => {
   useEffect(() => {
     const fetchLandlord = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/user/${listing?.userRef}`,{
+        const res = await axios.get(`/api/user/${listing?.userRef}`,{
             
                 headers: {
                   Authorization: `${currentuser?.data}`,

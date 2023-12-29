@@ -121,7 +121,7 @@ const Createlist = () => {
       setLoading(true);
       setError(false);
       const res = await axios.post(
-        "http://localhost:3000/api/list/createlisting",
+        "/api/list/createlisting",
         {
           ...formData,
           userRef: currentuser?.rest?._id,
