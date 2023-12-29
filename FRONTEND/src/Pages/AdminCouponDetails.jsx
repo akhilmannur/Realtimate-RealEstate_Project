@@ -37,7 +37,7 @@ const AdminCouponDetails = () => {
   const handleDelete = async (couponId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/api/coupon/${couponId}/deletecoupon`
+        `/api/coupon/${couponId}/deletecoupon`
       );
       console.log(response.data);
       setCoupons((prev) => prev.filter((coupon) => coupon._id !== couponId));
@@ -65,7 +65,7 @@ const AdminCouponDetails = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/coupon/${editedCoupons._id}/editcoupon`,
+        `/api/coupon/${editedCoupons._id}/editcoupon`,
         editedCoupons
       );
       toast.success("Updated coupon successfully");

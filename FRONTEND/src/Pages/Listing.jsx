@@ -31,7 +31,7 @@ const Listing = () => {
   const [contact, setContact] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [discountedPrice, setDiscountedPrice] = useState(null);
-  const navigate =useNavigate();
+  const navigate = useNavigate();
   const params = useParams();
   const { currentuser } = useSelector((state) => state.user);
   const {
@@ -45,7 +45,7 @@ const Listing = () => {
       try {
         setLoading(true);
         const res = await axios.get(
-          `http://localhost:3000/api/list/${params.listingId}/getlisting`,
+          `/api/list/${params.listingId}/getlisting`,
           {
             headers: {
               Authorization: `${currentuser?.data}`,
@@ -73,11 +73,10 @@ const Listing = () => {
     setShowInput(true);
   };
 
-
   const handleApplyCoupon = async (formData) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/coupon/applycoupon",
+        "/api/coupon/applycoupon",
         { propertyId: listing._id, couponCode: formData.couponCode }
       );
 
@@ -98,7 +97,6 @@ const Listing = () => {
     setShowInput(false);
   };
 
- 
   return (
     <>
       <Header />
@@ -161,12 +159,12 @@ const Listing = () => {
                 <p className="bg-red-900 w-full max-w-[100px] text-white text-center p-1 rounded-md">
                   {listing.type === "rent" ? "For Rent" : "For Sale"}
                 </p>
-                {listing.offer && listing.type==="rent" && (
+                {listing.offer && listing.type === "rent" && (
                   <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
                     Rs{listing.discountPrice} OFF every month
                   </p>
                 )}
-                {listing.offer && listing.type==="sell" && (
+                {listing.offer && listing.type === "sell" && (
                   <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
                     Rs{listing.discountPrice} off
                   </p>
@@ -224,18 +222,25 @@ const Listing = () => {
                   </div>
                 )}
               </div>
-              
+
               {currentuser &&
                 listing?.userRef !== currentuser?.rest._id &&
                 !contact && (
                   <div className="flex gap-4 flex-col sm:flex-row">
-                  <button
-                    onClick={() => setContact(true)}
-                    className="bg-black text-white rounded-lg uppercase hover:opacity-95 p-3 w-[20rem]"
-                  >
-                    Contact Owner
-                  </button>
-                  <button className="bg-black text-white rounded-lg uppercase hover:opacity-95 p-3 w-[20rem]"  onClick={()=>{navigate("/chatbox");}}>LiveChat</button>
+                    <button
+                      onClick={() => setContact(true)}
+                      className="bg-black text-white rounded-lg uppercase hover:opacity-95 p-3 w-[20rem]"
+                    >
+                      Contact Owner
+                    </button>
+                    <button
+                      className="bg-black text-white rounded-lg uppercase hover:opacity-95 p-3 w-[20rem]"
+                      onClick={() => {
+                        navigate("/chatbox");
+                      }}
+                    >
+                      LiveChat
+                    </button>
                   </div>
                 )}
               {contact && <Contact listing={listing} />}

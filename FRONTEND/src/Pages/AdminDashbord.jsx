@@ -32,7 +32,7 @@ const AdminDashbord = () => {
     const fetchListingCount = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/admin/listingpermonth"
+          "/api/admin/listingpermonth"
         );
         const data = res.data;
         setListCounts(data);
@@ -45,7 +45,7 @@ const AdminDashbord = () => {
     const fetchTypesCount = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/admin/typecount"
+          "/api/admin/typecount"
         );
         const data = res.data;
         setTypeCounts(data);

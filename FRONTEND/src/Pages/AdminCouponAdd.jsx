@@ -26,7 +26,7 @@ const AddCouponForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/coupon/addcoupon",
+        "/api/coupon/addcoupon",
         couponData
       );
      toast.success("coupon added successfully")
