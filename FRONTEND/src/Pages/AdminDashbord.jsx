@@ -19,7 +19,7 @@ const AdminDashbord = () => {
     const fetchUserCounts = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/admin/usersjoinedpermonth"
+          "/api/admin/usersjoinedpermonth"
         );
         const data = res.data;
         setUserCounts(data);
