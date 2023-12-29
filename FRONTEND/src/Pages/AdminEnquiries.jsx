@@ -13,10 +13,12 @@ import {
 import { toast } from "react-toastify";
 import { TrashIcon, } from "@heroicons/react/24/solid";
 
+
 const AdminEnquiries = () => {
   const [contacts, setContacts] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [userMessages, setUserMessages] = useState({});
+
 
   const handleOpen = (id) => setOpen((cur) => !cur);
 
@@ -56,10 +58,11 @@ const AdminEnquiries = () => {
       }
     };
 
-    if (contacts.length === 0) {
+   
       fetchContacts();
-    }
-  }, [contacts]);
+
+  }, []);
+  console.log(contacts);
 
 
   const handleDeleteMessage = async (messageId) => {
@@ -81,13 +84,13 @@ const AdminEnquiries = () => {
             className="bg-white shadow-md rounded-md p-4 flex sm:flex-row flex-col gap-2"
             key={contact._id}
           >
-            <img
-              src={contact.userRef.avatar}
+            {/* <img
+              src={contact?.userRef?.avatar}
               alt="User Avatar"
               className="w-10 h-10 rounded-full mb-4"
-            />
+            /> */}
             <div>
-              <h3 className="text-lg font-semibold">{contact.userRef.name}</h3>
+              {/* <h3 className="text-lg font-semibold">{contact.userRef.name}</h3> */}
               <h3 className="text-lg font-semibold">
                 Type of Enquiry:{contact.enquiryType}
               </h3>
